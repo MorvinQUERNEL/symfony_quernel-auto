@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une préférence véhicule{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="login-container">
+    <div class="login-card p-4 p-md-5">
+        <div class="login-header text-center mb-4">
+            <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="login-logo mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">Préférence véhicule</h1>
+        </div>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-message flash-{{ label }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+        {{ form_start(form, {'attr': {'class': 'preference-form'}}) }}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ form_label(field) }}
+                    {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(field) }}
+                </div>
+            {% endfor %}
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-login">Enregistrer</button>
+            </div>
+        {{ form_end(form) }}
+        <div class="text-center mt-4">
+            <a href="{{ path('app_profile') }}" class="register-link">Retour à mon profil</a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

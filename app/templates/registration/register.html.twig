@@ -4,7 +4,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/registration.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -21,13 +21,13 @@
                     Veuillez corriger les erreurs ci-dessous
                 </div>
             {% endif %}
-            
             <div class="form-row">
                 <div class="form-group">
                     {{ form_label(registrationForm.firstname) }}
                     {{ form_widget(registrationForm.firstname, {
                         'attr': {
-                            'class': 'form-control ' ~ (registrationForm.firstname.vars.valid ? '' : 'is-invalid')
+                            'class': 'form-control',
+                            'placeholder': 'Prénom'
                         }
                     }) }}
                     {{ form_errors(registrationForm.firstname) }}
@@ -36,49 +36,50 @@
                     {{ form_label(registrationForm.lastname) }}
                     {{ form_widget(registrationForm.lastname, {
                         'attr': {
-                            'class': 'form-control ' ~ (registrationForm.lastname.vars.valid ? '' : 'is-invalid')
+                            'class': 'form-control',
+                            'placeholder': 'Nom'
                         }
                     }) }}
                     {{ form_errors(registrationForm.lastname) }}
                 </div>
             </div>
-
             <div class="form-group">
                 {{ form_label(registrationForm.email) }}
                 {{ form_widget(registrationForm.email, {
                     'attr': {
-                        'class': 'form-control ' ~ (registrationForm.email.vars.valid ? '' : 'is-invalid')
+                        'class': 'form-control',
+                        'placeholder': 'Email'
                     }
                 }) }}
                 {{ form_errors(registrationForm.email) }}
             </div>
-
             <div class="form-group">
                 {{ form_label(registrationForm.plainPassword) }}
                 {{ form_widget(registrationForm.plainPassword, {
                     'attr': {
-                        'class': 'form-control ' ~ (registrationForm.plainPassword.vars.valid ? '' : 'is-invalid')
+                        'class': 'form-control',
+                        'placeholder': 'Mot de passe'
                     }
                 }) }}
                 {{ form_errors(registrationForm.plainPassword) }}
             </div>
-
             <div class="form-group">
                 {{ form_label(registrationForm.address) }}
                 {{ form_widget(registrationForm.address, {
                     'attr': {
-                        'class': 'form-control ' ~ (registrationForm.address.vars.valid ? '' : 'is-invalid')
+                        'class': 'form-control',
+                        'placeholder': 'Adresse'
                     }
                 }) }}
                 {{ form_errors(registrationForm.address) }}
             </div>
-
             <div class="form-row">
                 <div class="form-group">
                     {{ form_label(registrationForm.city) }}
                     {{ form_widget(registrationForm.city, {
                         'attr': {
-                            'class': 'form-control ' ~ (registrationForm.city.vars.valid ? '' : 'is-invalid')
+                            'class': 'form-control',
+                            'placeholder': 'Ville'
                         }
                     }) }}
                     {{ form_errors(registrationForm.city) }}
@@ -87,19 +88,20 @@
                     {{ form_label(registrationForm.postalCode) }}
                     {{ form_widget(registrationForm.postalCode, {
                         'attr': {
-                            'class': 'form-control ' ~ (registrationForm.postalCode.vars.valid ? '' : 'is-invalid')
+                            'class': 'form-control',
+                            'placeholder': 'Code postal'
                         }
                     }) }}
                     {{ form_errors(registrationForm.postalCode) }}
                 </div>
             </div>
-
             <div class="form-row">
                 <div class="form-group">
                     {{ form_label(registrationForm.country) }}
                     {{ form_widget(registrationForm.country, {
                         'attr': {
-                            'class': 'form-select ' ~ (registrationForm.country.vars.valid ? '' : 'is-invalid')
+                            'class': 'form-select',
+                            'placeholder': 'Pays'
                         }
                     }) }}
                     {{ form_errors(registrationForm.country) }}
@@ -108,20 +110,19 @@
                     {{ form_label(registrationForm.phoneNumber) }}
                     {{ form_widget(registrationForm.phoneNumber, {
                         'attr': {
-                            'class': 'form-control ' ~ (registrationForm.phoneNumber.vars.valid ? '' : 'is-invalid')
+                            'class': 'form-control',
+                            'placeholder': 'Numéro de téléphone'
                         }
                     }) }}
                     {{ form_errors(registrationForm.phoneNumber) }}
                 </div>
             </div>
-
             <div class="form-group text-center">
                 <button type="submit" class="btn btn-login">S'inscrire</button>
             </div>
         {{ form_end(registrationForm) }}
-
         <div class="text-center mt-4">
-            <a href="{{ path('app_login') }}" class="text-decoration-none">Déjà inscrit ? Connectez-vous</a>
+            <a href="{{ path('app_login') }}" class="register-link">Déjà inscrit ? Connectez-vous</a>
         </div>
     </div>
 </div>

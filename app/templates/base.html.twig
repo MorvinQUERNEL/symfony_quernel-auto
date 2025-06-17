@@ -8,6 +8,8 @@
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
             <link rel="stylesheet" href="{{ asset('css/flash.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/legal.css') }}">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         {% endblock %}
 
@@ -30,8 +32,11 @@
                 <a href="#vehicles" class="nav-link">Véhicules</a>
                 <a href="#contact" class="nav-link">Contact</a>
                 {% if app.user %}
+                    <a href="{{ path('app_preference_add') }}" class="nav-link">
+                        <i class="fas fa-car"></i> Ajouter préférence véhicule
+                    </a>
                     <div class="nav-user">
-                        <span class="nav-user-name">{{ app.user.firstname }}</span>
+                        <a href="{{ path('app_profile') }}" class="nav-user-name">{{ app.user.firstname }}</a>
                         <a href="{{ path('app_logout') }}" class="nav-link nav-link-logout">
                             <i class="fas fa-sign-out-alt"></i> Déconnexion
                         </a>
@@ -59,7 +64,34 @@
             </div>
         {% endfor %}
 
-        {% block body %}{% endblock %}
+        <div class="site-wrapper">
+            {% block body %}{% endblock %}
+            {% block footer %}
+            <footer class="footer">
+                <div class="footer-content">
+                    <div class="footer-left">
+                        <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto Logo" class="footer-logo">
+                        <div class="footer-links">
+                            <a href="{{ path('app_mentions_legales') }}" class="footer-link">Mentions légales</a>
+                            <a href="{{ path('app_politique_confidentialite') }}" class="footer-link">Politique de confidentialité</a>
+                            <a href="{{ path('app_cgv') }}" class="footer-link">CGV</a>
+                        </div>
+                    </div>
+                    <div class="footer-social">
+                        <a href="#" class="social-icon">
+                            <img src="{{ asset('svg/facebook.svg') }}" alt="Facebook">
+                        </a>
+                        <a href="#" class="social-icon">
+                            <img src="{{ asset('svg/instagram.svg') }}" alt="Instagram">
+                        </a>
+                        <a href="#" class="social-icon">
+                            <img src="{{ asset('svg/twitter.svg') }}" alt="Twitter">
+                        </a>
+                    </div>
+                </div>
+            </footer>
+            {% endblock %}
+        </div>
 
         <script>
             // Auto-hide flash messages after 5 seconds

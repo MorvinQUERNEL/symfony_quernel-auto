@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Email envoyé{% endblock %}
+{% block title %}Vérification de l'email{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -8,20 +8,20 @@
 {% endblock %}
 
 {% block body %}
-<div class="login-container">
-    <div class="login-card p-4 p-md-5">
-        <div class="login-header text-center mb-4">
-            <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="login-logo mb-4">
-            <h1 class="h3 mb-3 font-weight-normal">Email envoyé</h1>
+<div class="reset-container">
+    <div class="reset-card">
+        <div class="reset-header">
+            <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="reset-logo">
+            <h1>Vérification de l'email</h1>
         </div>
 
-        <p class="text-center mb-4">
-            Si un compte correspond à votre adresse email, vous recevrez un lien pour réinitialiser votre mot de passe.
-            Ce lien expirera dans 1 heure.
+        <p class="text-center">
+            Si un compte correspondant à votre adresse email existe, un email contenant un lien pour réinitialiser votre mot de passe vient d'être envoyé.
+            Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
         </p>
 
-        <p class="text-center mb-4">
-            Si vous ne recevez pas d'email, vérifiez votre dossier spam ou <a href="{{ path('app_forgot_password_request') }}">réessayez</a>.
+        <p class="text-center">
+            Si vous ne recevez pas d'email, vérifiez votre dossier spam ou <a href="{{ path('app_forgot_password_request') }}" class="text-decoration-none">réessayez</a>.
         </p>
 
         <div class="text-center mt-4">

@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %}
+
+{% block body %}
+<div class="profile-container">
+    <div class="profile-card">
+        <div class="profile-header">
+            <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="profile-logo">
+            <h2>Mon Profil</h2>
+        </div>
+        <div class="profile-body">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            <div class="profile-info">
+                <h3>Informations personnelles</h3>
+                <p><strong>Prénom :</strong> {{ user.firstName }}</p>
+                <p><strong>Nom :</strong> {{ user.lastName }}</p>
+                <p><strong>Email :</strong> {{ user.email }}</p>
+                <p><strong>Adresse :</strong> {{ user.address }}</p>
+                <p><strong>Ville :</strong> {{ user.city }}</p>
+                <p><strong>Code postal :</strong> {{ user.postalCode }}</p>
+                <p><strong>Pays :</strong> {{ user.country }}</p>
+                <p><strong>Téléphone :</strong> {{ user.phoneNumber }}</p>
+            </div>
+
+            <div class="profile-preferences">
+                <h3>Préférences véhicule</h3>
+                {% if preferences is not empty %}
+                    <ul class="preferences-list">
+                        {% for preference in preferences %}
+                            <li class="preference-item">
+                                <span><strong>Marque :</strong> {{ preference.prefereneceBrand ?: '-' }}</span> |
+                                <span><strong>Modèle :</strong> {{ preference.preferenceModel ?: '-' }}</span> |
+                                <span><strong>Année min :</strong> {{ preference.minYear ? preference.minYear|date('Y') : '-' }}</span> |
+                                <span><strong>Prix max :</strong> {{ preference.maxPrice ?: '-' }} €</span> |
+                                <span><strong>Carburant :</strong> {{ preference.preferenceFuelType ?: '-' }}</span>
+                                <form method="post" action="{{ path('app_profile_preference_delete', {id: preference.id}) }}" style="display:inline" onsubmit="return confirm('Supprimer cette préférence ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete_preference_' ~ preference.id) }}">
+                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Supprimer</button>
+                                </form>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Aucune préférence enregistrée.</p>
+                {% endif %}
+            </div>
+
+            <div class="profile-actions">
+                <a href="{{ path('app_profile_edit') }}" class="btn btn-primary">Modifier mes informations</a>
+                <a href="{{ path('app_profile_change_password') }}" class="btn btn-secondary">Changer mon mot de passe</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
