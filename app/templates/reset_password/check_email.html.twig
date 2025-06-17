@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Email envoyé{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/reset_password.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="login-container">
+    <div class="login-card p-4 p-md-5">
+        <div class="login-header text-center mb-4">
+            <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="login-logo mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">Email envoyé</h1>
+        </div>
+
+        <p class="text-center mb-4">
+            Si un compte correspond à votre adresse email, vous recevrez un lien pour réinitialiser votre mot de passe.
+            Ce lien expirera dans 1 heure.
+        </p>
+
+        <p class="text-center mb-4">
+            Si vous ne recevez pas d'email, vérifiez votre dossier spam ou <a href="{{ path('app_forgot_password_request') }}">réessayez</a>.
+        </p>
+
+        <div class="text-center mt-4">
+            <a href="{{ path('app_login') }}" class="text-decoration-none">Retour à la connexion</a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,180 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quernel Auto - Import/Export de véhicules{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+{% endblock %}
+
+{% block body %}
+    <!-- Section Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>QUERNEL AUTO</h1>
+            <p>QUERNEL AUTO simplifie l'import-export de voitures, offrant des solutions fiables et transparentes pour l'achat et la vente de véhicules à l'international. Avec une expertise reconnue et un réseau mondial, nous vous accompagnons à chaque étape pour rendre vos transactions automobiles fluides et sécurisées.</p>
+            <a href="#contact" class="cta-button">Remplir un formulaire</a>
+        </div>
+    </section>
+
+    <!-- Section Services -->
+    <section class="services">
+        <h2>Nos Services</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fas fa-car"></i>
+                <h3>Import de Véhicules</h3>
+                <p>Solutions personnalisées pour l'importation de véhicules de qualité</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-globe"></i>
+                <h3>Export International</h3>
+                <p>Expertise mondiale dans l'exportation de véhicules</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-handshake"></i>
+                <h3>Accompagnement</h3>
+                <p>Support complet tout au long du processus</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Processus -->
+    <section class="process">
+        <h2>Notre Processus d'Importation</h2>
+        <div class="process-steps">
+            {% for i in 1..4 %}
+                <div class="step">
+                    <img src="{{ asset('images/etape' ~ i ~ '.jpg') }}" alt="Étape {{ i }}">
+                    <h3>Étape {{ i }}</h3>
+                    <p>{{ {
+                        1: 'Sélection du véhicule selon vos critères',
+                        2: 'Vérification et inspection complète',
+                        3: 'Transport sécurisé',
+                        4: 'Livraison et formalités administratives'
+                    }[i] }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Section Véhicules Récents -->
+    <section class="recent-vehicles">
+        <h2>Véhicules Récemment Importés</h2>
+        <div class="vehicles-grid">
+            {% for vehicule in recentVehicules %}
+                <div class="vehicle-card">
+                    {% if vehicule.pictures is not empty %}
+                        <img src="{{ asset(vehicule.pictures|first.path) }}" alt="{{ vehicule.name }}">
+                    {% endif %}
+                    <h3>{{ vehicule.name }}</h3>
+                    <p>{{ vehicule.description }}</p>
+                    <span class="price">{{ vehicule.price }} €</span>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Section Inscription -->
+    <section id="contact" class="registration">
+        <h2>Créez votre compte</h2>
+        <div class="form-container">
+            {{ form_start(registrationForm, {'attr': {'class': 'registration-form'}}) }}
+                {% if not registrationForm.vars.valid %}
+                    <div class="flash-message flash-error">
+                        Veuillez corriger les erreurs ci-dessous
+                    </div>
+                {% endif %}
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(registrationForm.firstname) }}
+                        {{ form_widget(registrationForm.firstname, {
+                            'attr': {
+                                'class': registrationForm.firstname.vars.valid ? '' : 'is-invalid'
+                            }
+                        }) }}
+                        {{ form_errors(registrationForm.firstname) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(registrationForm.lastname) }}
+                        {{ form_widget(registrationForm.lastname, {
+                            'attr': {
+                                'class': registrationForm.lastname.vars.valid ? '' : 'is-invalid'
+                            }
+                        }) }}
+                        {{ form_errors(registrationForm.lastname) }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form_label(registrationForm.email) }}
+                    {{ form_widget(registrationForm.email, {
+                        'attr': {
+                            'class': registrationForm.email.vars.valid ? '' : 'is-invalid'
+                        }
+                    }) }}
+                    {{ form_errors(registrationForm.email) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(registrationForm.password) }}
+                    {{ form_widget(registrationForm.password, {
+                        'attr': {
+                            'class': registrationForm.password.vars.valid ? '' : 'is-invalid'
+                        }
+                    }) }}
+                    {{ form_errors(registrationForm.password) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(registrationForm.address) }}
+                    {{ form_widget(registrationForm.address, {
+                        'attr': {
+                            'class': registrationForm.address.vars.valid ? '' : 'is-invalid'
+                        }
+                    }) }}
+                    {{ form_errors(registrationForm.address) }}
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(registrationForm.city) }}
+                        {{ form_widget(registrationForm.city, {
+                            'attr': {
+                                'class': registrationForm.city.vars.valid ? '' : 'is-invalid'
+                            }
+                        }) }}
+                        {{ form_errors(registrationForm.city) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(registrationForm.postalCode) }}
+                        {{ form_widget(registrationForm.postalCode, {
+                            'attr': {
+                                'class': registrationForm.postalCode.vars.valid ? '' : 'is-invalid'
+                            }
+                        }) }}
+                        {{ form_errors(registrationForm.postalCode) }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(registrationForm.country) }}
+                        {{ form_widget(registrationForm.country, {
+                            'attr': {
+                                'class': 'form-select ' ~ (registrationForm.country.vars.valid ? '' : 'is-invalid')
+                            }
+                        }) }}
+                        {{ form_errors(registrationForm.country) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(registrationForm.phoneNumber) }}
+                        {{ form_widget(registrationForm.phoneNumber, {
+                            'attr': {
+                                'class': registrationForm.phoneNumber.vars.valid ? '' : 'is-invalid'
+                            }
+                        }) }}
+                        {{ form_errors(registrationForm.phoneNumber) }}
+                    </div>
+                </div>
+                <button type="submit" class="submit-button">S'inscrire</button>
+            {{ form_end(registrationForm) }}
+        </div>
+    </section>
+{% endblock %} 

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Bienvenue chez Quernel Auto</title>
+    <link rel="stylesheet" href="{{ absolute_url(asset('css/email.css')) }}">
+    <style>
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .header img {
+            height: 60px;
+            width: auto;
+        }
+        .header h1 {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="{{ absolute_url(asset('images/logo_quernel_auto.png')) }}" alt="Logo Quernel Auto">
+            <h1>QUERNEL AUTO</h1>
+        </div>
+        <div class="content">
+            <h2>Bienvenue {{ user.firstname }} !</h2>
+            <p>Nous sommes ravis de vous accueillir chez Quernel Auto. Votre compte a été créé avec succès.</p>
+            <p>Vous pouvez maintenant accéder à votre espace personnel pour :</p>
+            <ul>
+                <li>Suivre vos demandes d'importation</li>
+                <li>Consulter notre catalogue de véhicules</li>
+                <li>Communiquer avec notre équipe</li>
+            </ul>
+            <a href="{{ absolute_url(path('app_home')) }}" class="button">Accéder à mon compte</a>
+        </div>
+        <div class="footer">
+            <p>© {{ "now"|date("Y") }} Quernel Auto - Tous droits réservés</p>
+        </div>
+    </div>
+</body>
+</html> 
