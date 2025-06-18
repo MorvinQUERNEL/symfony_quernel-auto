@@ -6,8 +6,10 @@ services:
     ports:
       - 8080:80 # 8080 port externe, 80 port dans l'image (EXPOSE 80)
     volumes:
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ./app:/var/www/html # ./app dossier local des fichiers php, /var/www/html dossier dans le conteneur
       - ./apache/default.conf:/etc/apache2/sites-enabled/000-default.conf
+
   database:
     image: mysql:8.0
     container_name: mysql_quernel_auto

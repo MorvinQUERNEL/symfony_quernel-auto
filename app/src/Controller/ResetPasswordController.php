@@ -53,10 +53,13 @@ class ResetPasswordController extends AbstractController
                 ;
 
                 $mailer->send($email);
+                
+                $this->addFlash('success', 'Un email de réinitialisation a été envoyé à votre adresse email.');
+                return $this->redirectToRoute('app_check_email');
+            } else {
+                $this->addFlash('error', 'Aucun compte associé à cette adresse email.');
+                return $this->redirectToRoute('app_forgot_password_request');
             }
-
-            $this->addFlash('success', 'Si votre adresse email est correcte, un email vous a été envoyé.');
-            return $this->redirectToRoute('app_check_email');
         }
 
         return $this->render('reset_password/request.html.twig', [

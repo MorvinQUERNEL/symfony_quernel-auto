@@ -27,26 +27,20 @@ security:
     # Hiérarchie des rôles
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER
-        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_USER]
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # Routes publiques
-        - { path: ^/$, roles: PUBLIC_ACCESS }
-        - { path: ^/login, roles: PUBLIC_ACCESS }
-        - { path: ^/register, roles: PUBLIC_ACCESS }
-        - { path: ^/reset-password, roles: PUBLIC_ACCESS }
-        
         # Routes utilisateur
         - { path: ^/profile, roles: ROLE_USER }
-        
+
         # Routes admin
         - { path: ^/admin, roles: ROLE_ADMIN }
-        
-        # Routes super admin
         - { path: ^/users, roles: ROLE_SUPER_ADMIN }
         - { path: ^/roles, roles: ROLE_SUPER_ADMIN }
+        # Routes super admin
+
         - { path: ^/admin/settings, roles: ROLE_SUPER_ADMIN }
 
 when@test:

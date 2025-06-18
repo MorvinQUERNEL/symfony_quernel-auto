@@ -65,11 +65,11 @@
             {% for vehicule in recentVehicules %}
                 <div class="vehicle-card">
                     {% if vehicule.pictures is not empty %}
-                        <img src="{{ asset(vehicule.pictures|first.path) }}" alt="{{ vehicule.name }}">
+                        <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures|first.name) }}" alt="{{ vehicule.brand }} {{ vehicule.model }}">
                     {% endif %}
-                    <h3>{{ vehicule.name }}</h3>
+                    <h3>{{ vehicule.brand }} {{ vehicule.model }}</h3>
                     <p>{{ vehicule.description }}</p>
-                    <span class="price">{{ vehicule.price }} €</span>
+                    <span class="price">{{ vehicule.salePrice|number_format(0, ',', ' ') }} €</span>
                 </div>
             {% endfor %}
         </div>

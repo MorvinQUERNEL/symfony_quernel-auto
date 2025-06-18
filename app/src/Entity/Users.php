@@ -57,8 +57,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $registrationAt = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $role = null;
+
 
     /**
      * @var Collection<int, Orders>
@@ -139,6 +138,22 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         $this->roles = $roles;
 
         return $this;
+    }
+
+    /**
+     * Vérifie si l'utilisateur est super admin
+     */
+    public function isSuperAdmin(): bool
+    {
+        return in_array('ROLE_SUPER_ADMIN', $this->roles);
+    }
+
+    /**
+     * Vérifie si l'utilisateur est admin
+     */
+    public function isAdmin(): bool
+    {
+        return in_array('ROLE_ADMIN', $this->roles) || $this->isSuperAdmin();
     }
 
     /**
@@ -257,18 +272,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRegistrationAt(\DateTimeImmutable $registrationAt): static
     {
         $this->registrationAt = $registrationAt;
-
-        return $this;
-    }
-
-    public function getRole(): ?string
-    {
-        return $this->role;
-    }
-
-    public function setRole(string $role): static
-    {
-        $this->role = $role;
 
         return $this;
     }

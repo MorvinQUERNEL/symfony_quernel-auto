@@ -46,13 +46,13 @@ class Vehicules
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $status = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::BIGINT)]
     private ?int $salePrice = null;
 
     /**
      * @var Collection<int, Pictures>
      */
-    #[ORM\OneToMany(targetEntity: Pictures::class, mappedBy: 'vehicules')]
+    #[ORM\OneToMany(targetEntity: Pictures::class, mappedBy: 'vehicules', cascade: ['persist', 'remove'])]
     private Collection $pictures;
 
     #[ORM\ManyToOne(inversedBy: 'vehicules')]

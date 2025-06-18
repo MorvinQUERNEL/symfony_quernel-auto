@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le véhicule - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/vehicules.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="vehicule-form-container">
+    <div class="vehicule-form-card">
+        <div class="vehicule-form-header">
+            <h1><i class="fas fa-edit"></i> Modifier le véhicule</h1>
+            <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour au véhicule
+            </a>
+        </div>
+
+        {{ form_start(form, {'attr': {'class': 'vehicule-form'}}) }}
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(form.brand) }}
+                    {{ form_widget(form.brand) }}
+                    {{ form_errors(form.brand) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.model) }}
+                    {{ form_widget(form.model) }}
+                    {{ form_errors(form.model) }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(form.year) }}
+                    {{ form_widget(form.year) }}
+                    {{ form_errors(form.year) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.mileage) }}
+                    {{ form_widget(form.mileage) }}
+                    {{ form_errors(form.mileage) }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(form.fuelType) }}
+                    {{ form_widget(form.fuelType) }}
+                    {{ form_errors(form.fuelType) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.trasmission) }}
+                    {{ form_widget(form.trasmission) }}
+                    {{ form_errors(form.trasmission) }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(form.color) }}
+                    {{ form_widget(form.color) }}
+                    {{ form_errors(form.color) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.doorCount) }}
+                    {{ form_widget(form.doorCount) }}
+                    {{ form_errors(form.doorCount) }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(form.salePrice) }}
+                    {{ form_widget(form.salePrice) }}
+                    {{ form_errors(form.salePrice) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.status) }}
+                    {{ form_widget(form.status) }}
+                    {{ form_errors(form.status) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description) }}
+                {{ form_errors(form.description) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.pictures) }}
+                <div class="images-collection" data-prototype="{{ form_widget(form.pictures.vars.prototype)|e('html_attr') }}">
+                    {% for picture in form.pictures %}
+                        <div class="image-item">
+                            {% if picture.vars.value and picture.vars.value.name %}
+                                <div class="existing-image">
+                                    <img src="{{ asset('uploads/vehicules/' ~ picture.vars.value.name) }}" 
+                                         alt="Image existante" class="thumbnail">
+                                    <p class="image-name">{{ picture.vars.value.name }}</p>
+                                </div>
+                            {% endif %}
+                            {{ form_widget(picture) }}
+                            <button type="button" class="btn btn-danger btn-sm remove-image">
+                                <i class="fas fa-trash"></i> Supprimer
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm add-image">
+                    <i class="fas fa-plus"></i> Ajouter une image
+                </button>
+                {{ form_errors(form.pictures) }}
+                <small class="form-text text-muted">
+                    <i class="fas fa-info-circle"></i> 
+                    Formats acceptés : JPG, PNG, GIF, WebP. Taille maximale : 10MB par image.
+                    Laissez le champ "Nouvelle image" vide pour conserver l'image existante.
+                </small>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Enregistrer les modifications
+                </button>
+                <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Annuler
+                </a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const imagesCollection = document.querySelector('.images-collection');
+    const addImageBtn = document.querySelector('.add-image');
+    const prototype = imagesCollection.dataset.prototype;
+    let index = imagesCollection.children.length;
+
+    // Ajouter une nouvelle image
+    addImageBtn.addEventListener('click', function() {
+        const newImage = prototype.replace(/__name__/g, index);
+        const imageItem = document.createElement('div');
+        imageItem.className = 'image-item';
+        imageItem.innerHTML = newImage + 
+            '<button type="button" class="btn btn-danger btn-sm remove-image">' +
+            '<i class="fas fa-trash"></i> Supprimer</button>';
+        
+        imagesCollection.appendChild(imageItem);
+        index++;
+    });
+
+    // Supprimer une image
+    imagesCollection.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-image')) {
+            e.target.closest('.image-item').remove();
+        }
+    });
+});
+</script>
+{% endblock %} 

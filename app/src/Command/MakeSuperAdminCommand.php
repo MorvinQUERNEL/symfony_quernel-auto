@@ -37,27 +37,36 @@ class MakeSuperAdminCommand extends Command
             ->addArgument('password', InputArgument::REQUIRED, 'Mot de passe du super admin')
             ->addArgument('firstname', InputArgument::REQUIRED, 'Prénom du super admin')
             ->addArgument('lastname', InputArgument::REQUIRED, 'Nom du super admin')
-            ->addArgument('phone', InputArgument::REQUIRED, 'Numéro de téléphone')
-            ->addArgument('address', InputArgument::REQUIRED, 'Adresse')
-            ->addArgument('city', InputArgument::REQUIRED, 'Ville')
-            ->addArgument('postal_code', InputArgument::REQUIRED, 'Code postal')
-            ->addArgument('country', InputArgument::REQUIRED, 'Pays')
+            // ->addArgument('phone', InputArgument::REQUIRED, 'Numéro de téléphone')
+            // ->addArgument('address', InputArgument::REQUIRED, 'Adresse')
+            // ->addArgument('city', InputArgument::REQUIRED, 'Ville')
+            // ->addArgument('postal_code', InputArgument::REQUIRED, 'Code postal')
+            // ->addArgument('country', InputArgument::REQUIRED, 'Pays')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        
+
         $email = $input->getArgument('email');
         $password = $input->getArgument('password');
         $firstname = $input->getArgument('firstname');
         $lastname = $input->getArgument('lastname');
-        $phone = $input->getArgument('phone');
-        $address = $input->getArgument('address');
-        $city = $input->getArgument('city');
-        $postalCode = $input->getArgument('postal_code');
-        $country = $input->getArgument('country');
+        // $phone = $input->getArgument('phone');
+        // $address = $input->getArgument('address');
+        // $city = $input->getArgument('city');
+        // $postalCode = $input->getArgument('postal_code');
+        // $country = $input->getArgument('country');
+
+        // Vérifier si un super admin existe déjà
+        $existingSuperAdmin = $this->entityManager->getRepository(Users::class)->findSuperAdmin();
+
+        if ($existingSuperAdmin) {
+            $io->error('Un super administrateur existe déjà dans le système. Il ne peut y avoir qu\'un seul super admin.');
+            $io->note('Super admin existant: ' . $existingSuperAdmin->getEmail());
+            return Command::FAILURE;
+        }
 
         // Vérifier si l'utilisateur existe déjà
         $existingUser = $this->entityManager->getRepository(Users::class)->findOneBy(['email' => $email]);
@@ -71,15 +80,14 @@ class MakeSuperAdminCommand extends Command
         $user->setEmail($email);
         $user->setFirstname($firstname);
         $user->setLastname($lastname);
-        $user->setPhoneNumber($phone);
-        $user->setAddress($address);
-        $user->setCity($city);
-        $user->setPostalCode((int)$postalCode);
-        $user->setCountry($country);
-        $user->setRoles(['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_USER']);
-        $user->setRole('ROLE_SUPER_ADMIN');
+        $user->setPhoneNumber("0000000000");
+        $user->setAddress("0000000000");
+        $user->setCity("0000000000");
+        $user->setPostalCode((int)"00000");
+        $user->setCountry("0000000000");
+        $user->setRoles(['ROLE_SUPER_ADMIN']);
         $user->setRegistrationAt(new \DateTimeImmutable());
-        
+
         // Hasher le mot de passe
         $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
         $user->setPassword($hashedPassword);

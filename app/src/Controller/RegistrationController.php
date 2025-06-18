@@ -16,12 +16,7 @@ use Symfony\Component\Mime\Email;
 class RegistrationController extends AbstractController
 {
     #[Route('/inscription', name: 'app_register')]
-    public function register(
-        Request $request, 
-        UserPasswordHasherInterface $userPasswordHasher, 
-        EntityManagerInterface $entityManager,
-        MailerInterface $mailer
-    ): Response {
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, MailerInterface $mailer): Response {
         $user = new Users();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -58,4 +53,4 @@ class RegistrationController extends AbstractController
             'registrationForm' => $form->createView(),
         ]);
     }
-} 
+}

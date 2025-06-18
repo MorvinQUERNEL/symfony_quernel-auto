@@ -21,6 +21,18 @@
             </div>
         {% endfor %}
 
+        {% for flash_error in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ flash_error }}
+            </div>
+        {% endfor %}
+
+        {% for flash_success in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ flash_success }}
+            </div>
+        {% endfor %}
+
         {{ form_start(requestForm) }}
             <div class="form-group">
                 {{ form_label(requestForm.email) }}

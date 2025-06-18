@@ -33,6 +33,30 @@ class UsersRepository extends ServiceEntityRepository implements PasswordUpgrade
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * Trouve le super administrateur existant
+     */
+    public function findSuperAdmin(): ?Users
+    {
+        $users = $this->findAll();
+        
+        foreach ($users as $user) {
+            if ($user->isSuperAdmin()) {
+                return $user;
+            }
+        }
+        
+        return null;
+    }
+
+    /**
+     * Vérifie s'il existe déjà un super administrateur
+     */
+    public function hasSuperAdmin(): bool
+    {
+        return $this->findSuperAdmin() !== null;
+    }
+
     //    /**
     //     * @return Users[] Returns an array of Users objects
     //     */

@@ -29,9 +29,14 @@
                 <a href="{{ path('app_home') }}" class="nav-link">Accueil</a>
                 <a href="#services" class="nav-link">Services</a>
                 <a href="#process" class="nav-link">Processus</a>
-                <a href="#vehicles" class="nav-link">Véhicules</a>
+                <a href="{{ path('app_vehicules_index') }}" class="nav-link">Véhicules</a>
                 <a href="#contact" class="nav-link">Contact</a>
                 {% if app.user %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_vehicules_index') }}" class="nav-link">
+                            <i class="fas fa-car"></i> Gestion Véhicules
+                        </a>
+                    {% endif %}
                     <a href="{{ path('app_preference_add') }}" class="nav-link">
                         <i class="fas fa-car"></i> Ajouter préférence véhicule
                     </a>
