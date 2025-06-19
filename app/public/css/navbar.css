@@ -1,3 +1,10 @@
+/* ===== VARIABLES CSS ===== */
+:root {
+    --primary-color: #FF6B00;
+    --text-color: #333333;
+    --background-color: #ffffff;
+}
+
 .navbar {
     position: fixed;
     top: 0;
@@ -99,7 +106,115 @@
     transform: translateY(-2px);
 }
 
-/* ===== RESPONSIVE DESIGN COMPLET ===== */
+/* ===== STYLES POUR LE MENU BURGER (MOBILE ET TABLETTE) ===== */
+@media (max-width: 768px) {
+    .navbar-burger {
+        display: flex !important;
+        position: relative;
+        z-index: 1001;
+    }
+    
+    .navbar-menu {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.95);
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 80px 2rem 2rem 2rem;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-y: auto;
+        gap: 1rem;
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+    }
+    
+    .navbar-menu.is-active {
+        left: 0;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+    
+    .nav-link {
+        width: 100%;
+        padding: 1rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    
+    .nav-link:hover {
+        background-color: rgba(255, 107, 0, 0.1);
+        padding-left: 1rem;
+        color: var(--primary-color);
+    }
+    
+    .nav-link::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 0;
+        background-color: var(--primary-color);
+        transition: width 0.3s ease;
+        z-index: -1;
+    }
+    
+    .nav-link:hover::before {
+        width: 4px;
+    }
+    
+    .nav-user {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-link-login,
+    .nav-link-logout {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 1rem 0;
+        border-radius: 0;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-link-login:hover,
+    .nav-link-logout:hover {
+        transform: none;
+        padding-left: 1rem;
+    }
+    
+    /* Animation du burger */
+    .navbar-burger.is-active span:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+    }
+    
+    .navbar-burger.is-active span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    
+    .navbar-burger.is-active span:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+    }
+    
+    /* Effet de pulsation pour le burger */
+    .navbar-burger:hover span {
+        background-color: #ff8533;
+    }
+    
+    .navbar-burger:active span {
+        background-color: #e05a00;
+    }
+}
 
 /* ===== MOBILE (≤ 480px) ===== */
 @media (max-width: 480px) {
@@ -112,32 +227,15 @@
     }
 
     .navbar-menu {
-        top: 60px;
-        padding: 1rem;
-        gap: 0.75rem;
-        max-height: calc(100vh - 60px);
+        padding: 70px 1rem 1rem 1rem;
     }
 
     .nav-link {
-        padding: 0.6rem 0;
-        font-size: 0.9rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .nav-user {
-        gap: 0.5rem;
-        padding-top: 0.5rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 1rem;
     }
 
     .nav-user-name {
         font-size: 0.9rem;
-    }
-
-    .nav-link-login,
-    .nav-link-logout {
-        padding: 0.6rem 0.75rem;
-        font-size: 0.85rem;
     }
 
     .navbar-burger {
@@ -169,32 +267,15 @@
     }
 
     .navbar-menu {
-        top: 70px;
-        padding: 1.5rem;
-        gap: 1rem;
-        max-height: calc(100vh - 70px);
+        padding: 80px 1.5rem 1.5rem 1.5rem;
     }
 
     .nav-link {
-        padding: 0.75rem 0;
-        font-size: 1rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .nav-user {
-        gap: 0.75rem;
-        padding-top: 0.5rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 1.1rem;
     }
 
     .nav-user-name {
         font-size: 1rem;
-    }
-
-    .nav-link-login,
-    .nav-link-logout {
-        padding: 0.75rem 1rem;
-        font-size: 0.9rem;
     }
 
     .navbar-burger {
@@ -204,14 +285,6 @@
 
     .navbar-burger span {
         height: 3px;
-    }
-
-    .navbar-burger.is-active span:nth-child(1) {
-        transform: translateY(9px) rotate(45deg);
-    }
-
-    .navbar-burger.is-active span:nth-child(3) {
-        transform: translateY(-9px) rotate(-45deg);
     }
 }
 

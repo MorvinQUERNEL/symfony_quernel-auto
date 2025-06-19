@@ -3,3 +3,22 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+# Routes d'erreur personnalisées
+error_404:
+    path: /_error/404
+    controller: App\Controller\ErrorController::show404
+
+error_403:
+    path: /_error/403
+    controller: App\Controller\ErrorController::show403
+
+error_500:
+    path: /_error/500
+    controller: App\Controller\ErrorController::show500
+
+error_general:
+    path: /_error/{code}
+    controller: App\Controller\ErrorController::show
+    requirements:
+        code: \d+

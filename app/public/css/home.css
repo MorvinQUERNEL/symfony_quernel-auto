@@ -169,8 +169,8 @@ body {
 .carousel-track {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    gap: 30px;
-    padding: 20px 0;
+    gap: 60px;
+    padding: 30px 0;
     width: fit-content;
 }
 
@@ -185,6 +185,7 @@ body {
     opacity: 0.7;
     position: relative;
     min-width: 350px;
+    margin: 0 10px;
 }
 
 .carousel-item.active {
@@ -302,26 +303,65 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    pointer-events: auto;
 }
 
 .carousel-btn:hover {
     background-color: #e05a00;
     transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3);
+    box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
+}
+
+.carousel-btn:active {
+    transform: translateY(-50%) scale(0.95);
+    box-shadow: 0 2px 8px rgba(255, 107, 0, 0.3);
 }
 
 .carousel-btn-prev {
-    left: 0;
+    left: 10px;
 }
 
 .carousel-btn-next {
-    right: 0;
+    right: 10px;
 }
 
 .carousel-btn:disabled {
-    opacity: 0.5;
+    opacity: 0.3;
     cursor: not-allowed;
     transform: translateY(-50%) scale(1);
+    background-color: #ccc;
+    box-shadow: none;
+    pointer-events: none;
+}
+
+.carousel-btn:disabled:hover {
+    transform: translateY(-50%) scale(1);
+    box-shadow: none;
+    background-color: #ccc;
+}
+
+/* Amélioration de la visibilité des boutons */
+.carousel-btn::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, var(--primary-color), #e05a00);
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.carousel-btn:hover::before {
+    opacity: 1;
 }
 
 /* Carousel Dots */
@@ -452,30 +492,131 @@ body {
     
     /* Carousel Responsive */
     .carousel-container {
-        padding: 0 40px;
+        padding: 0 50px;
+        position: relative;
+    }
+    
+    .carousel-track {
+        gap: 30px;
+        padding: 15px 0;
     }
     
     .carousel-item {
-        flex: 0 0 280px;
+        flex: 0 0 250px;
+        min-width: 250px;
+        margin: 0 2px;
     }
     
     .carousel-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 25;
+    }
+    
+    .carousel-btn-prev {
+        left: 5px;
+    }
+    
+    .carousel-btn-next {
+        right: 5px;
+    }
+    
+    .carousel-btn:hover {
+        transform: translateY(-50%) scale(1.05);
+    }
+    
+    .carousel-btn:active {
+        transform: translateY(-50%) scale(0.95);
     }
     
     .vehicle-content h3 {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
     
     .price {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
     
     .vehicle-details {
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
+    }
+    
+    .vehicle-year,
+    .vehicle-fuel {
+        font-size: 0.75rem;
+        padding: 3px 8px;
+    }
+    
+    .view-details-btn {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Mobile très petit */
+@media (max-width: 480px) {
+    .carousel-container {
+        padding: 0 45px;
+    }
+    
+    .carousel-item {
+        flex: 0 0 220px;
+        min-width: 220px;
+    }
+    
+    .carousel-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+    
+    .carousel-btn-prev {
+        left: 3px;
+    }
+    
+    .carousel-btn-next {
+        right: 3px;
+    }
+    
+    .carousel-track {
+        gap: 25px;
+        padding: 10px 0;
+    }
+}
+
+/* Tablette */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .carousel-track {
+        gap: 50px;
+        padding: 25px 0;
+    }
+    
+    .carousel-item {
+        margin: 0 8px;
+    }
+    
+    .carousel-container {
+        padding: 0 50px;
+    }
+}
+
+/* Grands écrans */
+@media (min-width: 1025px) {
+    .carousel-track {
+        gap: 70px;
+        padding: 35px 0;
+    }
+    
+    .carousel-item {
+        margin: 0 15px;
+    }
+    
+    .carousel-container {
+        padding: 0 70px;
     }
 }
 

@@ -19,14 +19,7 @@ use Psr\Log\LoggerInterface;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(
-        Request $request,
-        EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher,
-        MailerInterface $mailer,
-        VehiculesRepository $vehiculesRepository,
-        LoggerInterface $logger
-    ): Response {
+    public function index(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, MailerInterface $mailer, VehiculesRepository $vehiculesRepository, LoggerInterface $logger): Response {
         $user = new Users();
         $form = $this->createForm(RegistrationType::class, $user);
         $form->handleRequest($request);
@@ -38,7 +31,7 @@ class HomeController extends AbstractController
                     $user->setRoles(['ROLE_USER']);
                     // Définir le rôle dans la colonne role
                     $user->setRole('ROLE_USER');
-                    
+
                     $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
                     $user->setPassword($hashedPassword);
                     $user->setRegistrationAt(new \DateTimeImmutable());
@@ -81,4 +74,4 @@ class HomeController extends AbstractController
             'recentVehicules' => $recentVehicules,
         ]);
     }
-} 
+}

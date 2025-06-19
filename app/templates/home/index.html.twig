@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/carousel.js') }}" defer></script>
+{% endblock %} 
+
 {% block body %}
     <!-- Section Hero -->
     <section class="hero">
@@ -207,116 +212,3 @@
     </section>
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Vérifier si les éléments existent
-            const carouselTrack = document.getElementById('carouselTrack');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const dots = document.querySelectorAll('.dot');
-            const items = document.querySelectorAll('.carousel-item');
-            
-            // Si pas d'éléments, arrêter
-            if (!carouselTrack || items.length === 0) {
-                console.log('Carousel elements not found');
-                return;
-            }
-            
-            console.log('Carousel initialized with', items.length, 'items');
-            
-            let currentIndex = 0;
-            const itemWidth = 380; // Largeur de l'item + gap
-            const visibleItems = Math.floor(carouselTrack.offsetWidth / itemWidth);
-            const maxIndex = Math.max(0, items.length - visibleItems);
-            
-            console.log('Visible items:', visibleItems, 'Max index:', maxIndex);
-            
-            // Initialisation
-            updateCarousel();
-            
-            // Fonction pour mettre à jour le carrousel
-            function updateCarousel() {
-                console.log('Updating carousel, current index:', currentIndex);
-                
-                // Mettre à jour la position du track
-                const translateX = -currentIndex * itemWidth;
-                carouselTrack.style.transform = `translateX(${translateX}px)`;
-                
-                // Mettre à jour les classes active
-                items.forEach((item, index) => {
-                    item.classList.remove('active');
-                    if (index >= currentIndex && index < currentIndex + visibleItems) {
-                        item.classList.add('active');
-                    }
-                });
-                
-                // Mettre à jour les dots
-                dots.forEach((dot, index) => {
-                    dot.classList.remove('active');
-                    if (index === currentIndex) {
-                        dot.classList.add('active');
-                    }
-                });
-                
-                // Mettre à jour les boutons
-                if (prevBtn) prevBtn.disabled = currentIndex === 0;
-                if (nextBtn) nextBtn.disabled = currentIndex >= maxIndex;
-            }
-            
-            // Événements des boutons
-            if (prevBtn) {
-                prevBtn.addEventListener('click', function() {
-                    console.log('Previous button clicked');
-                    if (currentIndex > 0) {
-                        currentIndex--;
-                        updateCarousel();
-                    }
-                });
-            }
-            
-            if (nextBtn) {
-                nextBtn.addEventListener('click', function() {
-                    console.log('Next button clicked');
-                    if (currentIndex < maxIndex) {
-                        currentIndex++;
-                        updateCarousel();
-                    }
-                });
-            }
-            
-            // Événements des dots
-            dots.forEach((dot, index) => {
-                dot.addEventListener('click', function() {
-                    console.log('Dot clicked:', index);
-                    currentIndex = Math.max(0, Math.min(index, maxIndex));
-                    updateCarousel();
-                });
-            });
-            
-            // Navigation au clavier
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'ArrowLeft' && currentIndex > 0) {
-                    currentIndex--;
-                    updateCarousel();
-                } else if (e.key === 'ArrowRight' && currentIndex < maxIndex) {
-                    currentIndex++;
-                    updateCarousel();
-                }
-            });
-            
-            // Gestion du redimensionnement
-            window.addEventListener('resize', function() {
-                const newVisibleItems = Math.floor(carouselTrack.offsetWidth / itemWidth);
-                const newMaxIndex = Math.max(0, items.length - newVisibleItems);
-                
-                if (currentIndex > newMaxIndex) {
-                    currentIndex = newMaxIndex;
-                }
-                
-                updateCarousel();
-            });
-        });
-    </script>
-{% endblock %} 
