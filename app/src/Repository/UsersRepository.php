@@ -57,6 +57,36 @@ class UsersRepository extends ServiceEntityRepository implements PasswordUpgrade
         return $this->findSuperAdmin() !== null;
     }
 
+    /**
+     * Recherche des utilisateurs par nom, prénom ou email
+     */
+    public function findBySearch(string $search): array
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.preferences', 'p')
+            ->addSelect('p')
+            ->andWhere('u.firstname LIKE :search OR u.lastname LIKE :search OR u.email LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->orderBy('u.lastname', 'ASC')
+            ->addOrderBy('u.firstname', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Trouve tous les utilisateurs avec leurs préférences
+     */
+    public function findAllWithPreferences(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.preferences', 'p')
+            ->addSelect('p')
+            ->orderBy('u.lastname', 'ASC')
+            ->addOrderBy('u.firstname', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Users[] Returns an array of Users objects
     //     */

@@ -23,7 +23,7 @@ class Preference
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $minYear = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::BIGINT)]
     private ?int $maxPrice = null;
 
     #[ORM\Column(length: 30)]

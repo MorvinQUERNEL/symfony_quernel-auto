@@ -74,7 +74,7 @@ class HomeController extends AbstractController
             }
         }
 
-        $recentVehicules = $vehiculesRepository->findBy([], ['id' => 'DESC'], 3);
+        $recentVehicules = $vehiculesRepository->findBy([], ['id' => 'DESC'], 6);
 
         return $this->render('home/index.html.twig', [
             'registrationForm' => $form->createView(),

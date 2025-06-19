@@ -59,21 +59,49 @@
     </section>
 
     <!-- Section Véhicules Récents -->
+    {% if recentVehicules is not empty %}
     <section class="recent-vehicles">
         <h2>Véhicules Récemment Importés</h2>
-        <div class="vehicles-grid">
+        <div class="carousel-container">
+            <button class="carousel-btn carousel-btn-prev" id="prevBtn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="carousel-track" id="carouselTrack">
+                {% for vehicule in recentVehicules %}
+                    <div class="vehicle-card carousel-item" data-index="{{ loop.index0 }}">
+                        {% if vehicule.pictures is not empty %}
+                            <div class="vehicle-image">
+                                <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures|first.name) }}" alt="{{ vehicule.brand }} {{ vehicule.model }}">
+                            </div>
+                        {% endif %}
+                        <div class="vehicle-content">
+                            <h3>{{ vehicule.brand }} {{ vehicule.model }}</h3>
+                            <p class="vehicle-description">{{ vehicule.description|length > 100 ? vehicule.description|slice(0, 100) ~ '...' : vehicule.description }}</p>
+                            <div class="vehicle-details">
+                                <span class="vehicle-year">{{ vehicule.year ? vehicule.year|date('Y') : 'N/A' }}</span>
+                                <span class="vehicle-fuel">{{ vehicule.fuelType }}</span>
+                            </div>
+                            <span class="price">{{ vehicule.salePrice|number_format(0, ',', ' ') }} €</span>
+                            <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="view-details-btn">
+                                Voir les détails
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-btn carousel-btn-next" id="nextBtn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+        {% if recentVehicules|length > 1 %}
+        <div class="carousel-dots" id="carouselDots">
             {% for vehicule in recentVehicules %}
-                <div class="vehicle-card">
-                    {% if vehicule.pictures is not empty %}
-                        <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures|first.name) }}" alt="{{ vehicule.brand }} {{ vehicule.model }}">
-                    {% endif %}
-                    <h3>{{ vehicule.brand }} {{ vehicule.model }}</h3>
-                    <p>{{ vehicule.description }}</p>
-                    <span class="price">{{ vehicule.salePrice|number_format(0, ',', ' ') }} €</span>
-                </div>
+                <button class="dot" data-index="{{ loop.index0 }}"></button>
             {% endfor %}
         </div>
+        {% endif %}
     </section>
+    {% endif %}
 
     <!-- Section Inscription -->
     <section id="contact" class="registration">
@@ -177,4 +205,118 @@
             {{ form_end(registrationForm) }}
         </div>
     </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier si les éléments existent
+            const carouselTrack = document.getElementById('carouselTrack');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const dots = document.querySelectorAll('.dot');
+            const items = document.querySelectorAll('.carousel-item');
+            
+            // Si pas d'éléments, arrêter
+            if (!carouselTrack || items.length === 0) {
+                console.log('Carousel elements not found');
+                return;
+            }
+            
+            console.log('Carousel initialized with', items.length, 'items');
+            
+            let currentIndex = 0;
+            const itemWidth = 380; // Largeur de l'item + gap
+            const visibleItems = Math.floor(carouselTrack.offsetWidth / itemWidth);
+            const maxIndex = Math.max(0, items.length - visibleItems);
+            
+            console.log('Visible items:', visibleItems, 'Max index:', maxIndex);
+            
+            // Initialisation
+            updateCarousel();
+            
+            // Fonction pour mettre à jour le carrousel
+            function updateCarousel() {
+                console.log('Updating carousel, current index:', currentIndex);
+                
+                // Mettre à jour la position du track
+                const translateX = -currentIndex * itemWidth;
+                carouselTrack.style.transform = `translateX(${translateX}px)`;
+                
+                // Mettre à jour les classes active
+                items.forEach((item, index) => {
+                    item.classList.remove('active');
+                    if (index >= currentIndex && index < currentIndex + visibleItems) {
+                        item.classList.add('active');
+                    }
+                });
+                
+                // Mettre à jour les dots
+                dots.forEach((dot, index) => {
+                    dot.classList.remove('active');
+                    if (index === currentIndex) {
+                        dot.classList.add('active');
+                    }
+                });
+                
+                // Mettre à jour les boutons
+                if (prevBtn) prevBtn.disabled = currentIndex === 0;
+                if (nextBtn) nextBtn.disabled = currentIndex >= maxIndex;
+            }
+            
+            // Événements des boutons
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function() {
+                    console.log('Previous button clicked');
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        updateCarousel();
+                    }
+                });
+            }
+            
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function() {
+                    console.log('Next button clicked');
+                    if (currentIndex < maxIndex) {
+                        currentIndex++;
+                        updateCarousel();
+                    }
+                });
+            }
+            
+            // Événements des dots
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', function() {
+                    console.log('Dot clicked:', index);
+                    currentIndex = Math.max(0, Math.min(index, maxIndex));
+                    updateCarousel();
+                });
+            });
+            
+            // Navigation au clavier
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                    currentIndex--;
+                    updateCarousel();
+                } else if (e.key === 'ArrowRight' && currentIndex < maxIndex) {
+                    currentIndex++;
+                    updateCarousel();
+                }
+            });
+            
+            // Gestion du redimensionnement
+            window.addEventListener('resize', function() {
+                const newVisibleItems = Math.floor(carouselTrack.offsetWidth / itemWidth);
+                const newMaxIndex = Math.max(0, items.length - newVisibleItems);
+                
+                if (currentIndex > newMaxIndex) {
+                    currentIndex = newMaxIndex;
+                }
+                
+                updateCarousel();
+            });
+        });
+    </script>
 {% endblock %} 

@@ -17,14 +17,23 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class VehiculeController extends AbstractController
 {
     #[Route('/', name: 'app_vehicules_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $vehicules = $entityManager
-            ->getRepository(Vehicules::class)
-            ->findAll();
+        $search = $request->query->get('search', '');
+        
+        if ($search) {
+            $vehicules = $entityManager
+                ->getRepository(Vehicules::class)
+                ->findBySearch($search);
+        } else {
+            $vehicules = $entityManager
+                ->getRepository(Vehicules::class)
+                ->findAll();
+        }
 
         return $this->render('vehicule/index.html.twig', [
             'vehicules' => $vehicules,
+            'search' => $search,
         ]);
     }
 

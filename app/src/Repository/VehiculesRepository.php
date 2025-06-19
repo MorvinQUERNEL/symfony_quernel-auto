@@ -16,6 +16,22 @@ class VehiculesRepository extends ServiceEntityRepository
         parent::__construct($registry, Vehicules::class);
     }
 
+    /**
+     * Recherche des véhicules par marque, modèle, carburant, etc.
+     */
+    public function findBySearch(string $search): array
+    {
+        return $this->createQueryBuilder('v')
+            ->leftJoin('v.pictures', 'p')
+            ->addSelect('p')
+            ->andWhere('v.brand LIKE :search OR v.model LIKE :search OR v.fuelType LIKE :search OR v.color LIKE :search OR v.trasmission LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->orderBy('v.brand', 'ASC')
+            ->addOrderBy('v.model', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Vehicules[] Returns an array of Vehicules objects
     //     */

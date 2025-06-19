@@ -18,6 +18,55 @@
         {% endif %}
     </div>
 
+    <!-- Barre de recherche -->
+    <div class="search-section">
+        <form method="GET" action="{{ path('app_vehicules_index') }}" class="search-form" id="searchForm">
+            <div class="search-input-group">
+                <input type="text" 
+                       name="search" 
+                       value="{{ search }}" 
+                       placeholder="Rechercher par marque, modèle, carburant, couleur..."
+                       class="search-input"
+                       id="searchInput">
+                <button type="submit" class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            {% if search %}
+                <a href="{{ path('app_vehicules_index') }}" class="clear-search">
+                    <i class="fas fa-times"></i> Effacer la recherche
+                </a>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="stats-section">
+        <div class="stat-card">
+            <i class="fas fa-car"></i>
+            <div class="stat-content">
+                <span class="stat-number">{{ vehicules|length }}</span>
+                <span class="stat-label">Véhicules</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-check-circle"></i>
+            <div class="stat-content">
+                <span class="stat-number">{{ vehicules|filter(v => v.status == 'Disponible')|length }}</span>
+                <span class="stat-label">Disponibles</span>
+            </div>
+        </div>
+        {% if search %}
+            <div class="stat-card">
+                <i class="fas fa-search"></i>
+                <div class="stat-content">
+                    <span class="stat-number">{{ vehicules|length }}</span>
+                    <span class="stat-label">Résultats pour "{{ search }}"</span>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
     {% for message in app.flashes('success') %}
         <div class="alert alert-success">
             {{ message }}
@@ -104,4 +153,31 @@
         </div>
     {% endif %}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const searchForm = document.getElementById('searchForm');
+
+    // Gestion de la soumission du formulaire (clic sur la loupe ou touche Entrée)
+    searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const searchTerm = searchInput.value.trim();
+        
+        if (searchTerm) {
+            const url = new URL(window.location);
+            url.searchParams.set('search', searchTerm);
+            window.location.href = url.toString();
+        }
+    });
+
+    // Recherche quand on appuie sur Entrée dans le champ
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            searchForm.dispatchEvent(new Event('submit'));
+        }
+    });
+});
+</script>
 {% endblock %} 
