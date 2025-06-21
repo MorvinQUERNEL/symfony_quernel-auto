@@ -67,34 +67,43 @@
     {% if recentVehicules is not empty %}
     <section class="recent-vehicles">
         <h2>Véhicules Récemment Importés</h2>
-        <div class="carousel-container">
-            <button class="carousel-btn carousel-btn-prev" id="prevBtn">
+        <div class="carousel carousel-container">
+            <button class="carousel-nav carousel-nav-prev" id="prevBtn">
                 <i class="fas fa-chevron-left"></i>
             </button>
             <div class="carousel-track" id="carouselTrack">
                 {% for vehicule in recentVehicules %}
                     <div class="vehicle-card carousel-item" data-index="{{ loop.index0 }}">
                         {% if vehicule.pictures is not empty %}
-                            <div class="vehicle-image">
-                                <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures|first.name) }}" alt="{{ vehicule.brand }} {{ vehicule.model }}">
+                            <div class="carousel-image-container">
+                                <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures|first.name) }}" alt="{{ vehicule.brand }} {{ vehicule.model }}" class="carousel-image">
+                                <div class="carousel-image-overlay"></div>
                             </div>
                         {% endif %}
-                        <div class="vehicle-content">
-                            <h3>{{ vehicule.brand }} {{ vehicule.model }}</h3>
-                            <p class="vehicle-description">{{ vehicule.description|length > 100 ? vehicule.description|slice(0, 100) ~ '...' : vehicule.description }}</p>
-                            <div class="vehicle-details">
-                                <span class="vehicle-year">{{ vehicule.year ? vehicule.year|date('Y') : 'N/A' }}</span>
-                                <span class="vehicle-fuel">{{ vehicule.fuelType }}</span>
+                        <div class="carousel-content">
+                            <h3 class="carousel-vehicle-title">{{ vehicule.brand }} {{ vehicule.model }}</h3>
+                            <p class="carousel-vehicle-subtitle">{{ vehicule.description|length > 100 ? vehicule.description|slice(0, 100) ~ '...' : vehicule.description }}</p>
+                            <div class="carousel-vehicle-details">
+                                <div class="carousel-detail-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>{{ vehicule.year ? vehicule.year|date('Y') : 'N/A' }}</span>
+                                </div>
+                                <div class="carousel-detail-item">
+                                    <i class="fas fa-gas-pump"></i>
+                                    <span>{{ vehicule.fuelType }}</span>
+                                </div>
                             </div>
-                            <span class="price">{{ vehicule.salePrice|number_format(0, ',', ' ') }} €</span>
-                            <div class="vehicle-actions">
-                                <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="view-details-btn">
+                            <div class="carousel-price">
+                                <span class="price">{{ vehicule.salePrice|number_format(0, ',', ' ') }} €</span>
+                            </div>
+                            <div class="carousel-actions">
+                                <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="carousel-btn-view">
                                     Voir les détails
                                 </a>
                                 {% if vehicule.status == 'Disponible' %}
-                                    <a href="{{ path('app_vehicules_buy', {'id': vehicule.id}) }}" class="buy-vehicle-btn">
+                                    <a href="{{ path('app_vehicules_buy', {'id': vehicule.id}) }}" class="carousel-btn-buy">
                                         <i class="fas fa-credit-card"></i>
-                                        Acheter ce véhicule
+                                        Acheter
                                     </a>
                                 {% endif %}
                             </div>
@@ -102,14 +111,14 @@
                     </div>
                 {% endfor %}
             </div>
-            <button class="carousel-btn carousel-btn-next" id="nextBtn">
+            <button class="carousel-nav carousel-nav-next" id="nextBtn">
                 <i class="fas fa-chevron-right"></i>
             </button>
         </div>
         {% if recentVehicules|length > 1 %}
-        <div class="carousel-dots" id="carouselDots">
+        <div class="carousel-indicators" id="carouselDots">
             {% for vehicule in recentVehicules %}
-                <button class="dot" data-index="{{ loop.index0 }}"></button>
+                <button class="carousel-dot" data-index="{{ loop.index0 }}"></button>
             {% endfor %}
         </div>
         {% endif %}

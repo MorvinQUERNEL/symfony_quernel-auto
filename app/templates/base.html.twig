@@ -68,7 +68,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#contact" class="nav-link">
+                        <a href="{{ path('app_contact') }}" class="nav-link" aria-current="{{ app.request.get('_route') == 'app_contact' ? 'page' : 'false' }}">
                             <i class="fas fa-envelope"></i>
                             <span>Contact</span>
                         </a>

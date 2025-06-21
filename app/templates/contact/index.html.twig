@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/contact.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="contact-container">
+    <div class="contact-header">
+        <h1>Contactez-nous</h1>
+        <p>Nous sommes là pour vous accompagner dans vos projets d'import-export de véhicules</p>
+    </div>
+
+    <div class="contact-content">
+        <!-- Informations de contact -->
+        <div class="contact-info-section">
+            <h2>Nos coordonnées</h2>
+            <div class="contact-info-grid">
+                <div class="contact-info-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Téléphone</h3>
+                        <p>+33 1 23 45 67 89</p>
+                        <span class="contact-note">Lun-Ven : 9h-18h</span>
+                    </div>
+                </div>
+
+                <div class="contact-info-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Email</h3>
+                        <p>contact@quernel-auto.fr</p>
+                        <span class="contact-note">Réponse sous 24h</span>
+                    </div>
+                </div>
+
+                <div class="contact-info-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Adresse</h3>
+                        <p>123 Rue de la Paix<br>75001 Paris, France</p>
+                        <span class="contact-note">Sur rendez-vous</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulaire de contact -->
+        <div class="contact-form-section">
+            <h2>Envoyez-nous un message</h2>
+            <div class="contact-form-card">
+                {{ form_start(form, {'attr': {'class': 'contact-form'}}) }}
+                    <div class="form-group">
+                        {{ form_label(form.email) }}
+                        {{ form_widget(form.email) }}
+                        {{ form_errors(form.email) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(form.message) }}
+                        {{ form_widget(form.message) }}
+                        {{ form_errors(form.message) }}
+                        <div class="form-help">
+                            <small>Votre message doit contenir entre 10 et 2000 caractères.</small>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        {{ form_widget(form.submit) }}
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -25,6 +25,7 @@
                 {% else %}
                     <div class="no-image">
                         <i class="fas fa-car"></i>
+                        <span>Aucune image</span>
                     </div>
                 {% endif %}
             </div>
@@ -50,26 +51,26 @@
                 <div class="form-row">
                     <div class="form-group">
                         {{ form_label(form.deliveryAdress) }}
-                        {{ form_widget(form.deliveryAdress) }}
+                        {{ form_widget(form.deliveryAdress, {'attr': {'class': 'form-control'}}) }}
                         {{ form_errors(form.deliveryAdress) }}
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         {{ form_label(form.deliveryCity) }}
-                        {{ form_widget(form.deliveryCity) }}
+                        {{ form_widget(form.deliveryCity, {'attr': {'class': 'form-control'}}) }}
                         {{ form_errors(form.deliveryCity) }}
                     </div>
                     <div class="form-group">
                         {{ form_label(form.deliveryPostalCode) }}
-                        {{ form_widget(form.deliveryPostalCode) }}
+                        {{ form_widget(form.deliveryPostalCode, {'attr': {'class': 'form-control'}}) }}
                         {{ form_errors(form.deliveryPostalCode) }}
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         {{ form_label(form.deliveryCountry) }}
-                        {{ form_widget(form.deliveryCountry) }}
+                        {{ form_widget(form.deliveryCountry, {'attr': {'class': 'form-control'}}) }}
                         {{ form_errors(form.deliveryCountry) }}
                     </div>
                 </div>

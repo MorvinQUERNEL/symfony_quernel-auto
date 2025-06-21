@@ -169,7 +169,7 @@ body {
 .carousel-track {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    gap: 60px;
+    gap: 30px;
     padding: 30px 0;
     width: fit-content;
 }
@@ -323,110 +323,83 @@ body {
     font-size: 12px;
 }
 
-/* Carousel Navigation */
-.carousel-btn {
+/* Navigation buttons */
+.carousel-nav {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: var(--primary-color);
-    color: var(--light-color);
-    border: none;
     width: 50px;
     height: 50px;
+    background: var(--primary-color);
+    border: none;
     border-radius: 50%;
+    color: var(--light-color);
+    font-size: 1.2rem;
     cursor: pointer;
     z-index: 20;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    pointer-events: auto;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.carousel-btn:hover {
-    background-color: #e05a00;
+.carousel-nav:hover {
+    background: #e55a00;
     transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
-.carousel-btn:active {
+.carousel-nav:active {
     transform: translateY(-50%) scale(0.95);
-    box-shadow: 0 2px 8px rgba(255, 107, 0, 0.3);
 }
 
-.carousel-btn-prev {
+.carousel-nav-prev {
     left: 10px;
 }
 
-.carousel-btn-next {
+.carousel-nav-next {
     right: 10px;
 }
 
-.carousel-btn:disabled {
-    opacity: 0.3;
+.carousel-nav:disabled {
+    background: #ccc;
     cursor: not-allowed;
+    opacity: 0.5;
     transform: translateY(-50%) scale(1);
-    background-color: #ccc;
-    box-shadow: none;
-    pointer-events: none;
 }
 
-.carousel-btn:disabled:hover {
+.carousel-nav:disabled:hover {
+    background: #ccc;
     transform: translateY(-50%) scale(1);
-    box-shadow: none;
-    background-color: #ccc;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Amélioration de la visibilité des boutons */
-.carousel-btn::before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(45deg, var(--primary-color), #e05a00);
-    border-radius: 50%;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.carousel-btn:hover::before {
-    opacity: 1;
-}
-
-/* Carousel Dots */
-.carousel-dots {
+/* Carousel indicators */
+.carousel-indicators {
     display: flex;
     justify-content: center;
     gap: 10px;
     margin-top: 30px;
 }
 
-.dot {
+.carousel-dot {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background-color: #ccc;
+    background: #ccc;
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
-.dot.active {
-    background-color: var(--primary-color);
+.carousel-dot.active {
+    background: var(--primary-color);
     transform: scale(1.2);
 }
 
-.dot:hover {
-    background-color: var(--primary-color);
+.carousel-dot:hover {
+    background: var(--primary-color);
     transform: scale(1.1);
 }
 
@@ -545,7 +518,7 @@ body {
         margin: 0 2px;
     }
     
-    .carousel-btn {
+    .carousel-nav {
         width: 35px;
         height: 35px;
         font-size: 0.9rem;
@@ -554,19 +527,19 @@ body {
         z-index: 25;
     }
     
-    .carousel-btn-prev {
+    .carousel-nav-prev {
         left: 5px;
     }
     
-    .carousel-btn-next {
+    .carousel-nav-next {
         right: 5px;
     }
     
-    .carousel-btn:hover {
+    .carousel-nav:hover {
         transform: translateY(-50%) scale(1.05);
     }
     
-    .carousel-btn:active {
+    .carousel-nav:active {
         transform: translateY(-50%) scale(0.95);
     }
     
@@ -620,17 +593,17 @@ body {
         min-width: 220px;
     }
     
-    .carousel-btn {
+    .carousel-nav {
         width: 30px;
         height: 30px;
         font-size: 0.8rem;
     }
     
-    .carousel-btn-prev {
+    .carousel-nav-prev {
         left: 3px;
     }
     
-    .carousel-btn-next {
+    .carousel-nav-next {
         right: 3px;
     }
     

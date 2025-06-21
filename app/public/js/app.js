@@ -53,7 +53,7 @@ class App {
     initCarousel() {
         try {
             if (typeof Carousel !== 'undefined') {
-                const carouselElements = document.querySelectorAll('.carousel');
+                const carouselElements = document.querySelectorAll('.carousel-container');
                 carouselElements.forEach((element, index) => {
                     this.carousels[index] = new Carousel(element);
                 });

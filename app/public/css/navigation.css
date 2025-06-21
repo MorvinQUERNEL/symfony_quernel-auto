@@ -214,8 +214,36 @@
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-lg);
     padding: var(--spacing-sm) 0;
-    z-index: var(--z-dropdown);
+    z-index: 1200;
     animation: fadeIn 0.2s ease-out;
+}
+
+/* Gestion spécifique pour le mode mobile */
+@media (max-width: 767px) {
+    .dropdown-menu {
+        position: static;
+        width: 100%;
+        min-width: auto;
+        margin-top: var(--spacing-sm);
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        z-index: 1200;
+    }
+
+    .dropdown-item {
+        color: #FFFFFF;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .dropdown-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--primary-color);
+    }
+
+    .dropdown-divider {
+        background: rgba(255, 255, 255, 0.2);
+    }
 }
 
 .dropdown.active .dropdown-menu {
@@ -225,7 +253,7 @@
 .dropdown-item {
     display: block;
     padding: var(--spacing-sm) var(--spacing-lg);
-    color: var(--text-color);
+    color: FFFFFF;
     text-decoration: none;
     transition: all var(--transition-fast);
 }
@@ -293,7 +321,7 @@
     .navbar-container {
         padding: var(--spacing-md) var(--spacing-lg);
     }
-    
+
     /* Menu principal - AFFICHÉ EN HORIZONTAL */
     .navbar-nav {
         display: flex !important;
@@ -305,7 +333,7 @@
         box-shadow: none;
         border: none;
     }
-    
+
     .navbar-nav.active {
         flex-direction: row;
         position: static;
@@ -315,12 +343,12 @@
         box-shadow: none;
         border: none;
     }
-    
+
     /* Bouton burger - MASQUÉ */
     .navbar-toggler {
         display: none !important;
     }
-    
+
     /* Actions utilisateur - AFFICHÉES */
     .navbar-actions {
         display: flex !important;
@@ -329,18 +357,18 @@
         padding-top: 0;
         border: none;
     }
-    
+
     .navbar-actions.active {
         flex-direction: row;
         margin-top: 0;
         padding-top: 0;
         border: none;
     }
-    
+
     .nav-link {
         padding: var(--spacing-sm) var(--spacing-md);
     }
-    
+
     .dropdown-menu {
         min-width: 220px;
     }
@@ -353,19 +381,19 @@
     .navbar-container {
         padding: var(--spacing-lg) var(--spacing-xl);
     }
-    
+
     .navbar-nav {
         gap: var(--spacing-xl);
     }
-    
+
     .nav-link {
         padding: var(--spacing-sm) var(--spacing-lg);
     }
-    
+
     .navbar-actions {
         gap: var(--spacing-lg);
     }
-    
+
     .dropdown-menu {
         min-width: 250px;
     }
@@ -426,4 +454,4 @@
         transition: none;
         animation: none;
     }
-} 
+}

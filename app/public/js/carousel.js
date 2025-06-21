@@ -118,6 +118,7 @@ class Carousel {
         if (this.prevBtn) {
             this.prevBtn.addEventListener('click', (e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 this.prev();
             });
         }
@@ -125,13 +126,16 @@ class Carousel {
         if (this.nextBtn) {
             this.nextBtn.addEventListener('click', (e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 this.next();
             });
         }
         
         // Navigation par dots
         this.dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
+            dot.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 this.goTo(index);
             });
         });

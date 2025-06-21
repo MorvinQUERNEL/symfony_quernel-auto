@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation de votre message</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .email-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #FF6B00;
+            padding-bottom: 20px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FF6B00;
+            margin-bottom: 10px;
+        }
+        .title {
+            color: #333;
+            font-size: 20px;
+            margin: 0;
+        }
+        .content {
+            margin-bottom: 30px;
+        }
+        .success-message {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .message-recap {
+            background-color: #f8f9fa;
+            border-left: 4px solid #FF6B00;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .contact-info {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .contact-info strong {
+            color: #FF6B00;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+            color: #666;
+            font-size: 14px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #FF6B00;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <div class="logo">QUERNEL AUTO</div>
+            <h1 class="title">Confirmation de votre message</h1>
+        </div>
+
+        <div class="content">
+            <div class="success-message">
+                <strong>✅ Votre message a été reçu avec succès !</strong>
+            </div>
+
+            <p>Bonjour,</p>
+            
+            <p>Nous avons bien reçu votre message et nous vous en remercions. Notre équipe va l'étudier et vous répondre dans les plus brefs délais.</p>
+
+            <div class="contact-info">
+                <strong>Votre email :</strong> {{ email }}<br>
+                <strong>Date d'envoi :</strong> {{ date|date('d/m/Y à H:i') }}
+            </div>
+
+            <h3>Récapitulatif de votre message :</h3>
+            <div class="message-recap">
+                {{ message|nl2br }}
+            </div>
+
+            <p>En attendant notre réponse, vous pouvez également nous contacter directement :</p>
+            
+            <ul>
+                <li><strong>Téléphone :</strong> +33 1 23 45 67 89</li>
+                <li><strong>Email :</strong> contact@quernel-auto.fr</li>
+                <li><strong>Adresse :</strong> 123 Rue de la Paix, 75001 Paris</li>
+            </ul>
+
+            <p>Cordialement,<br>
+            <strong>L'équipe Quernel Auto</strong></p>
+        </div>
+
+        <div class="footer">
+            <p>Cet email confirme la réception de votre message sur le site Quernel Auto.</p>
+            <p>© {{ "now"|date("Y") }} Quernel Auto - Tous droits réservés</p>
+        </div>
+    </div>
+</body>
+</html> 
