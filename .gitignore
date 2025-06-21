@@ -1,2 +1,5 @@
 mysql
 .idea
+
+app/.env:43
+app/config/services.yaml:9
