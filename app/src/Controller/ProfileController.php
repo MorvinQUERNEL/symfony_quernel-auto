@@ -21,13 +21,19 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class ProfileController extends AbstractController
 {
     #[Route('/', name: 'app_profile')]
-    public function index(PreferenceRepository $preferenceRepository): Response
+    public function index(PreferenceRepository $preferenceRepository, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
         $preferences = $user->getPreferences();
+        
+        // Récupérer les commandes de l'utilisateur (les 3 plus récentes pour l'aperçu)
+        $orders = $entityManager->getRepository(\App\Entity\Orders::class)
+            ->findBy(['users' => $user], ['createdAt' => 'DESC'], 3);
+        
         return $this->render('profile/index.html.twig', [
             'user' => $user,
             'preferences' => $preferences,
+            'orders' => $orders,
         ]);
     }
 

@@ -4,18 +4,37 @@ namespace App\Controller;
 
 use App\Entity\Vehicules;
 use App\Entity\Pictures;
+use App\Entity\Orders;
 use App\Form\VehiculeType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Stripe\StripeClient;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/vehicules')]
 class VehiculeController extends AbstractController
 {
+    private StripeClient $stripeClient;
+    private string $stripePublicKey;
+    private LoggerInterface $logger;
+
+    public function __construct(
+        StripeClient $stripeClient,
+        string $stripePublicKey,
+        LoggerInterface $logger
+    ) {
+        $this->stripeClient = $stripeClient;
+        $this->stripePublicKey = $stripePublicKey;
+        $this->logger = $logger;
+    }
+
     #[Route('/', name: 'app_vehicules_index', methods: ['GET'])]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -162,6 +181,78 @@ class VehiculeController extends AbstractController
             $this->addFlash('success', 'Le véhicule a été supprimé avec succès !');
         }
 
+        return $this->redirectToRoute('app_vehicules_index');
+    }
+
+    #[Route('/{id}/buy', name: 'app_vehicules_buy', methods: ['GET'])]
+    public function buy(Vehicules $vehicule): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            $this->addFlash('error', 'Vous devez être connecté pour acheter un véhicule.');
+            return $this->redirectToRoute('app_login');
+        }
+
+        if ($vehicule->getStatus() !== 'Disponible') {
+            $this->addFlash('error', 'Ce véhicule n\'est plus disponible à la vente.');
+            return $this->redirectToRoute('app_vehicules_show', ['id' => $vehicule->getId()]);
+        }
+
+        // Rediriger vers le formulaire de commande avec l'ID du véhicule
+        return $this->redirectToRoute('app_orders_new_with_vehicule', ['vehicule_id' => $vehicule->getId()]);
+    }
+
+    #[Route('/purchase/success', name: 'app_vehicules_purchase_success')]
+    public function purchaseSuccess(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $sessionId = $request->query->get('session_id');
+        $vehiculeId = $request->query->get('vehicule_id');
+
+        try {
+            if ($sessionId) {
+                // Récupérer les détails de la session Stripe
+                $session = $this->stripeClient->checkout->sessions->retrieve($sessionId);
+                
+                if ($session->payment_status === 'paid') {
+                    // Mettre à jour le véhicule et la commande
+                    $vehicule = $entityManager->getRepository(Vehicules::class)->find($vehiculeId);
+                    $orderId = $session->metadata->order_id ?? null;
+                    
+                    if ($vehicule && $orderId) {
+                        $order = $entityManager->getRepository(Orders::class)->find($orderId);
+                        
+                        if ($order) {
+                            $order->setOrderStatus('paid');
+                            $vehicule->setStatus('Vendu');
+                            
+                            $entityManager->flush();
+                            
+                            $this->addFlash('success', 'Félicitations ! Votre véhicule a été acheté avec succès !');
+                        }
+                    }
+                }
+            }
+
+            return $this->render('vehicule/purchase_success.html.twig', [
+                'vehicule_id' => $vehiculeId,
+            ]);
+
+        } catch (\Exception $e) {
+            $this->logger->error('Erreur lors du traitement du succès d\'achat', [
+                'error' => $e->getMessage(),
+                'session_id' => $sessionId,
+                'vehicule_id' => $vehiculeId,
+            ]);
+
+            $this->addFlash('error', 'Erreur lors du traitement de l\'achat. Contactez le support.');
+            return $this->redirectToRoute('app_vehicules_index');
+        }
+    }
+
+    #[Route('/purchase/cancel', name: 'app_vehicules_purchase_cancel')]
+    public function purchaseCancel(Request $request): Response
+    {
+        $this->addFlash('warning', 'Le paiement a été annulé.');
         return $this->redirectToRoute('app_vehicules_index');
     }
 } 

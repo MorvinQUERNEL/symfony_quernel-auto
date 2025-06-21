@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statut Webhook Stripe{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">
+                        <i class="fas fa-link me-2"></i>
+                        Statut Webhook Stripe
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h5><i class="fas fa-info-circle me-2"></i>Informations Webhook</h5>
+                        <p class="mb-0">
+                            Cette page affiche les informations de configuration du webhook Stripe.
+                            Le webhook lui-même n'est accessible que via des requêtes POST de Stripe.
+                        </p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0"><i class="fas fa-check-circle me-2"></i>URL du Webhook</h6>
+                                </div>
+                                <div class="card-body">
+                                    <code class="text-break">{{ webhook_url }}</code>
+                                    <div class="mt-2">
+                                        <small class="text-muted">
+                                            <i class="fas fa-exclamation-triangle me-1"></i>
+                                            Cette URL doit être configurée dans votre dashboard Stripe
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-header bg-warning text-dark">
+                                    <h6 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Méthode HTTP</h6>
+                                </div>
+                                <div class="card-body">
+                                    <span class="badge bg-primary fs-6">POST</span>
+                                    <div class="mt-2">
+                                        <small class="text-muted">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Seules les requêtes POST sont acceptées
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header bg-info text-white">
+                            <h6 class="mb-0"><i class="fas fa-list me-2"></i>Événements Supportés</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                {% for event in supported_events %}
+                                    <div class="col-md-6 mb-2">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-circle text-success me-2"></i>
+                                            <code>{{ event }}</code>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header bg-secondary text-white">
+                            <h6 class="mb-0"><i class="fas fa-cogs me-2"></i>Instructions de Configuration</h6>
+                        </div>
+                        <div class="card-body">
+                            <ol class="mb-0">
+                                <li>Connectez-vous à votre <a href="https://dashboard.stripe.com/webhooks" target="_blank">Dashboard Stripe</a></li>
+                                <li>Allez dans <strong>Développeurs > Webhooks</strong></li>
+                                <li>Cliquez sur <strong>"Ajouter un endpoint"</strong></li>
+                                <li>Entrez l'URL : <code>{{ webhook_url }}</code></li>
+                                <li>Sélectionnez les événements listés ci-dessus</li>
+                                <li>Copiez la clé secrète du webhook</li>
+                                <li>Mettez à jour le paramètre <code>stripe_webhook_secret</code> dans <code>config/services.yaml</code></li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header bg-dark text-white">
+                            <h6 class="mb-0"><i class="fas fa-terminal me-2"></i>Test du Webhook</h6>
+                        </div>
+                        <div class="card-body">
+                            <p>Pour tester le webhook, utilisez la commande Symfony :</p>
+                            <div class="bg-dark text-light p-3 rounded">
+                                <code>php bin/console stripe:webhook:setup</code>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <h6>Ou utilisez Stripe CLI en local :</h6>
+                                <div class="bg-dark text-light p-3 rounded">
+                                    <code>stripe listen --forward-to localhost:8080/webhook/stripe</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a href="{{ path('app_payment') }}" class="btn btn-primary">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Retour aux paiements
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

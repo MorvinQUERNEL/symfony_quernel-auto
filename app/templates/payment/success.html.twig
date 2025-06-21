@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement réussi - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/payment.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="payment-container">
+        <div class="success-content">
+            <div class="success-card">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                
+                <div class="success-header">
+                    <h1>Paiement réussi !</h1>
+                    <p>Votre commande a été confirmée et sera traitée dans les plus brefs délais.</p>
+                </div>
+                
+                {% if order_id %}
+                    <div class="order-info">
+                        <h3>Détails de la commande</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="label">Numéro de commande :</span>
+                                <span class="value">#{{ order_id }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Statut :</span>
+                                <span class="value status-paid">Payée</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Date de paiement :</span>
+                                <span class="value">{{ "now"|date('d/m/Y H:i') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <div class="next-steps">
+                    <h3>Prochaines étapes</h3>
+                    <div class="steps-list">
+                        <div class="step">
+                            <div class="step-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="step-content">
+                                <h4>Email de confirmation</h4>
+                                <p>Vous recevrez un email de confirmation dans les prochaines minutes.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="step-content">
+                                <h4>Traitement de la commande</h4>
+                                <p>Notre équipe va traiter votre commande et vous contacter pour les détails de livraison.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="step-content">
+                                <h4>Support client</h4>
+                                <p>Notre équipe est disponible pour répondre à toutes vos questions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="success-actions">
+                    <a href="{{ path('app_home') }}" class="btn btn-primary">
+                        <i class="fas fa-home"></i> Retour à l'accueil
+                    </a>
+                    <a href="{{ path('app_vehicules_index') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-car"></i> Voir nos véhicules
+                    </a>
+                    <a href="{{ path('app_payment') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-credit-card"></i> Mes paiements
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %} 

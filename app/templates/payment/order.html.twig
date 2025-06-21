@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement - Commande #{{ order.id }} - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/payment.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="payment-container">
+        <div class="payment-header">
+            <h1>Paiement de la commande</h1>
+            <p>Finalisez votre achat en toute sécurité avec Stripe</p>
+        </div>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label == 'error' ? 'danger' : label == 'warning' ? 'warning' : 'success' }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="payment-content">
+            <div class="order-summary">
+                <div class="order-card">
+                    <div class="order-header">
+                        <h3>Commande #{{ order.id }}</h3>
+                        <span class="order-status status-pending">En attente de paiement</span>
+                    </div>
+                    
+                    <div class="order-details">
+                        <div class="order-info">
+                            <p><strong>Date de commande :</strong> {{ order.createdAt|date('d/m/Y H:i') }}</p>
+                            <p><strong>Description :</strong> {{ order.description ?? 'Commande de véhicule' }}</p>
+                            {% if order.vehicule %}
+                                <p><strong>Véhicule :</strong> {{ order.vehicule.brand }} {{ order.vehicule.model }}</p>
+                                <p><strong>Année :</strong> {{ order.vehicule.year ? order.vehicule.year|date('Y') : 'N/A' }}</p>
+                                <p><strong>Carburant :</strong> {{ order.vehicule.fuelType }}</p>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="order-amount">
+                            <span class="amount">{{ order.totalAmount|number_format(2, ',', ' ') }} €</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="payment-section">
+                <div class="payment-card">
+                    <div class="payment-header">
+                        <h3>Informations de paiement</h3>
+                        <div class="payment-methods">
+                            <i class="fab fa-cc-visa"></i>
+                            <i class="fab fa-cc-mastercard"></i>
+                            <i class="fab fa-cc-amex"></i>
+                            <i class="fab fa-cc-paypal"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-form">
+                        <div class="payment-summary">
+                            <div class="summary-row">
+                                <span>Sous-total :</span>
+                                <span>{{ order.totalAmount|number_format(2, ',', ' ') }} €</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Frais de transaction :</span>
+                                <span>0,00 €</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total à payer :</span>
+                                <span>{{ order.totalAmount|number_format(2, ',', ' ') }} €</span>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-actions">
+                            <button type="button" class="btn btn-primary btn-pay-stripe" onclick="initiatePayment()">
+                                <i class="fas fa-credit-card"></i> Payer avec Stripe
+                            </button>
+                            <a href="{{ path('app_payment') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left"></i> Retour aux commandes
+                            </a>
+                        </div>
+                        
+                        <div class="payment-security">
+                            <div class="security-info">
+                                <i class="fas fa-shield-alt"></i>
+                                <div>
+                                    <strong>Paiement sécurisé</strong>
+                                    <p>Vos informations de paiement sont protégées par le cryptage SSL et Stripe</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Chargement...</span>
+            </div>
+            <p>Redirection vers Stripe...</p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function initiatePayment() {
+            // Afficher le loading
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            
+            // Désactiver le bouton
+            const payButton = document.querySelector('.btn-pay-stripe');
+            payButton.disabled = true;
+            payButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Traitement...';
+            
+            // Créer la session de paiement
+            fetch('{{ path('app_create_checkout_session') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: 'order_id={{ order.id }}'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.url) {
+                    // Rediriger vers Stripe
+                    window.location.href = data.url;
+                } else {
+                    throw new Error(data.error || 'Erreur lors de la création de la session de paiement');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                
+                // Masquer le loading
+                document.getElementById('loadingOverlay').style.display = 'none';
+                
+                // Réactiver le bouton
+                payButton.disabled = false;
+                payButton.innerHTML = '<i class="fas fa-credit-card"></i> Payer avec Stripe';
+                
+                // Afficher l'erreur
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-danger alert-dismissible fade show';
+                alertDiv.innerHTML = `
+                    ${error.message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                `;
+                
+                const container = document.querySelector('.payment-container');
+                container.insertBefore(alertDiv, container.firstChild);
+            });
+        }
+    </script>
+{% endblock %} 

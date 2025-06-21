@@ -25,7 +25,7 @@ class ErrorController extends AbstractController
     /**
      * Gestion des erreurs 404 (Page non trouvée)
      */
-    public function show404(Request $request, \Throwable $exception = null): Response
+    public function show404(Request $request, ?\Throwable $exception = null): Response
     {
         $this->logger->warning('Erreur 404 - Page non trouvée', [
             'url' => $request->getUri(),
@@ -33,15 +33,22 @@ class ErrorController extends AbstractController
             'ip' => $request->getClientIp()
         ]);
 
-        $this->addFlash('error', 'La page que vous recherchez n\'existe pas ou a été déplacée.');
-        
-        return $this->redirectToRoute('app_home');
+        return new Response('
+            <html>
+                <head><title>Erreur 404</title></head>
+                <body>
+                    <h1>Page non trouvée</h1>
+                    <p>La page que vous recherchez n\'existe pas.</p>
+                    <p><a href="/test">Page de test</a></p>
+                </body>
+            </html>
+        ', 404);
     }
 
     /**
      * Gestion des erreurs 403 (Accès refusé)
      */
-    public function show403(Request $request, \Throwable $exception = null): Response
+    public function show403(Request $request, ?\Throwable $exception = null): Response
     {
         $this->logger->warning('Erreur 403 - Accès refusé', [
             'url' => $request->getUri(),
@@ -49,15 +56,22 @@ class ErrorController extends AbstractController
             'ip' => $request->getClientIp()
         ]);
 
-        $this->addFlash('error', 'Vous n\'avez pas les permissions nécessaires pour accéder à cette page.');
-        
-        return $this->redirectToRoute('app_home');
+        return new Response('
+            <html>
+                <head><title>Erreur 403</title></head>
+                <body>
+                    <h1>Accès refusé</h1>
+                    <p>Vous n\'avez pas les permissions nécessaires.</p>
+                    <p><a href="/test">Page de test</a></p>
+                </body>
+            </html>
+        ', 403);
     }
 
     /**
      * Gestion des erreurs 500 (Erreur serveur)
      */
-    public function show500(Request $request, \Throwable $exception = null): Response
+    public function show500(Request $request, ?\Throwable $exception = null): Response
     {
         $this->logger->error('Erreur 500 - Erreur serveur', [
             'url' => $request->getUri(),
@@ -66,15 +80,22 @@ class ErrorController extends AbstractController
             'exception' => $exception ? $exception->getMessage() : 'Aucune exception'
         ]);
 
-        $this->addFlash('error', 'Une erreur inattendue s\'est produite. Veuillez réessayer plus tard.');
-        
-        return $this->redirectToRoute('app_home');
+        return new Response('
+            <html>
+                <head><title>Erreur 500</title></head>
+                <body>
+                    <h1>Erreur serveur</h1>
+                    <p>Une erreur inattendue s\'est produite.</p>
+                    <p><a href="/test">Page de test</a></p>
+                </body>
+            </html>
+        ', 500);
     }
 
     /**
      * Gestion générale des erreurs
      */
-    public function show(Request $request, \Throwable $exception = null): Response
+    public function show(Request $request, ?\Throwable $exception = null): Response
     {
         $statusCode = 500;
         $message = 'Une erreur inattendue s\'est produite.';
@@ -87,51 +108,31 @@ class ErrorController extends AbstractController
         switch ($statusCode) {
             case 404:
                 $message = 'La page que vous recherchez n\'existe pas ou a été déplacée.';
-                $this->logger->warning('Erreur 404 - Page non trouvée', [
-                    'url' => $request->getUri(),
-                    'user_agent' => $request->headers->get('User-Agent'),
-                    'ip' => $request->getClientIp()
-                ]);
                 break;
             case 403:
                 $message = 'Vous n\'avez pas les permissions nécessaires pour accéder à cette page.';
-                $this->logger->warning('Erreur 403 - Accès refusé', [
-                    'url' => $request->getUri(),
-                    'user_agent' => $request->headers->get('User-Agent'),
-                    'ip' => $request->getClientIp()
-                ]);
                 break;
             case 400:
                 $message = 'La requête est invalide. Veuillez vérifier les informations saisies.';
-                $this->logger->warning('Erreur 400 - Requête invalide', [
-                    'url' => $request->getUri(),
-                    'user_agent' => $request->headers->get('User-Agent'),
-                    'ip' => $request->getClientIp()
-                ]);
                 break;
             case 401:
                 $message = 'Vous devez être connecté pour accéder à cette page.';
-                $this->logger->info('Erreur 401 - Non authentifié', [
-                    'url' => $request->getUri(),
-                    'user_agent' => $request->headers->get('User-Agent'),
-                    'ip' => $request->getClientIp()
-                ]);
                 break;
             case 500:
             default:
                 $message = 'Une erreur inattendue s\'est produite. Veuillez réessayer plus tard.';
-                $this->logger->error('Erreur serveur', [
-                    'url' => $request->getUri(),
-                    'user_agent' => $request->headers->get('User-Agent'),
-                    'ip' => $request->getClientIp(),
-                    'exception' => $exception ? $exception->getMessage() : 'Aucune exception',
-                    'status_code' => $statusCode
-                ]);
                 break;
         }
 
-        $this->addFlash('error', $message);
-        
-        return $this->redirectToRoute('app_home');
+        return new Response('
+            <html>
+                <head><title>Erreur ' . $statusCode . '</title></head>
+                <body>
+                    <h1>Erreur ' . $statusCode . '</h1>
+                    <p>' . $message . '</p>
+                    <p><a href="/test">Page de test</a></p>
+                </body>
+            </html>
+        ', $statusCode);
     }
 } 

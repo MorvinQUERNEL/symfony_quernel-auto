@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Achat réussi{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <h2 class="mb-0">
+                        <i class="fas fa-check-circle me-2"></i>
+                        Achat réussi !
+                    </h2>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-car text-success" style="font-size: 4rem;"></i>
+                    </div>
+
+                    <h3 class="text-success mb-3">Félicitations !</h3>
+                    <p class="lead">
+                        Votre véhicule a été acheté avec succès. 
+                        Vous recevrez bientôt un email de confirmation avec tous les détails.
+                    </p>
+
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-info-circle me-2"></i>Prochaines étapes :</h6>
+                        <ul class="text-start mb-0">
+                            <li>Vous recevrez un email de confirmation dans les prochaines minutes</li>
+                            <li>Notre équipe vous contactera pour organiser la livraison</li>
+                            <li>Le véhicule sera préparé et livré à votre adresse</li>
+                            <li>Vous recevrez tous les documents nécessaires</li>
+                        </ul>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6><i class="fas fa-phone me-2"></i>Support client</h6>
+                                    <p class="mb-0">Besoin d'aide ? Contactez-nous :</p>
+                                    <strong>01 23 45 67 89</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6><i class="fas fa-envelope me-2"></i>Email</h6>
+                                    <p class="mb-0">Ou envoyez-nous un email :</p>
+                                    <strong>contact@quernel-auto.fr</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="{{ path('app_vehicules_index') }}" class="btn btn-primary me-2">
+                            <i class="fas fa-car me-2"></i>
+                            Voir d'autres véhicules
+                        </a>
+                        <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-home me-2"></i>
+                            Retour à l'accueil
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -20,6 +20,7 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
+                default_target_path: app_home
             logout:
                 path: app_logout
                 target: app_home
@@ -32,8 +33,20 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        # Routes publiques (accessibles à tous)
+        - { path: ^/$, roles: PUBLIC_ACCESS }
+        - { path: ^/connexion, roles: PUBLIC_ACCESS }
+        - { path: ^/inscription, roles: PUBLIC_ACCESS }
+        - { path: ^/vehicules, roles: PUBLIC_ACCESS }
+        - { path: ^/mentions-legales, roles: PUBLIC_ACCESS }
+        - { path: ^/politique-confidentialite, roles: PUBLIC_ACCESS }
+        - { path: ^/cgv, roles: PUBLIC_ACCESS }
+        - { path: ^/reset-password, roles: PUBLIC_ACCESS }
+        
         # Routes utilisateur
         - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/orders, roles: ROLE_USER }
+        - { path: ^/preference, roles: ROLE_USER }
 
         # Routes admin
         - { path: ^/admin, roles: ROLE_ADMIN }

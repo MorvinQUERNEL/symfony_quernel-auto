@@ -55,7 +55,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $country = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $registrationAt = null;
+    private \DateTimeImmutable $registrationAt;
 
 
 
@@ -89,6 +89,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         $this->preferences = new ArrayCollection();
         $this->messages = new ArrayCollection();
         $this->messagesRecipient = new ArrayCollection();
+        $this->registrationAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -264,7 +265,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getRegistrationAt(): ?\DateTimeImmutable
+    public function getRegistrationAt(): \DateTimeImmutable
     {
         return $this->registrationAt;
     }

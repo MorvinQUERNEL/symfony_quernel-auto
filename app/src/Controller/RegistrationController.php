@@ -22,6 +22,9 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Définir la date d'inscription
+            $user->setRegistrationAt(new \DateTimeImmutable());
+            
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,

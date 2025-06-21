@@ -267,22 +267,60 @@ body {
 }
 
 .view-details-btn {
-    display: block;
-    width: 100%;
-    padding: 12px;
+    display: inline-block;
+    padding: 10px;
     background-color: var(--primary-color);
     color: var(--light-color);
     text-decoration: none;
-    text-align: center;
-    border-radius: 8px;
-    font-weight: 600;
+    border-radius: 5px;
+    font-weight: bold;
     transition: all 0.3s ease;
+    text-align: center;
+    margin-top: 15px;
+    width: 100%;
+    font-size: 0.9rem;
 }
 
 .view-details-btn:hover {
-    background-color: #e05a00;
+    background-color: #e55a00;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3);
+}
+
+.vehicle-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.buy-vehicle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    background-color: #28a745;
+    color: var(--light-color);
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 100%;
+    font-size: 0.9rem;
+}
+
+.buy-vehicle-btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+    color: var(--light-color);
+    text-decoration: none;
+}
+
+.buy-vehicle-btn i {
+    font-size: 12px;
 }
 
 /* Carousel Navigation */
@@ -554,6 +592,20 @@ body {
     .view-details-btn {
         padding: 10px;
         font-size: 0.9rem;
+    }
+    
+    .vehicle-actions {
+        gap: 8px;
+        margin-top: 12px;
+    }
+    
+    .buy-vehicle-btn {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    
+    .buy-vehicle-btn i {
+        font-size: 12px;
     }
 }
 

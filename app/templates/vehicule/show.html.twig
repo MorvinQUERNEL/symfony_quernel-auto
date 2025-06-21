@@ -61,8 +61,22 @@
                 </div>
 
                 <div class="vehicule-price">
-                    <span class="price">{{ vehicule.salePrice|number_format(0, ',', ' ') }} €</span>
+                    <span class="price">{{ (vehicule.salePrice / 100)|number_format(2, ',', ' ') }} €</span>
                 </div>
+
+                {% if vehicule.status == 'Disponible' %}
+                    <div class="vehicule-actions-buy">
+                        <a href="{{ path('app_vehicules_buy', {'id': vehicule.id}) }}" class="btn btn-success btn-lg">
+                            <i class="fas fa-credit-card me-2"></i>
+                            Acheter ce véhicule
+                        </a>
+                    </div>
+                {% elseif vehicule.status == 'Vendu' %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Ce véhicule a déjà été vendu.
+                    </div>
+                {% endif %}
 
                 <div class="vehicule-specs">
                     <div class="spec-item">

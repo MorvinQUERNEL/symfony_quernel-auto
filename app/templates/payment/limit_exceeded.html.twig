@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Limite de paiement dépassée - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/payment.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="limit-exceeded-container">
+    <div class="limit-exceeded-card">
+        <div class="limit-exceeded-header">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h1>Limite de paiement dépassée</h1>
+        </div>
+
+        <div class="limit-exceeded-content">
+            <div class="order-summary">
+                <h2>Récapitulatif de votre commande</h2>
+                <div class="order-details">
+                    <p><strong>Numéro de commande :</strong> #{{ order.id }}</p>
+                    <p><strong>Montant total :</strong> <span class="price">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</span></p>
+                    <p><strong>Date :</strong> {{ order.createdAt|date('d/m/Y à H:i') }}</p>
+                </div>
+
+                {% set vehicule = order.vehicules.first() %}
+                {% if vehicule %}
+                <div class="vehicule-info">
+                    <h3>Véhicule sélectionné</h3>
+                    <div class="vehicule-card">
+                        {% if vehicule.pictures is not empty %}
+                            <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures.first.name) }}" 
+                                 alt="{{ vehicule.brand }} {{ vehicule.model }}">
+                        {% endif %}
+                        <div class="vehicule-details">
+                            <h4>{{ vehicule.brand }} {{ vehicule.model }}</h4>
+                            <p>{{ vehicule.year|date('Y') }} - {{ vehicule.mileage|number_format(0, ',', ' ') }} km</p>
+                            <p>{{ vehicule.fuelType }} - {{ vehicule.trasmission }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="limit-info">
+                <h2>Pourquoi cette limite ?</h2>
+                <p>Stripe impose une limite de <strong>999 999,99 €</strong> par session de paiement pour des raisons de sécurité. Votre commande de <strong>{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</strong> dépasse cette limite.</p>
+            </div>
+
+            <div class="payment-alternatives">
+                <h2>Alternatives de paiement</h2>
+                
+                <div class="alternative-option">
+                    <h3>💳 Paiement en plusieurs fois</h3>
+                    <p>Nous pouvons diviser votre paiement en plusieurs transactions séparées.</p>
+                    <a href="mailto:contact@quernel-auto.fr?subject=Paiement en plusieurs fois - Commande #{{ order.id }}" class="btn btn-primary">
+                        <i class="fas fa-envelope"></i> Demander un paiement en plusieurs fois
+                    </a>
+                </div>
+
+                <div class="alternative-option">
+                    <h3>🏦 Virement bancaire</h3>
+                    <p>Effectuez un virement bancaire direct vers notre compte.</p>
+                    <a href="mailto:contact@quernel-auto.fr?subject=Virement bancaire - Commande #{{ order.id }}" class="btn btn-secondary">
+                        <i class="fas fa-university"></i> Demander les coordonnées bancaires
+                    </a>
+                </div>
+
+                <div class="alternative-option">
+                    <h3>📞 Paiement par téléphone</h3>
+                    <p>Appelez-nous pour finaliser votre achat par téléphone.</p>
+                    <a href="tel:+33123456789" class="btn btn-success">
+                        <i class="fas fa-phone"></i> Appeler le support
+                    </a>
+                </div>
+            </div>
+
+            <div class="contact-info">
+                <h3>Besoin d'aide ?</h3>
+                <p>Notre équipe est là pour vous accompagner :</p>
+                <ul>
+                    <li><strong>📧 Email :</strong> contact@quernel-auto.fr</li>
+                    <li><strong>📞 Téléphone :</strong> +33 1 23 45 67 89</li>
+                    <li><strong>🕒 Horaires :</strong> Lundi-Vendredi 9h-18h</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="limit-exceeded-actions">
+            <a href="{{ path('app_orders_my_orders') }}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Retour à mes commandes
+            </a>
+            <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="btn btn-outline">
+                <i class="fas fa-car"></i> Retour au véhicule
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement annulé - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/payment.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="payment-container">
+        <div class="cancel-content">
+            <div class="cancel-card">
+                <div class="cancel-icon">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                
+                <div class="cancel-header">
+                    <h1>Paiement annulé</h1>
+                    <p>Votre paiement a été annulé. Aucun montant n'a été débité de votre compte.</p>
+                </div>
+                
+                {% if order_id %}
+                    <div class="order-info">
+                        <h3>Détails de la commande</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="label">Numéro de commande :</span>
+                                <span class="value">#{{ order_id }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Statut :</span>
+                                <span class="value status-pending">En attente de paiement</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Date d'annulation :</span>
+                                <span class="value">{{ "now"|date('d/m/Y H:i') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <div class="help-section">
+                    <h3>Besoin d'aide ?</h3>
+                    <div class="help-options">
+                        <div class="help-option">
+                            <div class="help-icon">
+                                <i class="fas fa-redo"></i>
+                            </div>
+                            <div class="help-content">
+                                <h4>Réessayer le paiement</h4>
+                                <p>Vous pouvez réessayer le paiement à tout moment depuis votre espace client.</p>
+                            </div>
+                        </div>
+                        <div class="help-option">
+                            <div class="help-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div class="help-content">
+                                <h4>Problème de carte</h4>
+                                <p>Vérifiez que votre carte est valide et que vous avez suffisamment de fonds.</p>
+                            </div>
+                        </div>
+                        <div class="help-option">
+                            <div class="help-icon">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                            <div class="help-content">
+                                <h4>Contactez le support</h4>
+                                <p>Notre équipe est là pour vous aider avec vos questions de paiement.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cancel-actions">
+                    {% if order_id %}
+                        <a href="{{ path('app_payment_order', {'id': order_id}) }}" class="btn btn-primary">
+                            <i class="fas fa-redo"></i> Réessayer le paiement
+                        </a>
+                    {% endif %}
+                    <a href="{{ path('app_payment') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-credit-card"></i> Mes commandes
+                    </a>
+                    <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-home"></i> Retour à l'accueil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %} 

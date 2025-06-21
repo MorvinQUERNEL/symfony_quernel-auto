@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commander {{ vehicule.brand }} {{ vehicule.model }} - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/orders.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="form-container">
+    <div class="form-header">
+        <h1>Commander ce véhicule</h1>
+        <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Retour au véhicule
+        </a>
+    </div>
+
+    <div class="order-summary">
+        <div class="vehicule-card">
+            <div class="vehicule-image">
+                {% if vehicule.pictures is not empty %}
+                    <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures.first.name) }}" 
+                         alt="{{ vehicule.brand }} {{ vehicule.model }}">
+                {% else %}
+                    <div class="no-image">
+                        <i class="fas fa-car"></i>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="vehicule-info">
+                <h3>{{ vehicule.brand }} {{ vehicule.model }}</h3>
+                <p class="vehicule-year">{{ vehicule.year|date('Y') }} - {{ vehicule.mileage|number_format(0, ',', ' ') }} km</p>
+                <div class="vehicule-specs">
+                    <span class="spec">{{ vehicule.fuelType }}</span>
+                    <span class="spec">{{ vehicule.trasmission }}</span>
+                    <span class="spec">{{ vehicule.color }}</span>
+                </div>
+                <div class="vehicule-price">
+                    <span class="price">{{ (vehicule.salePrice / 100)|number_format(2, ',', ' ') }} €</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-card">
+        {{ form_start(form, {'attr': {'class': 'order-form'}}) }}
+            <div class="form-section">
+                <h3>Informations de livraison</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.deliveryAdress) }}
+                        {{ form_widget(form.deliveryAdress) }}
+                        {{ form_errors(form.deliveryAdress) }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.deliveryCity) }}
+                        {{ form_widget(form.deliveryCity) }}
+                        {{ form_errors(form.deliveryCity) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.deliveryPostalCode) }}
+                        {{ form_widget(form.deliveryPostalCode) }}
+                        {{ form_errors(form.deliveryPostalCode) }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.deliveryCountry) }}
+                        {{ form_widget(form.deliveryCountry) }}
+                        {{ form_errors(form.deliveryCountry) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Récapitulatif de la commande</h3>
+                <div class="order-summary-details">
+                    <div class="summary-item">
+                        <span class="summary-label">Véhicule :</span>
+                        <span class="summary-value">{{ vehicule.brand }} {{ vehicule.model }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Prix :</span>
+                        <span class="summary-value price">{{ (vehicule.salePrice / 100)|number_format(2, ',', ' ') }} €</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Client :</span>
+                        <span class="summary-value">{{ app.user.firstName }} {{ app.user.lastName }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-credit-card"></i> Procéder au paiement
+                </button>
+                <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Annuler
+                </a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %} 

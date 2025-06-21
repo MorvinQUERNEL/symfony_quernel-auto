@@ -1,0 +1,107 @@
+{# templates/payment/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiements - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/payment.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="payment-container">
+        <div class="payment-header">
+            <h1>Mes Paiements</h1>
+            <p>Gérez vos commandes et effectuez vos paiements en toute sécurité</p>
+        </div>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label == 'error' ? 'danger' : label == 'warning' ? 'warning' : 'success' }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {% if pending_orders is empty %}
+            <div class="no-orders">
+                <div class="no-orders-content">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>Aucune commande en attente</h3>
+                    <p>Vous n'avez actuellement aucune commande nécessitant un paiement.</p>
+                    <a href="{{ path('app_vehicules_index') }}" class="btn btn-primary">
+                        <i class="fas fa-car"></i> Voir nos véhicules
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <div class="orders-grid">
+                {% for order in pending_orders %}
+                    <div class="order-card">
+                        <div class="order-header">
+                            <h3>Commande #{{ order.id }}</h3>
+                            <span class="order-status status-pending">En attente de paiement</span>
+                        </div>
+                        
+                        <div class="order-details">
+                            <div class="order-info">
+                                <p><strong>Date de commande :</strong> {{ order.createdAt|date('d/m/Y H:i') }}</p>
+                                <p><strong>Description :</strong> {{ order.description ?? 'Commande de véhicule' }}</p>
+                                {% if order.vehicule %}
+                                    <p><strong>Véhicule :</strong> {{ order.vehicule.brand }} {{ order.vehicule.model }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="order-amount">
+                                <span class="amount">{{ order.totalAmount|number_format(2, ',', ' ') }} €</span>
+                            </div>
+                        </div>
+                        
+                        <div class="order-actions">
+                            <a href="{{ path('app_payment_order', {'id': order.id}) }}" class="btn btn-primary btn-pay">
+                                <i class="fas fa-credit-card"></i> Payer maintenant
+                            </a>
+                            <button class="btn btn-outline-secondary btn-details" onclick="showOrderDetails({{ order.id }})">
+                                <i class="fas fa-info-circle"></i> Détails
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Modal pour les détails de commande -->
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderDetailsModalLabel">Détails de la commande</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="orderDetailsContent">
+                    <!-- Le contenu sera chargé dynamiquement -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function showOrderDetails(orderId) {
+            // Ici vous pouvez ajouter une requête AJAX pour charger les détails
+            // Pour l'instant, on affiche juste un message
+            document.getElementById('orderDetailsContent').innerHTML = 
+                '<p>Détails de la commande #' + orderId + ' en cours de chargement...</p>';
+            
+            const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
+            modal.show();
+        }
+    </script>
+{% endblock %}

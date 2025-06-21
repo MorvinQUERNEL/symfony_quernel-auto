@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la Commande #{{ order.id }} - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/orders.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="form-container">
+    <div class="form-header">
+        <h1>Modifier la Commande #{{ order.id }}</h1>
+        <div class="form-actions">
+            <a href="{{ path('app_orders_show', {'id': order.id}) }}" class="btn btn-info">
+                <i class="fas fa-eye"></i> Voir la commande
+            </a>
+            <a href="{{ path('app_orders_index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour à la liste
+            </a>
+        </div>
+    </div>
+
+    <div class="form-card">
+        {{ form_start(form, {'attr': {'class': 'order-form'}}) }}
+            <div class="form-section">
+                <h3>Informations générales</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.createdAt) }}
+                        {{ form_widget(form.createdAt) }}
+                        {{ form_errors(form.createdAt) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.orderStatus) }}
+                        {{ form_widget(form.orderStatus) }}
+                        {{ form_errors(form.orderStatus) }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.totalPrice) }}
+                        {{ form_widget(form.totalPrice) }}
+                        {{ form_errors(form.totalPrice) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Client</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.users) }}
+                        {{ form_widget(form.users) }}
+                        {{ form_errors(form.users) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Adresse de livraison</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.deliveryAdress) }}
+                        {{ form_widget(form.deliveryAdress) }}
+                        {{ form_errors(form.deliveryAdress) }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.deliveryCity) }}
+                        {{ form_widget(form.deliveryCity) }}
+                        {{ form_errors(form.deliveryCity) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.deliveryPostalCode) }}
+                        {{ form_widget(form.deliveryPostalCode) }}
+                        {{ form_errors(form.deliveryPostalCode) }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.deliveryCountry) }}
+                        {{ form_widget(form.deliveryCountry) }}
+                        {{ form_errors(form.deliveryCountry) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Véhicules</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.vehicules) }}
+                        {{ form_widget(form.vehicules) }}
+                        {{ form_errors(form.vehicules) }}
+                        <small class="form-text text-muted">Sélectionnez les véhicules de cette commande (optionnel)</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Enregistrer les modifications
+                </button>
+                <a href="{{ path('app_orders_show', {'id': order.id}) }}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Annuler
+                </a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %} 

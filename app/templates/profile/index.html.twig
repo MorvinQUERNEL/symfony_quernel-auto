@@ -34,6 +34,57 @@
                 <p><strong>Téléphone :</strong> {{ user.phoneNumber }}</p>
             </div>
 
+            <div class="profile-orders">
+                <h3>Mes dernières commandes</h3>
+                {% if orders is not empty %}
+                    <div class="orders-preview">
+                        {% for order in orders|slice(0, 3) %}
+                            <div class="order-preview-item">
+                                <div class="order-preview-header">
+                                    <span class="order-number">Commande #{{ order.id }}</span>
+                                    <span class="order-status status-{{ order.orderStatus }}">
+                                        {% if order.orderStatus == 'pending' %}
+                                            En attente
+                                        {% elseif order.orderStatus == 'paid' %}
+                                            Payée
+                                        {% elseif order.orderStatus == 'expired' %}
+                                            Expirée
+                                        {% elseif order.orderStatus == 'cancelled' %}
+                                            Annulée
+                                        {% elseif order.orderStatus == 'processing' %}
+                                            En cours
+                                        {% elseif order.orderStatus == 'shipped' %}
+                                            Expédiée
+                                        {% elseif order.orderStatus == 'delivered' %}
+                                            Livrée
+                                        {% else %}
+                                            {{ order.orderStatus }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="order-preview-details">
+                                    <p><strong>Date :</strong> {{ order.createdAt|date('d/m/Y') }}</p>
+                                    <p><strong>Prix :</strong> {{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</p>
+                                    <p><strong>Véhicules :</strong> {{ order.vehicules|length }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="orders-link">
+                        <a href="{{ path('app_orders_my_orders') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-list"></i> Voir toutes mes commandes
+                        </a>
+                    </div>
+                {% else %}
+                    <p>Aucune commande pour le moment.</p>
+                    <div class="orders-link">
+                        <a href="{{ path('app_vehicules_index') }}" class="btn btn-primary">
+                            <i class="fas fa-car"></i> Découvrir nos véhicules
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
             <div class="profile-preferences">
                 <h3>Préférences véhicule</h3>
                 {% if preferences is not empty %}

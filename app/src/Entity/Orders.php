@@ -21,7 +21,7 @@ class Orders
     #[ORM\Column(length: 50)]
     private ?string $orderStatus = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'bigint')]
     private ?int $totalPrice = null;
 
     #[ORM\Column(length: 100)]

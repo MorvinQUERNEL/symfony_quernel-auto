@@ -87,9 +87,17 @@
                                 <span class="vehicle-fuel">{{ vehicule.fuelType }}</span>
                             </div>
                             <span class="price">{{ vehicule.salePrice|number_format(0, ',', ' ') }} €</span>
-                            <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="view-details-btn">
-                                Voir les détails
-                            </a>
+                            <div class="vehicle-actions">
+                                <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="view-details-btn">
+                                    Voir les détails
+                                </a>
+                                {% if vehicule.status == 'Disponible' %}
+                                    <a href="{{ path('app_vehicules_buy', {'id': vehicule.id}) }}" class="buy-vehicle-btn">
+                                        <i class="fas fa-credit-card"></i>
+                                        Acheter ce véhicule
+                                    </a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 {% endfor %}

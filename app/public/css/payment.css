@@ -1,0 +1,1095 @@
+/* Variables CSS */
+:root {
+    --primary-color: #FF6B00;
+    --secondary-color: #2C3E50;
+    --success-color: #28a745;
+    --info-color: #17a2b8;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --white-color: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --border-radius: 10px;
+    --transition: all 0.3s ease;
+}
+
+/* Container principal */
+.payment-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    min-height: calc(100vh - 200px);
+}
+
+/* Header de paiement */
+.payment-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.payment-header h1 {
+    color: var(--secondary-color);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.payment-header p {
+    color: #666;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* Grille des commandes */
+.orders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+/* Cartes de commande */
+.order-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow-color);
+    overflow: hidden;
+    transition: var(--transition);
+    border: 1px solid var(--shadow-color);
+}
+
+.order-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.order-header {
+    background: linear-gradient(135deg, var(--primary-color), #ff8533);
+    color: var(--white-color);
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.order-status {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.status-pending {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.status-paid {
+    background: var(--success-color);
+    color: white;
+}
+
+.order-details {
+    padding: 1.5rem;
+}
+
+.order-info p {
+    margin: 0.5rem 0;
+    color: var(--secondary-color);
+    font-size: 0.95rem;
+}
+
+.order-info strong {
+    color: var(--secondary-color);
+}
+
+.order-amount {
+    text-align: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--shadow-color);
+}
+
+.amount {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.order-actions {
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-pay {
+    flex: 1;
+    min-width: 150px;
+}
+
+.btn-details {
+    flex: 1;
+    min-width: 150px;
+}
+
+/* Section sans commandes */
+.no-orders {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.no-orders-content {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.no-orders-content i {
+    font-size: 4rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+}
+
+.no-orders-content h3 {
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+}
+
+.no-orders-content p {
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+/* Layout de paiement */
+.payment-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+    .payment-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+/* Résumé de commande */
+.order-summary {
+    order: 1;
+}
+
+/* Section de paiement */
+.payment-section {
+    order: 2;
+}
+
+.payment-card {
+    background: var(--white-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 20px var(--shadow-color);
+    overflow: hidden;
+    border: 1px solid var(--shadow-color);
+}
+
+.payment-card .payment-header {
+    background: var(--light-color);
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--shadow-color);
+    margin-bottom: 0;
+}
+
+.payment-card .payment-header h3 {
+    margin: 0 0 1rem 0;
+    color: var(--secondary-color);
+}
+
+.payment-methods {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.payment-methods i {
+    font-size: 2rem;
+    color: #666;
+}
+
+.payment-form {
+    padding: 2rem;
+}
+
+/* Résumé de paiement */
+.payment-summary {
+    background: var(--light-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--shadow-color);
+}
+
+.summary-row:last-child {
+    border-bottom: none;
+}
+
+.summary-row.total {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    border-top: 2px solid var(--primary-color);
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
+
+/* Actions de paiement */
+.payment-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.btn-pay-stripe {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Sécurité */
+.payment-security {
+    background: #e8f5e8;
+    border: 1px solid #c3e6c3;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.security-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.security-info i {
+    font-size: 1.5rem;
+    color: var(--success-color);
+}
+
+.security-info strong {
+    color: var(--secondary-color);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.security-info p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Loading overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.loading-content p {
+    margin: 1rem 0 0 0;
+    color: var(--secondary-color);
+}
+
+/* Pages de succès et d'annulation */
+.success-content,
+.cancel-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.success-card,
+.cancel-card {
+    background: var(--white-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 20px var(--shadow-color);
+    padding: 3rem;
+    text-align: center;
+}
+
+.success-icon,
+.cancel-icon {
+    font-size: 4rem;
+    margin-bottom: 2rem;
+}
+
+.success-icon i {
+    color: var(--success-color);
+}
+
+.cancel-icon i {
+    color: var(--danger-color);
+}
+
+.success-header h1,
+.cancel-header h1 {
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+}
+
+.success-header p,
+.cancel-header p {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+/* Informations de commande */
+.order-info {
+    background: var(--light-color);
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 2rem 0;
+    text-align: left;
+}
+
+.order-info h3 {
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.info-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--shadow-color);
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-item .label {
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.info-item .value {
+    color: var(--secondary-color);
+}
+
+/* Étapes suivantes */
+.next-steps {
+    margin: 2rem 0;
+    text-align: left;
+}
+
+.next-steps h3 {
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.steps-list {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--light-color);
+    border-radius: 8px;
+}
+
+.step-icon {
+    background: var(--primary-color);
+    color: var(--white-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.step-content h4 {
+    color: var(--secondary-color);
+    margin: 0 0 0.5rem 0;
+}
+
+.step-content p {
+    color: #666;
+    margin: 0;
+}
+
+/* Actions */
+.success-actions,
+.cancel-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+/* Section d'aide */
+.help-section {
+    margin: 2rem 0;
+    text-align: left;
+}
+
+.help-section h3 {
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.help-options {
+    display: grid;
+    gap: 1rem;
+}
+
+.help-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--light-color);
+    border-radius: 8px;
+}
+
+.help-icon {
+    background: var(--warning-color);
+    color: var(--white-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.help-content h4 {
+    color: var(--secondary-color);
+    margin: 0 0 0.5rem 0;
+}
+
+.help-content p {
+    color: #666;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .payment-container {
+        padding: 1rem;
+    }
+    
+    .payment-header h1 {
+        font-size: 2rem;
+    }
+    
+    .orders-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .success-card,
+    .cancel-card {
+        padding: 2rem 1rem;
+    }
+    
+    .success-actions,
+    .cancel-actions {
+        flex-direction: column;
+    }
+    
+    .success-actions .btn,
+    .cancel-actions .btn {
+        width: 100%;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.order-card,
+.payment-card,
+.success-card,
+.cancel-card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Card Container */
+.purchase-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.purchase-card {
+    background: var(--white-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 20px var(--shadow-color);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.purchase-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Header */
+.purchase-header {
+    background: linear-gradient(135deg, var(--primary-color), #ff8533);
+    color: var(--white-color);
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.purchase-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.purchase-header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1));
+}
+
+/* Vehicle Info */
+.vehicle-info {
+    padding: 2rem;
+}
+
+.vehicle-title {
+    margin-bottom: 0.5rem;
+}
+
+.vehicle-title h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin: 0;
+}
+
+.vehicle-subtitle {
+    color: #6c757d;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.vehicle-price {
+    margin-bottom: 2rem;
+}
+
+.vehicle-price .price-label {
+    font-size: 1rem;
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+
+.vehicle-price .price-value {
+    font-size: 2rem;
+    color: var(--success-color);
+    font-weight: 600;
+}
+
+/* Specs Grid */
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.spec-item {
+    background: var(--light-color);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.spec-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px var(--shadow-color);
+}
+
+.spec-label {
+    font-weight: 500;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.spec-value {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Vehicle Image */
+.vehicle-image {
+    position: relative;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.vehicle-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.vehicle-image:hover img {
+    transform: scale(1.05);
+}
+
+/* Purchase Info Box */
+.purchase-info {
+    background: #f8f9fa;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.purchase-info h6 {
+    color: var(--info-color);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.purchase-info ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.purchase-info li {
+    margin-bottom: 0.75rem;
+    padding-left: 1.5rem;
+    position: relative;
+    color: var(--secondary-color);
+}
+
+.purchase-info li:last-child {
+    margin-bottom: 0;
+}
+
+.purchase-info li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--success-color);
+}
+
+/* Buttons */
+.purchase-actions {
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid #eee;
+}
+
+.btn-buy {
+    background: var(--success-color);
+    color: var(--white-color);
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-buy:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+.btn-back {
+    background: transparent;
+    color: var(--secondary-color);
+    border: 2px solid var(--secondary-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 1rem;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+
+.btn-back:hover {
+    background: var(--secondary-color);
+    color: var(--white-color);
+}
+
+/* Loading Spinner */
+.loading-container {
+    text-align: center;
+    padding: 2rem;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    border: 4px solid var(--light-color);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.loading-text {
+    margin-top: 1rem;
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .specs-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .vehicle-price .price-value {
+        font-size: 1.75rem;
+    }
+
+    .btn-buy {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .purchase-header h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .purchase-container {
+        margin: 1rem auto;
+    }
+
+    .vehicle-info {
+        padding: 1.5rem;
+    }
+
+    .vehicle-title h4 {
+        font-size: 1.25rem;
+    }
+
+    .vehicle-price .price-value {
+        font-size: 1.5rem;
+    }
+
+    .purchase-actions {
+        padding: 1.5rem;
+    }
+}
+
+/* Styles pour la page de limite de paiement dépassée */
+.limit-exceeded-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.limit-exceeded-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.limit-exceeded-header {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.limit-exceeded-header i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.limit-exceeded-header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.limit-exceeded-content {
+    padding: 30px;
+}
+
+.order-summary {
+    margin-bottom: 30px;
+}
+
+.order-summary h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.order-details {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.order-details p {
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.vehicule-info h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.vehicule-card {
+    display: flex;
+    background: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.vehicule-card img {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+}
+
+.vehicule-details {
+    padding: 15px;
+    flex: 1;
+}
+
+.vehicule-details h4 {
+    margin: 0 0 8px 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.vehicule-details p {
+    margin: 4px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.limit-info {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.limit-info h2 {
+    color: #856404;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.limit-info p {
+    color: #856404;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.payment-alternatives h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.alternative-option {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-left: 4px solid #007bff;
+}
+
+.alternative-option h3 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.alternative-option p {
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.contact-info {
+    background: #e3f2fd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.contact-info h3 {
+    color: #1976d2;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.contact-info p {
+    color: #1976d2;
+    margin-bottom: 15px;
+}
+
+.contact-info ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contact-info li {
+    color: #1976d2;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.limit-exceeded-actions {
+    background: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid #dee2e6;
+}
+
+.limit-exceeded-actions .btn {
+    margin: 0 10px;
+    display: inline-block;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .limit-exceeded-container {
+        padding: 10px;
+    }
+    
+    .limit-exceeded-card {
+        margin: 10px;
+    }
+    
+    .limit-exceeded-content {
+        padding: 20px;
+    }
+    
+    .vehicule-card {
+        flex-direction: column;
+    }
+    
+    .vehicule-card img {
+        width: 100%;
+        height: 200px;
+    }
+    
+    .limit-exceeded-actions .btn {
+        display: block;
+        margin: 10px 0;
+        width: 100%;
+    }
+} 
