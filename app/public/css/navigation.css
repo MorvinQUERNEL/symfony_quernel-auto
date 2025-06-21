@@ -11,7 +11,7 @@
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(26, 26, 26, 0.95);
+    background: linear-gradient(135deg, #2c3e50 0%, #1a1a1a 100%);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     z-index: var(--z-fixed);
@@ -20,7 +20,7 @@
 }
 
 .navbar.scrolled {
-    background: rgba(26, 26, 26, 0.98);
+    background: linear-gradient(135deg, #2c3e50 0%, #1a1a1a 100%);
     box-shadow: var(--shadow-lg);
 }
 
@@ -70,7 +70,7 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: rgba(26, 26, 26, 0.98);
+    background: linear-gradient(135deg, #2c3e50 0%, #1a1a1a 100%);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     padding: var(--spacing-lg);

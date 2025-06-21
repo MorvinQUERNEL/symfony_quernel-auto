@@ -1,0 +1,154 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notre Processus - Quernel Auto{% endblock %}
+
+{% block page_stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/processus.css') }}">
+{% endblock %}
+
+{% block page_javascripts %}
+    <script src="{{ asset('js/processus.js') }}" defer></script>
+{% endblock %}
+
+{% block body %}
+<div class="processus-container">
+    <!-- En-tête de la page -->
+    <section class="processus-header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="processus-title">Notre Processus d'Import-Export</h1>
+                <p class="processus-subtitle">
+                    Découvrez notre méthodologie éprouvée pour vous garantir des véhicules d'exception 
+                    avec un service transparent et professionnel.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Étapes du processus -->
+    <section class="processus-steps">
+        <div class="container">
+            <!-- Étape 1 -->
+            <div class="step-item" data-step="1">
+                <div class="step-content">
+                    <div class="step-image">
+                        <img src="{{ asset('images/etape1.jpg') }}" alt="Étape 1 - Sélection et sourcing" class="step-img">
+                        <div class="step-number">1</div>
+                    </div>
+                    <div class="step-text">
+                        <h2 class="step-title">Sélection et Sourcing</h2>
+                        <p class="step-description">
+                            Notre équipe d'experts parcourt les marchés internationaux pour identifier 
+                            les véhicules d'exception qui correspondent à nos critères de qualité. 
+                            Nous travaillons en étroite collaboration avec un réseau de partenaires 
+                            de confiance en Europe, en Amérique du Nord et en Asie pour dénicher 
+                            les perles rares qui feront la différence.
+                        </p>
+                        <ul class="step-features">
+                            <li><i class="fas fa-check-circle"></i> Audit qualité approfondi</li>
+                            <li><i class="fas fa-check-circle"></i> Vérification de l'historique</li>
+                            <li><i class="fas fa-check-circle"></i> Contrôle technique rigoureux</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Étape 2 -->
+            <div class="step-item" data-step="2">
+                <div class="step-content">
+                    <div class="step-image">
+                        <img src="{{ asset('images/etape2.jpg') }}" alt="Étape 2 - Négociation et acquisition" class="step-img">
+                        <div class="step-number">2</div>
+                    </div>
+                    <div class="step-text">
+                        <h2 class="step-title">Négociation et Acquisition</h2>
+                        <p class="step-description">
+                            Une fois le véhicule identifié, nos négociateurs expérimentés entrent 
+                            en action pour obtenir les meilleures conditions d'achat. Nous utilisons 
+                            notre expertise du marché et nos relations privilégiées pour négocier 
+                            des prix compétitifs tout en garantissant la qualité et l'authenticité 
+                            de chaque véhicule.
+                        </p>
+                        <ul class="step-features">
+                            <li><i class="fas fa-check-circle"></i> Négociation experte</li>
+                            <li><i class="fas fa-check-circle"></i> Vérification légale</li>
+                            <li><i class="fas fa-check-circle"></i> Sécurisation de l'achat</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Étape 3 -->
+            <div class="step-item" data-step="3">
+                <div class="step-content">
+                    <div class="step-image">
+                        <img src="{{ asset('images/etape3.jpg') }}" alt="Étape 3 - Préparation et transport" class="step-img">
+                        <div class="step-number">3</div>
+                    </div>
+                    <div class="step-text">
+                        <h2 class="step-title">Préparation et Transport</h2>
+                        <p class="step-description">
+                            Le véhicule est ensuite préparé avec le plus grand soin pour son 
+                            transport vers la France. Notre équipe logistique s'occupe de tous 
+                            les aspects : documentation douanière, emballage sécurisé, choix 
+                            du mode de transport optimal et suivi en temps réel jusqu'à destination.
+                        </p>
+                        <ul class="step-features">
+                            <li><i class="fas fa-check-circle"></i> Préparation minutieuse</li>
+                            <li><i class="fas fa-check-circle"></i> Transport sécurisé</li>
+                            <li><i class="fas fa-check-circle"></i> Suivi en temps réel</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Étape 4 -->
+            <div class="step-item" data-step="4">
+                <div class="step-content">
+                    <div class="step-image">
+                        <img src="{{ asset('images/etape4.jpg') }}" alt="Étape 4 - Livraison et service client" class="step-img">
+                        <div class="step-number">4</div>
+                    </div>
+                    <div class="step-text">
+                        <h2 class="step-title">Livraison et Service Client</h2>
+                        <p class="step-description">
+                            Dernière étape de notre processus : la livraison personnalisée et 
+                            l'accompagnement post-vente. Nous organisons la livraison selon vos 
+                            préférences et restons à vos côtés pour toute question ou besoin 
+                            d'assistance. Notre engagement ne s'arrête pas à la vente.
+                        </p>
+                        <ul class="step-features">
+                            <li><i class="fas fa-check-circle"></i> Livraison personnalisée</li>
+                            <li><i class="fas fa-check-circle"></i> Accompagnement post-vente</li>
+                            <li><i class="fas fa-check-circle"></i> Service client dédié</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section CTA -->
+    <section class="processus-cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Prêt à découvrir nos véhicules d'exception ?</h2>
+                <p class="cta-description">
+                    Notre processus garantit qualité, transparence et satisfaction client. 
+                    Découvrez notre sélection de véhicules et faites confiance à notre expertise.
+                </p>
+                <div class="cta-actions">
+                    <a href="{{ path('app_vehicules_index') }}" class="btn btn-primary">
+                        <i class="fas fa-car"></i>
+                        Voir nos véhicules
+                    </a>
+                    <a href="{{ path('app_contact') }}" class="btn btn-secondary">
+                        <i class="fas fa-envelope"></i>
+                        Nous contacter
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %} 

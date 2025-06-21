@@ -62,7 +62,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#process" class="nav-link">
+                        <a href="{{ path('app_processus') }}" class="nav-link" aria-current="{{ app.request.get('_route') == 'app_processus' ? 'page' : 'false' }}">
                             <i class="fas fa-route"></i>
                             <span>Processus</span>
                         </a>

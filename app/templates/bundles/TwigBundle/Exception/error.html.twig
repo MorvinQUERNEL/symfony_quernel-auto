@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erreur - Quernel Auto</title>
+    <link rel="icon" href="{{ asset('images/logo_quernel_auto.png') }}">
+    <link rel="stylesheet" href="{{ asset('css/error.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-icon">
+            <i class="fas fa-exclamation-circle"></i>
+        </div>
+        
+        <div class="error-code">{{ status_code }}</div>
+        
+        <h1 class="error-title">{{ status_text }}</h1>
+        
+        <p class="error-description">
+            Une erreur s'est produite lors du traitement de votre demande. 
+            Veuillez réessayer ou nous contacter si le problème persiste.
+        </p>
+        
+        <div class="error-actions">
+            <a href="{{ path('app_home') }}" class="btn btn-primary">
+                <i class="fas fa-home"></i>
+                Retour à l'accueil
+            </a>
+            <a href="{{ path('app_contact') }}" class="btn btn-secondary">
+                <i class="fas fa-envelope"></i>
+                Nous contacter
+            </a>
+        </div>
+        
+        {% if app.debug %}
+            <div class="error-details">
+                <h4>Détails techniques (mode debug)</h4>
+                <p><strong>Code d'erreur :</strong> <code>{{ status_code }}</code></p>
+                <p><strong>Message :</strong> <code>{{ status_text }}</code></p>
+                {% if exception %}
+                    <p><strong>Exception :</strong> <code>{{ exception.message }}</code></p>
+                    <p><strong>Fichier :</strong> <code>{{ exception.file }}:{{ exception.line }}</code></p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html> 

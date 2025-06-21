@@ -68,9 +68,6 @@
     <section class="recent-vehicles">
         <h2>Véhicules Récemment Importés</h2>
         <div class="carousel carousel-container">
-            <button class="carousel-nav carousel-nav-prev" id="prevBtn">
-                <i class="fas fa-chevron-left"></i>
-            </button>
             <div class="carousel-track" id="carouselTrack">
                 {% for vehicule in recentVehicules %}
                     <div class="vehicle-card carousel-item" data-index="{{ loop.index0 }}">
@@ -111,9 +108,7 @@
                     </div>
                 {% endfor %}
             </div>
-            <button class="carousel-nav carousel-nav-next" id="nextBtn">
-                <i class="fas fa-chevron-right"></i>
-            </button>
+
         </div>
         {% if recentVehicules|length > 1 %}
         <div class="carousel-indicators" id="carouselDots">

@@ -35,15 +35,16 @@
                         <div class="order-info">
                             <p><strong>Date de commande :</strong> {{ order.createdAt|date('d/m/Y H:i') }}</p>
                             <p><strong>Description :</strong> {{ order.description ?? 'Commande de véhicule' }}</p>
-                            {% if order.vehicule %}
-                                <p><strong>Véhicule :</strong> {{ order.vehicule.brand }} {{ order.vehicule.model }}</p>
-                                <p><strong>Année :</strong> {{ order.vehicule.year ? order.vehicule.year|date('Y') : 'N/A' }}</p>
-                                <p><strong>Carburant :</strong> {{ order.vehicule.fuelType }}</p>
+                            {% set vehicule = order.vehicules|first %}
+                            {% if vehicule %}
+                                <p><strong>Véhicule :</strong> {{ vehicule.brand }} {{ vehicule.model }}</p>
+                                <p><strong>Année :</strong> {{ vehicule.year ? vehicule.year|date('Y') : 'N/A' }}</p>
+                                <p><strong>Carburant :</strong> {{ vehicule.fuelType }}</p>
                             {% endif %}
                         </div>
                         
                         <div class="order-amount">
-                            <span class="amount">{{ order.totalAmount|number_format(2, ',', ' ') }} €</span>
+                            <span class="amount">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</span>
                         </div>
                     </div>
                 </div>
@@ -65,7 +66,7 @@
                         <div class="payment-summary">
                             <div class="summary-row">
                                 <span>Sous-total :</span>
-                                <span>{{ order.totalAmount|number_format(2, ',', ' ') }} €</span>
+                                <span>{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</span>
                             </div>
                             <div class="summary-row">
                                 <span>Frais de transaction :</span>
@@ -73,7 +74,7 @@
                             </div>
                             <div class="summary-row total">
                                 <span>Total à payer :</span>
-                                <span>{{ order.totalAmount|number_format(2, ',', ' ') }} €</span>
+                                <span>{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</span>
                             </div>
                         </div>
                         

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accès interdit - Quernel Auto</title>
+    <link rel="icon" href="{{ asset('images/logo_quernel_auto.png') }}">
+    <link rel="stylesheet" href="{{ asset('css/error.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="error-container error-403">
+        <div class="error-icon">
+            <i class="fas fa-lock"></i>
+        </div>
+        
+        <div class="error-code">403</div>
+        
+        <h1 class="error-title">Accès interdit</h1>
+        
+        <p class="error-description">
+            Vous n'avez pas les permissions nécessaires pour accéder à cette page. 
+            Cette zone est réservée aux utilisateurs autorisés.
+        </p>
+        
+        <div class="error-actions">
+            <a href="{{ path('app_home') }}" class="btn btn-primary">
+                <i class="fas fa-home"></i>
+                Retour à l'accueil
+            </a>
+            <a href="{{ path('app_login') }}" class="btn btn-secondary">
+                <i class="fas fa-sign-in-alt"></i>
+                Se connecter
+            </a>
+        </div>
+        
+        <div class="error-details">
+            <h4>Pourquoi cette erreur ?</h4>
+            <p><i class="fas fa-user"></i> Vous devez être connecté pour accéder à cette page</p>
+            <p><i class="fas fa-shield-alt"></i> Cette section nécessite des droits d'administration</p>
+            <p><i class="fas fa-key"></i> Votre session a peut-être expiré</p>
+            <p><i class="fas fa-envelope"></i> Contactez-nous si vous pensez qu'il s'agit d'une erreur</p>
+        </div>
+    </div>
+</body>
+</html> 

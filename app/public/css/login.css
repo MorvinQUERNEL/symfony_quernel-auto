@@ -7,6 +7,79 @@
     --gray-color: #f5f5f5;
 }
 
+/* Styles génériques pour tous les formulaires */
+form label {
+    color: #000000 !important;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+form input,
+form select,
+form textarea {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    font-size: 1rem;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.15);
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+form input::placeholder,
+form textarea::placeholder {
+    color: #666666 !important;
+}
+
+form option {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+}
+
+/* Styles pour les messages d'erreur Symfony */
+form .form-error,
+form .error {
+    color: #dc3545 !important;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+    font-weight: 500;
+}
+
+/* Styles pour les liens dans le conteneur de connexion uniquement */
+.login-container a {
+    color: var(--primary-color) !important;
+}
+
+.login-container a:hover {
+    color: #e05a00 !important;
+}
+
+/* S'assurer que la navigation garde ses couleurs originales */
+.navbar a,
+.navbar .nav-link,
+.navbar .navbar-brand {
+    color: var(--light-color) !important;
+}
+
+.navbar a:hover,
+.navbar .nav-link:hover,
+.navbar .navbar-brand:hover {
+    color: var(--primary-color) !important;
+}
+
 /* Global Styles */
 * {
     margin: 0;
@@ -176,6 +249,7 @@ input[type="password"]::placeholder {
     margin-bottom: 0;
 }
 
+/* Styles pour les liens spécifiques de la page de connexion */
 .text-decoration-none {
     color: var(--primary-color);
     text-decoration: none;
@@ -267,4 +341,83 @@ input[type="password"]::placeholder {
     .register-link {
         font-size: 1rem;
     }
+}
+
+/* Styles spécifiques pour la page de préférence */
+.preference-form label {
+    color: #000000 !important;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.preference-form input,
+.preference-form select,
+.preference-form textarea {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    font-size: 1rem;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.preference-form input:focus,
+.preference-form select:focus,
+.preference-form textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.15);
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+.preference-form input::placeholder,
+.preference-form textarea::placeholder {
+    color: #666666 !important;
+}
+
+.preference-form option {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+}
+
+/* Styles pour les messages d'erreur */
+.preference-form .form-error {
+    color: #dc3545 !important;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+    font-weight: 500;
+}
+
+/* Styles pour les messages flash */
+.flash-message {
+    color: #000000 !important;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.flash-success {
+    background-color: rgba(40, 167, 69, 0.1) !important;
+    border-color: #28a745 !important;
+    color: #155724 !important;
+}
+
+.flash-error {
+    background-color: rgba(220, 53, 69, 0.1) !important;
+    border-color: #dc3545 !important;
+    color: #721c24 !important;
+}
+
+.flash-info {
+    background-color: rgba(23, 162, 184, 0.1) !important;
+    border-color: #17a2b8 !important;
+    color: #0c5460 !important;
 }

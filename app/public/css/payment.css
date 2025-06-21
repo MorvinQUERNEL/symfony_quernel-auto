@@ -44,9 +44,25 @@
 /* Grille des commandes */
 .orders-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-template-columns: 1fr;
     gap: 2rem;
     margin-top: 2rem;
+}
+
+/* Responsive pour tablette (2 colonnes) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .orders-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+/* Responsive pour desktop (3 colonnes) */
+@media (min-width: 1024px) {
+    .orders-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
 }
 
 /* Cartes de commande */
@@ -57,6 +73,9 @@
     overflow: hidden;
     transition: var(--transition);
     border: 1px solid var(--shadow-color);
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
 }
 
 .order-card:hover {
@@ -129,16 +148,17 @@
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+    margin-top: auto;
 }
 
 .btn-pay {
     flex: 1;
-    min-width: 150px;
+    min-width: 120px;
 }
 
 .btn-details {
     flex: 1;
-    min-width: 150px;
+    min-width: 120px;
 }
 
 /* Section sans commandes */
@@ -1091,5 +1111,18 @@
         display: block;
         margin: 10px 0;
         width: 100%;
+    }
+}
+
+/* Responsive pour les boutons */
+@media (max-width: 480px) {
+    .order-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .btn-pay,
+    .btn-details {
+        min-width: 100%;
     }
 } 

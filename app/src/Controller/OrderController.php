@@ -25,6 +25,22 @@ class OrderController extends AbstractController
         ]);
     }
 
+    #[Route('/my-orders', name: 'app_orders_my_orders', methods: ['GET'])]
+    public function myOrders(OrdersRepository $ordersRepository): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            $this->addFlash('error', 'Vous devez être connecté pour voir vos commandes.');
+            return $this->redirectToRoute('app_login');
+        }
+
+        $orders = $ordersRepository->findBy(['users' => $user], ['createdAt' => 'DESC']);
+
+        return $this->render('order/my_orders.html.twig', [
+            'orders' => $orders,
+        ]);
+    }
+
     #[Route('/new', name: 'app_orders_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -215,21 +231,5 @@ class OrderController extends AbstractController
         }
 
         return $this->redirectToRoute('app_orders_index');
-    }
-
-    #[Route('/my-orders', name: 'app_orders_my_orders', methods: ['GET'])]
-    public function myOrders(OrdersRepository $ordersRepository): Response
-    {
-        $user = $this->getUser();
-        if (!$user) {
-            $this->addFlash('error', 'Vous devez être connecté pour voir vos commandes.');
-            return $this->redirectToRoute('app_login');
-        }
-
-        $orders = $ordersRepository->findBy(['users' => $user], ['createdAt' => 'DESC']);
-
-        return $this->render('order/my_orders.html.twig', [
-            'orders' => $orders,
-        ]);
     }
 } 
