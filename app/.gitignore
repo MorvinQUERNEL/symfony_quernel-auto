@@ -1,7 +1,5 @@
-
 ###> symfony/framework-bundle ###
-/.env:43
-/config/services.yaml:9
+/.env
 /.env.local
 /.env.local.php
 /.env.*.local
