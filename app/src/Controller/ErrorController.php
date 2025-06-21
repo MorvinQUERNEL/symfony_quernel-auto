@@ -39,7 +39,7 @@ class ErrorController extends AbstractController
                 <body>
                     <h1>Page non trouvée</h1>
                     <p>La page que vous recherchez n\'existe pas.</p>
-                    <p><a href="/test">Page de test</a></p>
+                    <p><a href="/">Retour à l\'accueil</a></p>
                 </body>
             </html>
         ', 404);
@@ -62,7 +62,7 @@ class ErrorController extends AbstractController
                 <body>
                     <h1>Accès refusé</h1>
                     <p>Vous n\'avez pas les permissions nécessaires.</p>
-                    <p><a href="/test">Page de test</a></p>
+                    <p><a href="/">Retour à l\'accueil</a></p>
                 </body>
             </html>
         ', 403);
@@ -86,7 +86,7 @@ class ErrorController extends AbstractController
                 <body>
                     <h1>Erreur serveur</h1>
                     <p>Une erreur inattendue s\'est produite.</p>
-                    <p><a href="/test">Page de test</a></p>
+                    <p><a href="/">Retour à l\'accueil</a></p>
                 </body>
             </html>
         ', 500);
@@ -130,7 +130,7 @@ class ErrorController extends AbstractController
                 <body>
                     <h1>Erreur ' . $statusCode . '</h1>
                     <p>' . $message . '</p>
-                    <p><a href="/test">Page de test</a></p>
+                    <p><a href="/">Retour à l\'accueil</a></p>
                 </body>
             </html>
         ', $statusCode);
