@@ -31,76 +31,76 @@ body {
 .contact-container {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    border-radius: 20px;
+    border-radius: 15px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    margin: 2rem auto;
-    padding: 3rem;
-    max-width: 1200px;
-    min-height: calc(100vh - 4rem);
+    margin: 1rem auto;
+    padding: 1.5rem;
+    max-width: 100%;
+    min-height: calc(100vh - 2rem);
 }
 
 /* Header de la page */
 .contact-header {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 .contact-header h1 {
     color: var(--primary-color);
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: 700;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     position: relative;
 }
 
 .contact-header h1::after {
     content: '';
     position: absolute;
-    bottom: -10px;
+    bottom: -8px;
     left: 50%;
     transform: translateX(-50%);
-    width: 80px;
-    height: 4px;
+    width: 60px;
+    height: 3px;
     background: linear-gradient(90deg, var(--primary-color), #ff8533);
     border-radius: 2px;
 }
 
 .contact-header p {
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: var(--gray-dark);
-    max-width: 600px;
+    max-width: 100%;
     margin: 0 auto;
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
 /* Contenu principal */
 .contact-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+    grid-template-columns: 1fr;
+    gap: 2rem;
     align-items: start;
 }
 
 /* Section informations de contact */
 .contact-info-section h2 {
     color: var(--secondary-color);
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 600;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     text-align: center;
 }
 
 .contact-info-grid {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .contact-info-card {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    padding: 1.5rem;
+    gap: 1rem;
+    padding: 1.25rem;
     background: var(--light-color);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
@@ -109,13 +109,13 @@ body {
 }
 
 .contact-info-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
 }
 
 .contact-icon {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     background: linear-gradient(135deg, var(--primary-color), #ff8533);
     border-radius: 50%;
     display: flex;
@@ -125,36 +125,36 @@ body {
 }
 
 .contact-icon i {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     color: var(--light-color);
 }
 
 .contact-details h3 {
     color: var(--secondary-color);
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 
 .contact-details p {
     color: var(--text-color);
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
     line-height: 1.4;
 }
 
 .contact-note {
     color: var(--gray-dark);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-style: italic;
 }
 
 /* Section formulaire */
 .contact-form-section h2 {
     color: var(--secondary-color);
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 600;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     text-align: center;
 }
 
@@ -162,13 +162,13 @@ body {
     background: var(--light-color);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
-    padding: 2rem;
+    padding: 1.5rem;
 }
 
 .contact-form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.25rem;
 }
 
 .form-group {
@@ -180,15 +180,15 @@ body {
 .form-group label {
     color: var(--secondary-color);
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 .form-control {
     width: 100%;
-    padding: 1rem;
+    padding: 0.875rem;
     border: 2px solid #e9ecef;
     border-radius: 8px;
-    font-size: 1rem;
+    font-size: 0.9rem;
     transition: var(--transition);
     background: var(--light-color);
     color: var(--text-color);
@@ -206,8 +206,9 @@ body {
 }
 
 .form-help {
+    font-size: 0.8rem;
     color: var(--gray-dark);
-    font-size: 0.9rem;
+    margin-top: 0.25rem;
 }
 
 .form-actions {
@@ -216,21 +217,20 @@ body {
     margin-top: 1rem;
 }
 
-/* Boutons */
 .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1rem 2rem;
+    padding: 0.875rem 2rem;
     border: none;
     border-radius: 8px;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     text-decoration: none;
+    text-align: center;
     cursor: pointer;
     transition: var(--transition);
-    text-align: center;
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
+    gap: 0.5rem;
 }
 
 .btn-primary {
@@ -240,94 +240,261 @@ body {
 }
 
 .btn-primary:hover {
+    background: linear-gradient(135deg, #e05a00, var(--primary-color));
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
 }
 
 .btn-lg {
-    padding: 1.2rem 2.5rem;
-    font-size: 1.2rem;
+    padding: 1rem 2.5rem;
+    font-size: 1rem;
 }
 
-/* Messages d'erreur */
 .form-group .form-error {
     color: var(--error-color);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-    .contact-content {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    
+/* ========================================
+   MEDIA QUERIES - TABLETTE (764px)
+   ======================================== */
+@media (min-width: 764px) {
     .contact-container {
-        margin: 1rem;
-        padding: 2rem;
+        margin: 2rem auto;
+        padding: 2.5rem;
+        max-width: 720px;
+        min-height: calc(100vh - 4rem);
     }
-}
 
-@media (max-width: 768px) {
+    .contact-header {
+        margin-bottom: 3rem;
+    }
+
     .contact-header h1 {
         font-size: 2.5rem;
+        margin-bottom: 1rem;
     }
-    
+
+    .contact-header h1::after {
+        width: 80px;
+        height: 4px;
+        bottom: -10px;
+    }
+
     .contact-header p {
+        font-size: 1.1rem;
+        max-width: 500px;
+    }
+
+    .contact-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+    }
+
+    .contact-info-section h2 {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+    }
+
+    .contact-info-grid {
+        gap: 1.5rem;
+    }
+
+    .contact-info-card {
+        padding: 1.5rem;
+        gap: 1.5rem;
+    }
+
+    .contact-info-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .contact-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .contact-icon i {
+        font-size: 1.5rem;
+    }
+
+    .contact-details h3 {
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .contact-details p {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .contact-note {
+        font-size: 0.9rem;
+    }
+
+    .contact-form-section h2 {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+    }
+
+    .contact-form-card {
+        padding: 2rem;
+    }
+
+    .contact-form {
+        gap: 1.5rem;
+    }
+
+    .form-group label {
         font-size: 1rem;
     }
-    
-    .contact-info-card {
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
+
+    .form-control {
+        padding: 1rem;
+        font-size: 1rem;
     }
-    
-    .contact-icon {
-        width: 50px;
-        height: 50px;
+
+    .btn {
+        padding: 1rem 2.5rem;
+        font-size: 1rem;
     }
-    
-    .contact-icon i {
-        font-size: 1.2rem;
-    }
-    
-    .contact-form-card {
-        padding: 1.5rem;
-    }
-    
+
     .btn-lg {
-        padding: 1rem 2rem;
+        padding: 1.25rem 3rem;
         font-size: 1.1rem;
     }
 }
 
-@media (max-width: 480px) {
+/* ========================================
+   MEDIA QUERIES - ORDINATEUR (1024px)
+   ======================================== */
+@media (min-width: 1024px) {
     .contact-container {
-        margin: 0.5rem;
-        padding: 1.5rem;
+        max-width: 1200px;
+        padding: 3rem;
     }
-    
+
     .contact-header h1 {
+        font-size: 3rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .contact-header h1::after {
+        width: 100px;
+        height: 5px;
+        bottom: -12px;
+    }
+
+    .contact-header p {
+        font-size: 1.2rem;
+        max-width: 600px;
+        line-height: 1.6;
+    }
+
+    .contact-content {
+        gap: 4rem;
+    }
+
+    .contact-info-section h2 {
         font-size: 2rem;
+        margin-bottom: 2.5rem;
     }
-    
-    .contact-info-section h2,
-    .contact-form-section h2 {
+
+    .contact-info-grid {
+        gap: 2rem;
+    }
+
+    .contact-info-card {
+        padding: 2rem;
+        gap: 2rem;
+    }
+
+    .contact-info-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .contact-icon {
+        width: 70px;
+        height: 70px;
+    }
+
+    .contact-icon i {
+        font-size: 1.75rem;
+    }
+
+    .contact-details h3 {
         font-size: 1.5rem;
+        margin-bottom: 0.75rem;
     }
-    
+
+    .contact-details p {
+        font-size: 1.2rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .contact-note {
+        font-size: 1rem;
+    }
+
+    .contact-form-section h2 {
+        font-size: 2rem;
+        margin-bottom: 2.5rem;
+    }
+
     .contact-form-card {
-        padding: 1rem;
+        padding: 2.5rem;
     }
-    
+
+    .contact-form {
+        gap: 2rem;
+    }
+
+    .form-group {
+        gap: 0.75rem;
+    }
+
+    .form-group label {
+        font-size: 1.1rem;
+    }
+
     .form-control {
-        padding: 0.75rem;
+        padding: 1.25rem;
+        font-size: 1.1rem;
+    }
+
+    .form-help {
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .form-actions {
+        margin-top: 1.5rem;
+    }
+
+    .btn {
+        padding: 1.25rem 3rem;
+        font-size: 1.1rem;
+    }
+
+    .btn-lg {
+        padding: 1.5rem 3.5rem;
+        font-size: 1.2rem;
+    }
+
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 107, 0, 0.4);
     }
 }
 
-/* Animations */
+/* ========================================
+   ANIMATIONS
+   ======================================== */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -341,7 +508,7 @@ body {
 
 .contact-info-card,
 .contact-form-card {
-    animation: fadeInUp 0.6s ease-out;
+    animation: fadeInUp 0.6s ease-out forwards;
 }
 
 .contact-info-card:nth-child(1) { animation-delay: 0.1s; }

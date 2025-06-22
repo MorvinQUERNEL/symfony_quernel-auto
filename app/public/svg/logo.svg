@@ -1,0 +1,30 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <!--
+      Améliorations apportées :
+      - Simplification du design pour une meilleure clarté et scalabilité.
+      - Utilisation d'un dégradé de couleurs plus dynamique.
+      - Typographie moderne et audacieuse pour la lettre 'a'.
+      - Composition équilibrée pour un look plus professionnel.
+    -->
+
+    <!-- Définition du dégradé de couleur orange -->
+    <defs>
+        <linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#FF8C00; stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#FF4500; stop-opacity:1" />
+        </linearGradient>
+    </defs>
+
+    <!-- Arrière-plan circulaire noir -->
+    <circle cx="100" cy="100" r="100" fill="#1a1a1a"/>
+
+    <!-- Arc extérieur (style compteur) -->
+    <path d="M 40 150 A 70 70 0 1 1 160 150" fill="none" stroke="url(#orangeGradient)" stroke-width="12" stroke-linecap="round" />
+
+    <!-- Aiguille du compteur -->
+    <line x1="100" y1="100" x2="145" y2="135" stroke="url(#orangeGradient)" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="100" cy="100" r="8" fill="url(#orangeGradient)"/>
+
+    <!-- Lettre 'a' stylisée -->
+    <text x="80" y="125" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="80" font-weight="bold" fill="#ffffff">a</text>
+</svg>
