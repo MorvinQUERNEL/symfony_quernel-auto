@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Users;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,34 +23,54 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Définir la date d'inscription
-            $user->setRegistrationAt(new \DateTimeImmutable());
-            
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+            try {
+                // Définir la date d'inscription
+                $user->setRegistrationAt(new \DateTimeImmutable());
+                
+                $user->setPassword(
+                    $userPasswordHasher->hashPassword(
+                        $user,
+                        $form->get('plainPassword')->getData()
+                    )
+                );
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+                $entityManager->persist($user);
+                $entityManager->flush();
 
-            // Envoi de l'email de confirmation
-            $email = (new Email())
-                ->from('noreply@quernel-auto.com')
-                ->to($user->getEmail())
-                ->subject('Bienvenue chez Quernel Auto')
-                ->html($this->renderView(
-                    'emails/registration.html.twig',
-                    ['user' => $user]
-                ));
+                // Envoi de l'email de confirmation
+                $email = (new Email())
+                    ->from('noreply@quernel-auto.com')
+                    ->to($user->getEmail())
+                    ->subject('Bienvenue chez Quernel Auto')
+                    ->html($this->renderView(
+                        'emails/registration.html.twig',
+                        ['user' => $user]
+                    ));
 
-            $mailer->send($email);
+                $mailer->send($email);
 
-            $this->addFlash('success', 'Votre compte a été créé avec succès. Un email de confirmation vous a été envoyé.');
+                $this->addFlash('success', 'Votre compte a été créé avec succès. Un email de confirmation vous a été envoyé.');
 
-            return $this->redirectToRoute('app_home');
+                return $this->redirectToRoute('app_home');
+                
+            } catch (UniqueConstraintViolationException $e) {
+                // Vérifier si c'est une erreur d'email dupliqué
+                if (strpos($e->getMessage(), 'UNIQ_IDENTIFIER_EMAIL') !== false) {
+                    $this->addFlash('error', 'Cette adresse email est déjà utilisée. Veuillez utiliser une autre adresse email ou vous connecter si vous avez déjà un compte.');
+                } else {
+                    $this->addFlash('error', 'Une erreur est survenue lors de l\'inscription. Veuillez réessayer.');
+                }
+                
+                // Réinitialiser le formulaire pour permettre une nouvelle tentative
+                $user = new Users();
+                $form = $this->createForm(RegistrationFormType::class, $user);
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur inattendue est survenue. Veuillez réessayer plus tard.');
+                
+                // Réinitialiser le formulaire pour permettre une nouvelle tentative
+                $user = new Users();
+                $form = $this->createForm(RegistrationFormType::class, $user);
+            }
         }
 
         return $this->render('registration/register.html.twig', [

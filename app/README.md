@@ -9,7 +9,7 @@
   [![Docker](https://img.shields.io/badge/Docker-20.10+-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
   [![Stripe](https://img.shields.io/badge/Stripe-008CDD?style=for-the-badge&logo=stripe&logoColor=white)](https://stripe.com/)
   
-  **Plateforme moderne d'import/export de véhicules avec paiements sécurisés**
+  **Plateforme moderne d'import/export de véhicules avec paiements sécurisés et support en temps réel**
 </div>
 
 ---
@@ -18,12 +18,14 @@
 
 - [🎯 À Propos](#-à-propos)
 - [✨ Fonctionnalités](#-fonctionnalités)
+- [🆕 Nouvelles Fonctionnalités](#-nouvelles-fonctionnalités)
 - [🏗️ Architecture](#️-architecture)
 - [🚀 Installation](#-installation)
 - [⚙️ Configuration](#️-configuration)
 - [📱 Utilisation](#-utilisation)
 - [🔧 Développement](#-développement)
 - [📊 Structure du Projet](#-structure-du-projet)
+- [🐛 Corrections et Améliorations](#-corrections-et-améliorations)
 - [🤝 Contribution](#-contribution)
 - [📄 Licence](#-licence)
 
@@ -31,13 +33,14 @@
 
 ## 🎯 À Propos
 
-**Quernel Auto** est une plateforme web moderne développée avec Symfony 6, spécialisée dans l'import et l'export de véhicules à l'international. Notre solution offre une expérience utilisateur fluide et sécurisée pour l'achat et la vente de véhicules de qualité.
+**Quernel Auto** est une plateforme web moderne développée avec Symfony 6, spécialisée dans l'import et l'export de véhicules à l'international. Notre solution offre une expérience utilisateur fluide et sécurisée pour l'achat et la vente de véhicules de qualité, avec un support client en temps réel.
 
 ### 🎨 Design Philosophie
 - **Design moderne et sobre** avec une palette de couleurs professionnelle
-- **Interface responsive** optimisée pour tous les appareils
+- **Interface responsive** optimisée pour tous les appareils (Mobile First)
 - **Expérience utilisateur intuitive** avec navigation fluide
 - **Accessibilité** conforme aux standards WCAG
+- **Performance optimisée** avec chargement rapide des pages
 
 ---
 
@@ -49,31 +52,74 @@
 - **Filtres dynamiques** pour affiner les résultats
 - **Carrousel interactif** sur la page d'accueil
 - **Statuts en temps réel** (Disponible, Vendu, En cours, etc.)
+- **Gestion des images** avec upload sécurisé
+- **Prix dynamiques** avec gestion des devises
 
 ### 👤 Gestion des Utilisateurs
-- **Inscription/Connexion** sécurisée
-- **Profils personnalisés** avec préférences
-- **Gestion des commandes** et historique
+- **Inscription/Connexion** sécurisée avec validation
+- **Profils personnalisés** avec préférences de véhicules
+- **Gestion des commandes** et historique complet
 - **Système de rôles** (Utilisateur, Admin, Super Admin)
+- **Réinitialisation de mot de passe** sécurisée
+- **Gestion des erreurs** avec messages clairs
 
 ### 💳 Paiements Sécurisés
 - **Intégration Stripe** pour les paiements
 - **Webhooks sécurisés** pour les notifications
 - **Gestion des commandes** automatisée
 - **Emails de confirmation** automatiques
+- **Support Apple Pay** (préparé)
+- **Gestion des erreurs de paiement**
 
-### 📧 Communication
+### 📧 Communication et Support
+- **Système de chat en temps réel** entre utilisateurs et admins
 - **Formulaire de contact** avec validation
 - **Notifications par email** (Symfony Mailer)
 - **Messages flash** pour le feedback utilisateur
 - **Support multilingue** (préparé)
+- **Emails transactionnels** automatiques
 
 ### 🛠️ Administration
-- **Interface d'administration** complète
-- **Gestion des véhicules** (CRUD)
+- **Interface d'administration** complète et responsive
+- **Gestion des véhicules** (CRUD complet)
 - **Gestion des utilisateurs** et permissions
-- **Statistiques** et rapports
+- **Statistiques** et rapports de vente
 - **Commandes console** pour la maintenance
+- **Gestion des conversations** de support
+
+---
+
+## 🆕 Nouvelles Fonctionnalités
+
+### 💬 Système de Chat en Temps Réel
+- **Chat utilisateur** : Interface moderne pour contacter le support
+- **Chat admin** : Gestion centralisée de toutes les conversations
+- **Messages en temps réel** avec AJAX
+- **Indicateurs de messages non lus**
+- **Historique des conversations** par utilisateur
+- **Sécurité** : Accès réservé aux utilisateurs connectés
+- **Interface responsive** adaptée mobile et desktop
+
+### 🔐 Réinitialisation de Mot de Passe
+- **Demande de réinitialisation** par email
+- **Liens sécurisés** avec expiration automatique (1 heure)
+- **Emails personnalisés** avec design professionnel
+- **Gestion des erreurs** (email inexistant, lien expiré)
+- **Interface utilisateur** moderne et intuitive
+
+### 🎨 Améliorations Interface
+- **Navigation mobile-first** avec menu déroulant
+- **Menu Services** dynamique selon l'état de connexion
+- **Corrections de couleurs** pour une meilleure lisibilité
+- **Formulaires optimisés** avec validation en temps réel
+- **Messages d'erreur** clairs et informatifs
+
+### 🛡️ Sécurité Renforcée
+- **Protection des routes** avec authentification
+- **Gestion des exceptions** pour éviter les erreurs 500
+- **Validation des données** côté serveur et client
+- **CSRF protection** sur tous les formulaires
+- **Sessions sécurisées** avec expiration
 
 ---
 
@@ -83,9 +129,10 @@
 ```
 Frontend:
 ├── Twig (Templates)
-├── CSS3 avec variables personnalisées
+├── CSS3 avec variables personnalisées (Mobile First)
 ├── JavaScript ES6+ (Vanilla)
 ├── Font Awesome (Icônes)
+├── AJAX pour les interactions temps réel
 └── Responsive Design (Mobile First)
 
 Backend:
@@ -94,11 +141,13 @@ Backend:
 ├── Doctrine ORM
 ├── Symfony Security
 ├── Symfony Mailer
-└── Symfony Forms
+├── Symfony Forms
+└── Symfony Messenger (pour les emails)
 
 Base de Données:
 ├── MySQL 8.0+
 ├── Migrations Doctrine
+├── Entité Messages (pour le chat)
 └── Fixtures pour les tests
 
 Services Externes:
@@ -111,9 +160,16 @@ Services Externes:
 ```
 src/
 ├── Controller/     # Contrôleurs métier
+│   ├── ChatController.php      # Gestion du chat
+│   ├── ResetPasswordController.php # Réinitialisation mot de passe
+│   └── ...
 ├── Entity/         # Entités Doctrine
+│   ├── Messages.php            # Messages du chat
+│   └── ...
 ├── Repository/     # Requêtes personnalisées
 ├── Form/          # Formulaires Symfony
+│   ├── ChatMessageType.php     # Formulaire chat
+│   └── ...
 ├── Service/       # Services métier
 └── EventListener/ # Écouteurs d'événements
 ```
@@ -221,6 +277,7 @@ http://localhost:8025
 3. **Rechercher** : Utiliser les filtres pour trouver le véhicule idéal
 4. **Commander** : Procéder au paiement sécurisé via Stripe
 5. **Suivre** : Consulter l'historique des commandes
+6. **Support** : Utiliser le chat pour contacter l'équipe
 
 ### 🔧 Administrateur
 1. **Connexion** : Se connecter avec les droits admin
@@ -228,6 +285,7 @@ http://localhost:8025
 3. **Utilisateurs** : Gérer les comptes utilisateurs
 4. **Commandes** : Suivre et gérer les commandes
 5. **Statistiques** : Consulter les rapports de vente
+6. **Support** : Répondre aux messages du chat utilisateur
 
 ### 🛠️ Commandes Console Utiles
 ```bash
@@ -255,11 +313,14 @@ public/
 │   ├── main.css   # Styles globaux
 │   ├── home.css   # Page d'accueil
 │   ├── vehicules.css # Liste des véhicules
+│   ├── chat.css   # Interface du chat
+│   ├── reset_password.css # Réinitialisation mot de passe
 │   └── ...
 ├── js/            # JavaScript
 │   ├── app.js     # Script principal
 │   ├── carousel.js # Carrousel interactif
-│   └── navigation.js # Navigation mobile
+│   ├── navigation.js # Navigation mobile
+│   └── chat.js    # Fonctionnalités chat
 └── images/        # Images et logos
 ```
 
@@ -298,16 +359,52 @@ symfony_quernel-auto/
 │   ├── src/                      # Code source
 │   │   ├── Command/              # Commandes console
 │   │   ├── Controller/           # Contrôleurs
+│   │   │   ├── ChatController.php # Gestion du chat
+│   │   │   └── ResetPasswordController.php # Réinitialisation
 │   │   ├── Entity/               # Entités Doctrine
+│   │   │   └── Messages.php      # Messages du chat
 │   │   ├── Form/                 # Formulaires
+│   │   │   └── ChatMessageType.php # Formulaire chat
 │   │   ├── Repository/           # Repositories
 │   │   └── Service/              # Services
 │   ├── templates/                # Templates Twig
+│   │   ├── chat/                 # Templates du chat
+│   │   ├── reset_password/       # Templates réinitialisation
+│   │   └── emails/               # Templates d'emails
 │   └── var/                      # Cache et logs
 ├── docs/                         # Documentation
 ├── docker-compose.yaml           # Configuration Docker
 └── README.md                     # Ce fichier
 ```
+
+---
+
+## 🐛 Corrections et Améliorations
+
+### 🔧 Corrections d'Erreurs
+- **Erreur 500** lors de l'inscription avec email dupliqué → Gestion des exceptions
+- **Erreur 500** lors de la réinitialisation de mot de passe → Correction du template
+- **Problèmes de couleurs** sur les formulaires → Styles CSS corrigés
+- **Routes manquantes** dans la navigation → Correction des noms de routes
+
+### 🎨 Améliorations Interface
+- **Navigation mobile-first** avec menu déroulant responsive
+- **Menu Services** adaptatif selon l'état de connexion
+- **Couleurs optimisées** pour une meilleure lisibilité
+- **Formulaires modernisés** avec validation améliorée
+- **Messages d'erreur** plus clairs et informatifs
+
+### 🛡️ Sécurité
+- **Protection du chat** : Accès réservé aux utilisateurs connectés
+- **Gestion des exceptions** : Éviter les erreurs 500
+- **Validation renforcée** : Côté serveur et client
+- **Sessions sécurisées** : Configuration optimisée
+
+### 📱 Responsive Design
+- **Approche mobile-first** pour tous les composants
+- **Navigation adaptative** avec menu burger
+- **Formulaires optimisés** pour mobile
+- **Chat responsive** sur tous les appareils
 
 ---
 
@@ -332,9 +429,10 @@ symfony_quernel-auto/
 
 ### 📝 Standards de Code
 - **PHP** : PSR-12
-- **JavaScript** : ESLint + Prettier
-- **CSS** : BEM methodology
+- **JavaScript** : ES6+ avec commentaires
+- **CSS** : BEM methodology + Mobile First
 - **Git** : Conventional Commits
+- **Symfony** : Best practices officielles
 
 ---
 
@@ -355,4 +453,5 @@ Ce projet est sous licence **MIT**. Voir le fichier [LICENSE](LICENSE) pour plus
 <div align="center">
   <p>Développé avec ❤️ par l'équipe Quernel Auto</p>
   <p>🚗 Simplifions l'import/export de véhicules ensemble !</p>
+  <p>💬 Support en temps réel disponible pour nos clients</p>
 </div> 

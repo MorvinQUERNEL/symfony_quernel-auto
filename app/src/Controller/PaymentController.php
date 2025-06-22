@@ -117,8 +117,8 @@ class PaymentController extends AbstractController
                 $vehiculeImage = $request->getSchemeAndHttpHost() . '/uploads/vehicules/' . $vehicule->getPictures()->first()->getName();
             }
 
-            // Créer la session de paiement Stripe
-            $checkoutSession = $this->stripeClient->checkout->sessions->create([
+            // Configuration de base pour la session
+            $sessionConfig = [
                 'line_items' => [[
                     'price_data' => [
                         'currency' => 'eur',
@@ -143,7 +143,21 @@ class PaymentController extends AbstractController
                     'order_id' => $order->getId(),
                     'user_id' => $user->getId(),
                 ],
-            ]);
+                // Configuration pour Apple Pay
+                'payment_method_types' => ['card', 'apple_pay'],
+                'payment_method_options' => [
+                    'apple_pay' => [
+                        'enabled' => true,
+                    ],
+                ],
+                'billing_address_collection' => 'required',
+                'shipping_address_collection' => [
+                    'allowed_countries' => ['FR', 'BE', 'CH', 'CA'],
+                ],
+            ];
+
+            // Créer la session de paiement Stripe
+            $checkoutSession = $this->stripeClient->checkout->sessions->create($sessionConfig);
 
             // Mettre à jour la commande avec l'ID de session Stripe
             $this->entityManager->flush();
@@ -158,6 +172,57 @@ class PaymentController extends AbstractController
 
             return new JsonResponse([
                 'error' => 'Erreur lors de la création de la session de paiement: ' . $e->getMessage()
+            ], 400);
+        }
+    }
+
+    #[Route('/create-payment-intent', name: 'app_create_payment_intent', methods: ['POST'])]
+    public function createPaymentIntent(Request $request): Response
+    {
+        try {
+            $orderId = $request->request->get('order_id');
+            $order = $this->entityManager->getRepository(Orders::class)->find($orderId);
+
+            if (!$order) {
+                throw new \Exception('Commande non trouvée.');
+            }
+
+            $user = $this->getUser();
+            if (!$user || $order->getUsers() !== $user) {
+                throw new \Exception('Accès non autorisé.');
+            }
+
+            if ($order->getOrderStatus() !== 'pending') {
+                throw new \Exception('Cette commande ne peut plus être payée.');
+            }
+
+            // Créer un PaymentIntent pour Apple Pay
+            $paymentIntent = $this->stripeClient->paymentIntents->create([
+                'amount' => (int)($order->getTotalPrice() * 100), // Convertir en centimes
+                'currency' => 'eur',
+                'automatic_payment_methods' => [
+                    'enabled' => true,
+                ],
+                'metadata' => [
+                    'order_id' => $order->getId(),
+                    'user_id' => $user->getId(),
+                ],
+            ]);
+
+            return new JsonResponse([
+                'client_secret' => $paymentIntent->client_secret,
+                'amount' => $paymentIntent->amount,
+                'currency' => $paymentIntent->currency,
+            ]);
+
+        } catch (\Exception $e) {
+            $this->logger->error('Erreur lors de la création du PaymentIntent', [
+                'error' => $e->getMessage(),
+                'order_id' => $orderId ?? null,
+            ]);
+
+            return new JsonResponse([
+                'error' => 'Erreur lors de la création du PaymentIntent: ' . $e->getMessage()
             ], 400);
         }
     }

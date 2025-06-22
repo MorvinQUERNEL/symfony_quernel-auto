@@ -1,0 +1,194 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Support Chat - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/chat.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="chat-container">
+    <div class="chat-header">
+        <div class="chat-header-info">
+            <h1><i class="fas fa-comments"></i> Support Chat</h1>
+            <p>Nos administrateurs sont là pour vous aider</p>
+        </div>
+        <div class="chat-status">
+            <span class="status-indicator online"></span>
+            <span class="status-text">En ligne</span>
+        </div>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+        {% if messages is empty %}
+            <div class="welcome-message">
+                <div class="welcome-icon">
+                    <i class="fas fa-hand-wave"></i>
+                </div>
+                <h3>Bienvenue !</h3>
+                <p>Comment pouvons-nous vous aider aujourd'hui ?</p>
+                <p class="welcome-note">Un administrateur vous répondra dans les plus brefs délais.</p>
+            </div>
+        {% else %}
+            {% for message in messages %}
+                <div class="message {{ message.isFromUser ? 'message-user' : 'message-admin' }}">
+                    <div class="message-content">
+                        <div class="message-text">{{ message.content }}</div>
+                        <div class="message-time">{{ message.sendAt|date('H:i') }}</div>
+                    </div>
+                    <div class="message-sender">
+                        {% if message.isFromUser %}
+                            <i class="fas fa-user"></i> Vous
+                        {% else %}
+                            <i class="fas fa-headset"></i> Support
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="chat-input-container">
+        <form id="chatForm" class="chat-form">
+            <div class="input-group">
+                <textarea 
+                    id="messageInput" 
+                    class="chat-input" 
+                    placeholder="Tapez votre message..."
+                    rows="1"
+                    maxlength="255"
+                ></textarea>
+                <button type="submit" class="send-button" id="sendButton">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <div class="input-footer">
+                <span class="char-count" id="charCount">0/255</span>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatMessages = document.getElementById('chatMessages');
+    const chatForm = document.getElementById('chatForm');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    const charCount = document.getElementById('charCount');
+    const conversationId = '{{ conversationId }}';
+    
+    let isTyping = false;
+    
+    // Auto-resize textarea
+    messageInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        
+        // Update character count
+        const count = this.value.length;
+        charCount.textContent = count + '/255';
+        
+        // Disable send button if empty
+        sendButton.disabled = count === 0;
+    });
+    
+    // Send message
+    chatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const content = messageInput.value.trim();
+        if (!content) return;
+        
+        // Disable form while sending
+        sendButton.disabled = true;
+        messageInput.disabled = true;
+        
+        // Add message to chat immediately
+        addMessageToChat(content, true, 'Vous');
+        
+        // Clear input
+        messageInput.value = '';
+        messageInput.style.height = 'auto';
+        charCount.textContent = '0/255';
+        
+        // Send to server
+        fetch('{{ path('app_chat_send') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                content: content,
+                conversationId: conversationId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Message sent successfully
+                sendButton.disabled = false;
+                messageInput.disabled = false;
+                messageInput.focus();
+            } else {
+                // Handle error
+                console.error('Erreur:', data.error);
+                sendButton.disabled = false;
+                messageInput.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            sendButton.disabled = false;
+            messageInput.disabled = false;
+        });
+    });
+    
+    // Add message to chat
+    function addMessageToChat(content, isFromUser, senderName) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isFromUser ? 'message-user' : 'message-admin'}`;
+        
+        const now = new Date();
+        const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                <div class="message-text">${content}</div>
+                <div class="message-time">${time}</div>
+            </div>
+            <div class="message-sender">
+                ${isFromUser ? '<i class="fas fa-user"></i> Vous' : '<i class="fas fa-headset"></i> Support'}
+            </div>
+        `;
+        
+        chatMessages.appendChild(messageDiv);
+        scrollToBottom();
+    }
+    
+    // Scroll to bottom
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    // Initial scroll
+    scrollToBottom();
+    
+    // Poll for new messages every 3 seconds
+    setInterval(function() {
+        fetch('{{ path('app_chat_get_messages', {'conversationId': conversationId}) }}')
+        .then(response => response.json())
+        .then(messages => {
+            // Check if there are new messages
+            const currentMessageCount = chatMessages.querySelectorAll('.message').length;
+            if (messages.length > currentMessageCount) {
+                // Reload the page to show new messages
+                location.reload();
+            }
+        })
+        .catch(error => console.error('Erreur lors de la récupération des messages:', error));
+    }, 3000);
+});
+</script>
+{% endblock %} 

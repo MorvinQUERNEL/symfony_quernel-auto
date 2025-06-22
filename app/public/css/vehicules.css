@@ -243,6 +243,16 @@ body {
     gap: 0.5rem;
 }
 
+/* Styles pour les formulaires dans les actions */
+.vehicule-actions form {
+    width: 100%;
+    display: flex;
+}
+
+.vehicule-actions form .btn {
+    width: 100%;
+}
+
 .vehicule-actions .btn-primary {
     background: var(--primary-color);
     color: var(--light-color);
@@ -363,6 +373,8 @@ body {
     border-radius: var(--border-radius-sm);
     font-size: 0.9rem;
     transition: var(--transition);
+    color: var(--text-color);
+    background: var(--light-color);
 }
 
 .form-group input:focus,
@@ -371,6 +383,19 @@ body {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+}
+
+/* Styles pour les placeholders */
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: var(--gray-dark);
+    opacity: 0.7;
+}
+
+/* Styles pour les options des selects */
+.form-group select option {
+    color: var(--text-color);
+    background: var(--light-color);
 }
 
 .form-group textarea {
@@ -615,6 +640,15 @@ body {
     .vehicule-actions .btn:hover {
         transform: translateY(-2px);
         box-shadow: var(--shadow-medium);
+    }
+
+    /* Styles pour les formulaires dans les actions en ordinateur */
+    .vehicule-actions form {
+        flex: 1;
+    }
+
+    .vehicule-actions form .btn {
+        width: 100%;
     }
 
     .form-row {

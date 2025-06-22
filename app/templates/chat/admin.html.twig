@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion du Chat - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/chat.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="chat-admin-container">
+    <div class="chat-admin-header">
+        <h1><i class="fas fa-headset"></i> Gestion du Support Chat</h1>
+        <div class="header-stats">
+            <div class="stat-item">
+                <i class="fas fa-comments"></i>
+                <span>{{ conversations|length }} conversations</span>
+            </div>
+            <div class="stat-item unread" id="unreadCount">
+                <i class="fas fa-bell"></i>
+                <span>0 messages non lus</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="conversations-list">
+        {% if conversations is empty %}
+            <div class="no-conversations">
+                <i class="fas fa-comments"></i>
+                <h3>Aucune conversation</h3>
+                <p>Aucun utilisateur n'a encore initié de conversation.</p>
+            </div>
+        {% else %}
+            {% for conversation in conversations %}
+                <div class="conversation-item" data-conversation-id="{{ conversation.conversationId }}">
+                    <div class="conversation-info">
+                        <div class="conversation-header">
+                            <h3>Conversation #{{ conversation.conversationId|slice(0, 8) }}</h3>
+                            {% if conversation.unreadCount > 0 %}
+                                <span class="unread-badge">{{ conversation.unreadCount }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="conversation-preview">
+                            {% if conversation.lastMessage %}
+                                <p>{{ conversation.lastMessage.content|length > 50 ? conversation.lastMessage.content|slice(0, 50) ~ '...' : conversation.lastMessage.content }}</p>
+                                <span class="conversation-time">{{ conversation.lastMessage.sendAt|date('d/m/Y H:i') }}</span>
+                            {% else %}
+                                <p>Aucun message</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="conversation-actions">
+                        <a href="{{ path('app_chat_admin_conversation', {'conversationId': conversation.conversationId}) }}" class="btn btn-primary">
+                            <i class="fas fa-comment"></i> Répondre
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Update unread count every 5 seconds
+    function updateUnreadCount() {
+        fetch('{{ path('app_chat_unread_count') }}')
+        .then(response => response.json())
+        .then(data => {
+            const unreadElement = document.getElementById('unreadCount');
+            if (data.unreadCount > 0) {
+                unreadElement.innerHTML = `<i class="fas fa-bell"></i><span>${data.unreadCount} messages non lus</span>`;
+                unreadElement.classList.add('has-unread');
+            } else {
+                unreadElement.innerHTML = `<i class="fas fa-bell"></i><span>0 messages non lus</span>`;
+                unreadElement.classList.remove('has-unread');
+            }
+        })
+        .catch(error => console.error('Erreur lors de la mise à jour du compteur:', error));
+    }
+    
+    // Initial update
+    updateUnreadCount();
+    
+    // Update every 5 seconds
+    setInterval(updateUnreadCount, 5000);
+});
+</script>
+{% endblock %} 

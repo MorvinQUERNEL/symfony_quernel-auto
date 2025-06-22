@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Messages - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/messages.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="messages-container">
+    <div class="messages-header">
+        <h1>Mes Messages</h1>
+        <a href="{{ path('app_messages_new') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Nouveau message
+        </a>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <!-- Messages reçus -->
+    <div class="messages-section">
+        <h2><i class="fas fa-inbox"></i> Messages reçus ({{ received_messages|length }})</h2>
+        
+        {% if received_messages is empty %}
+            <div class="no-messages">
+                <i class="fas fa-inbox"></i>
+                <p>Aucun message reçu</p>
+            </div>
+        {% else %}
+            <div class="messages-grid">
+                {% for message in received_messages %}
+                    <div class="message-card received">
+                        <div class="message-header">
+                            <div class="message-subject">
+                                <h3>{{ message.subject }}</h3>
+                            </div>
+                            <div class="message-date">
+                                {{ message.sendAt|date('d/m/Y H:i') }}
+                            </div>
+                        </div>
+                        
+                        <div class="message-content">
+                            <div class="message-participants">
+                                <div class="participant">
+                                    <i class="fas fa-user"></i>
+                                    <span><strong>De :</strong> {{ message.sender.firstname }} {{ message.sender.lastname }}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="message-preview">
+                                {{ message.content|length > 100 ? message.content|slice(0, 100) ~ '...' : message.content }}
+                            </div>
+                        </div>
+                        
+                        <div class="message-actions">
+                            <a href="{{ path('app_messages_show', {'id': message.id}) }}" class="btn btn-secondary">
+                                <i class="fas fa-eye"></i> Lire
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Messages envoyés -->
+    <div class="messages-section">
+        <h2><i class="fas fa-paper-plane"></i> Messages envoyés ({{ sent_messages|length }})</h2>
+        
+        {% if sent_messages is empty %}
+            <div class="no-messages">
+                <i class="fas fa-paper-plane"></i>
+                <p>Aucun message envoyé</p>
+            </div>
+        {% else %}
+            <div class="messages-grid">
+                {% for message in sent_messages %}
+                    <div class="message-card sent">
+                        <div class="message-header">
+                            <div class="message-subject">
+                                <h3>{{ message.subject }}</h3>
+                            </div>
+                            <div class="message-date">
+                                {{ message.sendAt|date('d/m/Y H:i') }}
+                            </div>
+                        </div>
+                        
+                        <div class="message-content">
+                            <div class="message-participants">
+                                <div class="participant">
+                                    <i class="fas fa-user"></i>
+                                    <span><strong>À :</strong> {{ message.recipient.firstname }} {{ message.recipient.lastname }}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="message-preview">
+                                {{ message.content|length > 100 ? message.content|slice(0, 100) ~ '...' : message.content }}
+                            </div>
+                        </div>
+                        
+                        <div class="message-actions">
+                            <a href="{{ path('app_messages_show', {'id': message.id}) }}" class="btn btn-secondary">
+                                <i class="fas fa-eye"></i> Voir
+                            </a>
+                            <a href="{{ path('app_messages_edit', {'id': message.id}) }}" class="btn btn-warning">
+                                <i class="fas fa-edit"></i> Modifier
+                            </a>
+                            <form method="post" action="{{ path('app_messages_delete', {'id': message.id}) }}" 
+                                  style="display: inline;" 
+                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce message ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ message.id) }}">
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> Supprimer
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

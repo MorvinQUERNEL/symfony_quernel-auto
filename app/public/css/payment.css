@@ -1357,4 +1357,191 @@
         padding: 1.5rem 3rem;
         font-size: 1.2rem;
     }
+}
+
+/* ========================================
+   BOUTON APPLE PAY
+   ======================================== */
+.apple-pay-button {
+    margin-bottom: 1rem;
+}
+
+.btn-apple-pay {
+    background: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-apple-pay:hover {
+    background: #333333;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-color);
+}
+
+.btn-apple-pay:active {
+    transform: translateY(0);
+}
+
+.btn-apple-pay i {
+    font-size: 1.2rem;
+}
+
+/* Style spécifique pour le bouton Apple Pay natif */
+.stripe-payment-request-button {
+    width: 100% !important;
+    height: 48px !important;
+    border-radius: var(--border-radius) !important;
+    margin-bottom: 1rem !important;
+}
+
+/* ========================================
+   AMÉLIORATIONS DES BOUTONS DE PAIEMENT
+   ======================================== */
+.payment-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.payment-actions .btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+.payment-actions .btn-primary {
+    background: var(--primary-color);
+    color: var(--white-color);
+}
+
+.payment-actions .btn-primary:hover {
+    background: var(--primary-color);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-color);
+}
+
+.payment-actions .btn-outline-secondary {
+    background: transparent;
+    color: var(--secondary-color);
+    border: 1px solid var(--shadow-color);
+}
+
+.payment-actions .btn-outline-secondary:hover {
+    background: var(--light-color);
+    color: var(--secondary-color);
+    transform: translateY(-1px);
+}
+
+/* ========================================
+   MÉTHODES DE PAIEMENT
+   ======================================== */
+.payment-methods {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.payment-methods i {
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    transition: var(--transition);
+}
+
+.payment-methods i:hover {
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.payment-methods .fa-apple-pay {
+    color: #000000;
+}
+
+/* ========================================
+   RESPONSIVE POUR APPLE PAY
+   ======================================== */
+@media (min-width: 764px) {
+    .payment-actions {
+        flex-direction: row;
+        gap: 1rem;
+    }
+    
+    .payment-actions .btn {
+        flex: 1;
+    }
+    
+    .apple-pay-button {
+        margin-bottom: 0;
+    }
+}
+
+@media (min-width: 1024px) {
+    .btn-apple-pay {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+    }
+    
+    .payment-actions .btn {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+    }
+}
+
+/* ========================================
+   ANIMATIONS POUR APPLE PAY
+   ======================================== */
+@keyframes applePayPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+}
+
+.btn-apple-pay:focus {
+    animation: applePayPulse 1.5s infinite;
+}
+
+/* ========================================
+   ÉTATS DE CHARGEMENT
+   ======================================== */
+.btn-apple-pay:disabled,
+.payment-actions .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.btn-apple-pay:disabled:hover,
+.payment-actions .btn:disabled:hover {
+    transform: none !important;
+    box-shadow: none !important;
 } 

@@ -55,11 +55,27 @@
                             <span>Véhicules</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#services" class="nav-link">
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle">
                             <i class="fas fa-cogs"></i>
                             <span>Services</span>
+                            <i class="fas fa-chevron-down"></i>
                         </a>
+                        <div class="dropdown-menu">
+                            {% if app.user %}
+                                <a href="{{ path('app_chat_index') }}" class="dropdown-item">
+                                    <i class="fas fa-comments"></i> Chat support
+                                </a>
+                            {% endif %}
+                            <a href="{{ path('app_contact') }}" class="dropdown-item">
+                                <i class="fas fa-envelope"></i> Contact
+                            </a>
+                            {% if app.user %}
+                                <a href="{{ path('app_preference_add') }}" class="dropdown-item">
+                                    <i class="fas fa-heart"></i> Ajouter préférence
+                                </a>
+                            {% endif %}
+                        </div>
                     </li>
                     <li class="nav-item">
                         <a href="{{ path('app_processus') }}" class="nav-link" aria-current="{{ app.request.get('_route') == 'app_processus' ? 'page' : 'false' }}">
@@ -105,6 +121,9 @@
                                     </a>
                                     <a href="{{ path('app_admin_users') }}" class="dropdown-item">
                                         <i class="fas fa-users"></i> Gestion Utilisateurs
+                                    </a>
+                                    <a href="{{ path('app_chat_admin') }}" class="dropdown-item">
+                                        <i class="fas fa-comments"></i> Chat Admin
                                     </a>
                                 {% endif %}
                                 

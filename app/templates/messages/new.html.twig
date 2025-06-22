@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Message - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/messages.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="messages-container">
+    <div class="messages-header">
+        <h1>Nouveau Message</h1>
+        <a href="{{ path('app_messages_my_messages') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Retour aux messages
+        </a>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="message-form-container">
+        <div class="message-form-card">
+            <div class="message-form-header">
+                <h2>Composer un nouveau message</h2>
+            </div>
+            
+            <div class="message-form">
+                {{ form_start(form, {'attr': {'class': 'message-form'}}) }}
+                    <div class="form-group">
+                        {{ form_label(form.subject) }}
+                        {{ form_widget(form.subject) }}
+                        {{ form_errors(form.subject) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(form.recipient) }}
+                        {{ form_widget(form.recipient) }}
+                        {{ form_errors(form.recipient) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(form.content) }}
+                        {{ form_widget(form.content) }}
+                        {{ form_errors(form.content) }}
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Envoyer le message
+                        </button>
+                        <a href="{{ path('app_messages_my_messages') }}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Annuler
+                        </a>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

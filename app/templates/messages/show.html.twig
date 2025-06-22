@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Message - {{ message.subject }} - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/messages.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="messages-container">
+    <div class="messages-header">
+        <h1>Message</h1>
+        <div class="header-actions">
+            <a href="{{ path('app_messages_my_messages') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour aux messages
+            </a>
+            {% if message.sender == app.user or is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_messages_edit', {'id': message.id}) }}" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Modifier
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="message-detail-container">
+        <div class="message-detail-card">
+            <div class="message-detail-header">
+                <h2>{{ message.subject }}</h2>
+                <div class="message-meta">
+                    <span class="message-date">
+                        <i class="fas fa-calendar"></i>
+                        {{ message.sendAt|date('d/m/Y à H:i') }}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="message-detail-content">
+                <div class="message-participants">
+                    <div class="participant sender">
+                        <i class="fas fa-user"></i>
+                        <div class="participant-info">
+                            <span class="participant-label">Expéditeur :</span>
+                            <span class="participant-name">{{ message.sender.firstname }} {{ message.sender.lastname }}</span>
+                            <span class="participant-email">{{ message.sender.email }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="participant recipient">
+                        <i class="fas fa-user"></i>
+                        <div class="participant-info">
+                            <span class="participant-label">Destinataire :</span>
+                            <span class="participant-name">{{ message.recipient.firstname }} {{ message.recipient.lastname }}</span>
+                            <span class="participant-email">{{ message.recipient.email }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="message-body">
+                    <h3>Contenu du message</h3>
+                    <div class="message-text">
+                        {{ message.content|nl2br }}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="message-detail-actions">
+                <a href="{{ path('app_messages_new') }}" class="btn btn-primary">
+                    <i class="fas fa-reply"></i> Répondre
+                </a>
+                {% if message.sender == app.user or is_granted('ROLE_ADMIN') %}
+                    <form method="post" action="{{ path('app_messages_delete', {'id': message.id}) }}" 
+                          style="display: inline;" 
+                          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce message ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ message.id) }}">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Supprimer
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

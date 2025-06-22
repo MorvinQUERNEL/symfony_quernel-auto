@@ -13,9 +13,6 @@ class Messages
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $subject = null;
-
     #[ORM\Column(length: 255)]
     private ?string $content = null;
 
@@ -25,24 +22,18 @@ class Messages
     #[ORM\ManyToOne(inversedBy: 'messages')]
     private ?Users $sender = null;
 
-    #[ORM\ManyToOne(inversedBy: 'messagesRecipient')]
-    private ?Users $recipient = null;
+    #[ORM\Column(length: 50)]
+    private ?string $conversationId = null;
+
+    #[ORM\Column]
+    private ?bool $isFromUser = null;
+
+    #[ORM\Column]
+    private ?bool $isRead = false;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getSubject(): ?string
-    {
-        return $this->subject;
-    }
-
-    public function setSubject(string $subject): static
-    {
-        $this->subject = $subject;
-
-        return $this;
     }
 
     public function getContent(): ?string
@@ -81,14 +72,38 @@ class Messages
         return $this;
     }
 
-    public function getRecipient(): ?Users
+    public function getConversationId(): ?string
     {
-        return $this->recipient;
+        return $this->conversationId;
     }
 
-    public function setRecipient(?Users $recipient): static
+    public function setConversationId(string $conversationId): static
     {
-        $this->recipient = $recipient;
+        $this->conversationId = $conversationId;
+
+        return $this;
+    }
+
+    public function isFromUser(): ?bool
+    {
+        return $this->isFromUser;
+    }
+
+    public function setIsFromUser(bool $isFromUser): static
+    {
+        $this->isFromUser = $isFromUser;
+
+        return $this;
+    }
+
+    public function isRead(): ?bool
+    {
+        return $this->isRead;
+    }
+
+    public function setIsRead(bool $isRead): static
+    {
+        $this->isRead = $isRead;
 
         return $this;
     }
