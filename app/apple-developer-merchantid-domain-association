@@ -1,0 +1,17 @@
+# Apple Pay Domain Association File
+# This file is required for Apple Pay to work in production
+# Place this file at: https://yourdomain.com/.well-known/apple-developer-merchantid-domain-association
+
+# Note: You need to replace this with your actual Apple Pay merchant ID
+# and configure it in your Apple Developer account
+
+# For testing purposes, you can use Stripe's test merchant ID
+# In production, you'll need your own merchant ID from Apple
+
+# This is a placeholder file - you'll need to:
+# 1. Register your domain with Apple
+# 2. Get your merchant ID from Apple Developer
+# 3. Replace this content with the actual domain association file
+
+# For more information, visit:
+# https://developer.apple.com/documentation/apple_pay_on_the_web/verifying_your_domain_with_apple 
