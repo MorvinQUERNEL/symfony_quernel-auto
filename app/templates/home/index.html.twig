@@ -224,3 +224,36 @@
     </section>
 {% endblock %}
 
+{% block page_javascripts %}
+    {{ parent() }}
+    <script>
+        // Démonstration des messages flash dynamiques (à retirer en production)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Exemple d'utilisation des messages flash dynamiques
+            const testButton = document.createElement('button');
+            testButton.textContent = 'Tester les notifications';
+            testButton.style.cssText = 'position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; background: var(--primary-color); color: white; border: none; border-radius: 5px; cursor: pointer; z-index: 1000;';
+            
+            let messageIndex = 0;
+            const messages = [
+                { type: 'success', text: 'Votre véhicule a été ajouté aux favoris !' },
+                { type: 'error', text: 'Une erreur est survenue lors de la connexion.' },
+                { type: 'warning', text: 'Votre session expire dans 5 minutes.' },
+                { type: 'info', text: 'Nouveau véhicule disponible dans notre catalogue !' }
+            ];
+            
+            testButton.addEventListener('click', function() {
+                const msg = messages[messageIndex % messages.length];
+                window.FlashMessage[msg.type](msg.text, {
+                    duration: messageIndex === 1 ? 8000 : 5000, // Message d'erreur plus long
+                    noAutoClose: messageIndex === 2 // Message warning sans auto-fermeture
+                });
+                messageIndex++;
+            });
+            
+            // Commenter cette ligne pour désactiver le bouton de test
+            // document.body.appendChild(testButton);
+        });
+    </script>
+{% endblock %}
+

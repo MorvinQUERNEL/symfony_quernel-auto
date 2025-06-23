@@ -1,6 +1,6 @@
 /* ========================================
    QUERNEL AUTO - CSS PRINCIPAL
-   Approche Mobile First
+   Approche Mobile First avec breakpoints 757px et 1024px
    ======================================== */
 
 /* ========================================
@@ -74,7 +74,7 @@
 }
 
 /* ========================================
-   RESET ET BASE
+   RESET ET BASE - MOBILE FIRST
    ======================================== */
 *,
 *::before,
@@ -99,10 +99,12 @@ body {
     background-color: var(--light-color);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Padding pour compenser la navbar fixe */
+    padding-top: 60px;
 }
 
 /* ========================================
-   TYPOGRAPHIE
+   TYPOGRAPHIE - MOBILE FIRST
    ======================================== */
 h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
@@ -111,30 +113,35 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--secondary-color);
 }
 
-h1 { font-size: var(--font-size-3xl); }
-h2 { font-size: var(--font-size-2xl); }
-h3 { font-size: var(--font-size-xl); }
-h4 { font-size: var(--font-size-lg); }
-h5 { font-size: var(--font-size-base); }
-h6 { font-size: var(--font-size-sm); }
+/* Tailles mobile-first */
+h1 { font-size: var(--font-size-2xl); }
+h2 { font-size: var(--font-size-xl); }
+h3 { font-size: var(--font-size-lg); }
+h4 { font-size: var(--font-size-base); }
+h5 { font-size: var(--font-size-sm); }
+h6 { font-size: var(--font-size-xs); }
 
 p {
     margin-bottom: var(--spacing-md);
     line-height: 1.7;
+    font-size: var(--font-size-base);
 }
 
 a {
     color: var(--primary-color);
     text-decoration: none;
-    transition: color var(--transition-fast);
-}
-
-a:hover {
-    color: var(--primary-dark);
+    transition: none;
+    /* Taille minimale pour les touches */
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 /* ========================================
-   LAYOUT ET CONTAINERS
+   LAYOUT ET CONTAINERS - MOBILE FIRST
    ======================================== */
 .container {
     width: 100%;
@@ -149,42 +156,47 @@ a:hover {
 }
 
 .section {
-    padding: var(--spacing-2xl) 0;
-}
-
-.section-sm {
     padding: var(--spacing-xl) 0;
 }
 
+.section-sm {
+    padding: var(--spacing-lg) 0;
+}
+
 .section-lg {
-    padding: var(--spacing-2xl) 0;
+    padding: var(--spacing-xl) 0;
 }
 
 /* ========================================
-   BOUTONS
+   BOUTONS - MOBILE FIRST
    ======================================== */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-sm) var(--spacing-md);
-    font-size: var(--font-size-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-base);
     font-weight: 500;
     text-align: center;
     text-decoration: none;
     border: none;
     border-radius: var(--border-radius-md);
     cursor: pointer;
-    transition: all var(--transition-normal);
+    transition: none;
     white-space: nowrap;
     user-select: none;
     position: relative;
     overflow: hidden;
+    /* Taille minimale pour les touches */
+    min-height: 44px;
+    min-width: 44px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 .btn:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.25);
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
 }
 
 .btn:disabled {
@@ -198,32 +210,15 @@ a:hover {
     color: var(--light-color);
 }
 
-.btn-primary:hover:not(:disabled) {
-    background-color: var(--primary-dark);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
-}
-
 .btn-secondary {
     background-color: var(--secondary-color);
     color: var(--light-color);
-}
-
-.btn-secondary:hover:not(:disabled) {
-    background-color: var(--gray-dark);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
 }
 
 .btn-outline {
     background-color: transparent;
     color: var(--primary-color);
     border: 2px solid var(--primary-color);
-}
-
-.btn-outline:hover:not(:disabled) {
-    background-color: var(--primary-color);
-    color: var(--light-color);
 }
 
 .btn-success {
@@ -243,22 +238,25 @@ a:hover {
 
 /* Tailles de boutons */
 .btn-sm {
-    padding: var(--spacing-xs) var(--spacing-sm);
-    font-size: var(--font-size-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+    min-height: 40px;
 }
 
 .btn-lg {
-    padding: var(--spacing-md) var(--spacing-xl);
+    padding: var(--spacing-lg) var(--spacing-xl);
     font-size: var(--font-size-lg);
+    min-height: 52px;
 }
 
 .btn-xl {
-    padding: var(--spacing-lg) var(--spacing-2xl);
+    padding: var(--spacing-xl) var(--spacing-2xl);
     font-size: var(--font-size-xl);
+    min-height: 60px;
 }
 
 /* ========================================
-   FORMULAIRES
+   FORMULAIRES - MOBILE FIRST
    ======================================== */
 .form-group {
     margin-bottom: var(--spacing-md);
@@ -266,24 +264,37 @@ a:hover {
 
 .form-label {
     display: block;
-    margin-bottom: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
     font-weight: 500;
     color: var(--text-color);
+    font-size: var(--font-size-base);
 }
 
 .form-control {
     width: 100%;
-    padding: var(--spacing-sm);
+    padding: var(--spacing-md);
     font-size: var(--font-size-base);
-    border: 1px solid var(--gray-dark);
-    border-radius: var(--border-radius-sm);
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    border: 2px solid var(--gray-dark);
+    border-radius: var(--border-radius-md);
+    transition: none;
+    background-color: var(--light-color);
+    color: var(--text-color);
+    /* Taille minimale pour les touches */
+    min-height: 44px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 .form-control:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+}
+
+.form-control::placeholder {
+    color: var(--gray-dark);
+    opacity: 1;
 }
 
 .form-control:invalid {
@@ -296,13 +307,17 @@ a:hover {
 
 .form-select {
     width: 100%;
-    padding: var(--spacing-sm);
+    padding: var(--spacing-md);
     font-size: var(--font-size-base);
-    border: 1px solid var(--gray-dark);
-    border-radius: var(--border-radius-sm);
+    border: 2px solid var(--gray-dark);
+    border-radius: var(--border-radius-md);
     background-color: var(--light-color);
     cursor: pointer;
-    transition: border-color var(--transition-fast);
+    transition: none;
+    min-height: 44px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 .form-select:focus {
@@ -311,18 +326,14 @@ a:hover {
 }
 
 /* ========================================
-   CARTES
+   CARTES - MOBILE FIRST
    ======================================== */
 .card {
     background-color: var(--light-color);
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-sm);
     overflow: hidden;
-    transition: box-shadow var(--transition-normal);
-}
-
-.card:hover {
-    box-shadow: var(--shadow-md);
+    transition: none;
 }
 
 .card-header {
@@ -356,7 +367,7 @@ a:hover {
 }
 
 /* ========================================
-   UTILITAIRES
+   UTILITAIRES - MOBILE FIRST
    ======================================== */
 .text-center { text-align: center; }
 .text-left { text-align: left; }
@@ -413,7 +424,7 @@ a:hover {
 .shadow-lg { box-shadow: var(--shadow-lg); }
 .shadow-xl { box-shadow: var(--shadow-xl); }
 
-/* Marges */
+/* Marges et padding avec tailles optimisées pour mobile */
 .m-0 { margin: 0; }
 .m-1 { margin: var(--spacing-xs); }
 .m-2 { margin: var(--spacing-sm); }
@@ -435,7 +446,6 @@ a:hover {
 .mb-4 { margin-bottom: var(--spacing-lg); }
 .mb-5 { margin-bottom: var(--spacing-xl); }
 
-/* Padding */
 .p-0 { padding: 0; }
 .p-1 { padding: var(--spacing-xs); }
 .p-2 { padding: var(--spacing-sm); }
@@ -517,89 +527,181 @@ a:hover {
 }
 
 .animate-scale-in {
-    animation: scaleIn 0.6s ease-out;
+    animation: scaleIn 0.4s ease-out;
 }
 
 /* ========================================
-   MEDIA QUERIES - TABLETTE (764px)
+   TABLETTES - min-width: 757px
    ======================================== */
-@media (min-width: 764px) {
+@media (min-width: 757px) {
+    body {
+        padding-top: 70px;
+    }
+    
     .container {
         max-width: 720px;
         padding: 0 var(--spacing-lg);
     }
-
+    
+    /* Typographie plus grande */
     h1 { font-size: var(--font-size-4xl); }
     h2 { font-size: var(--font-size-3xl); }
     h3 { font-size: var(--font-size-2xl); }
-
+    h4 { font-size: var(--font-size-xl); }
+    
     .section {
+        padding: var(--spacing-2xl) 0;
+    }
+    
+    .section-lg {
         padding: var(--spacing-3xl) 0;
     }
-
+    
+    /* Liens avec hover */
+    a {
+        transition: color var(--transition-fast);
+        min-height: auto;
+        min-width: auto;
+        display: inline;
+    }
+    
+    a:hover {
+        color: var(--primary-dark);
+    }
+    
+    /* Boutons avec hover */
     .btn {
+        transition: all var(--transition-normal);
+        min-height: auto;
+        min-width: auto;
         padding: var(--spacing-sm) var(--spacing-lg);
-        font-size: var(--font-size-base);
     }
-
+    
+    .btn-primary:hover:not(:disabled) {
+        background-color: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+    
+    .btn-secondary:hover:not(:disabled) {
+        background-color: var(--gray-dark);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+    
+    .btn-outline:hover:not(:disabled) {
+        background-color: var(--primary-color);
+        color: var(--light-color);
+    }
+    
     .btn-lg {
-        padding: var(--spacing-md) var(--spacing-2xl);
-        font-size: var(--font-size-xl);
+        padding: var(--spacing-md) var(--spacing-xl);
     }
-
+    
+    /* Formulaires avec transitions */
+    .form-control,
+    .form-select {
+        transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+        min-height: auto;
+        padding: var(--spacing-sm);
+        border-width: 1px;
+    }
+    
+    /* Cartes avec hover */
+    .card {
+        transition: box-shadow var(--transition-normal);
+    }
+    
+    .card:hover {
+        box-shadow: var(--shadow-md);
+    }
+    
+    /* Utilitaires responsive */
     .d-md-none { display: none; }
     .d-md-block { display: block; }
     .d-md-flex { display: flex; }
     .d-md-grid { display: grid; }
-
+    
     .text-md-left { text-align: left; }
     .text-md-center { text-align: center; }
     .text-md-right { text-align: right; }
-
+    
     .flex-md-row { flex-direction: row; }
     .flex-md-column { flex-direction: column; }
+    
+    .justify-content-md-start { justify-content: flex-start; }
+    .justify-content-md-center { justify-content: center; }
+    .justify-content-md-end { justify-content: flex-end; }
 }
 
 /* ========================================
-   MEDIA QUERIES - ORDINATEUR (1024px)
+   DESKTOP - min-width: 1024px
    ======================================== */
 @media (min-width: 1024px) {
     .container {
-        max-width: 960px;
+        max-width: 1200px;
         padding: 0 var(--spacing-xl);
     }
-
+    
+    /* Typographie encore plus grande */
     h1 { font-size: var(--font-size-5xl); }
     h2 { font-size: var(--font-size-4xl); }
     h3 { font-size: var(--font-size-3xl); }
-
+    h4 { font-size: var(--font-size-2xl); }
+    
     .section {
         padding: var(--spacing-3xl) 0;
     }
-
+    
     .section-lg {
-        padding: var(--spacing-3xl) 0;
+        padding: var(--spacing-3xl) 0 var(--spacing-3xl) 0;
     }
-
+    
+    /* Boutons avec effets plus prononcés */
     .btn-primary:hover:not(:disabled) {
         transform: translateY(-2px);
         box-shadow: var(--shadow-lg);
     }
-
+    
     .btn-secondary:hover:not(:disabled) {
         transform: translateY(-2px);
         box-shadow: var(--shadow-lg);
     }
-
+    
+    /* Utilitaires responsive */
     .d-lg-none { display: none; }
     .d-lg-block { display: block; }
     .d-lg-flex { display: flex; }
     .d-lg-grid { display: grid; }
-
+    
     .text-lg-left { text-align: left; }
     .text-lg-center { text-align: center; }
     .text-lg-right { text-align: right; }
-
+    
     .flex-lg-row { flex-direction: row; }
     .flex-lg-column { flex-direction: column; }
+    
+    .justify-content-lg-start { justify-content: flex-start; }
+    .justify-content-lg-center { justify-content: center; }
+    .justify-content-lg-end { justify-content: flex-end; }
+}
+
+/* ========================================
+   ACCESSIBILITÉ
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .animate-fade-in,
+    .animate-slide-left,
+    .animate-slide-right,
+    .animate-scale-in {
+        animation: none;
+    }
 } 

@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Test Messages Flash - Quernel Auto{% endblock %}
+
+{% block body %}
+<div class="container" style="padding: 50px;">
+    <h1>Test des Messages Flash</h1>
+    
+    <p>Cette page permet de tester les différents types de messages flash avec leurs animations.</p>
+    
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 30px;">
+        <button id="test-success" class="btn" style="background: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Tester Success
+        </button>
+        
+        <button id="test-error" class="btn" style="background: #dc3545; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Tester Error
+        </button>
+        
+        <button id="test-warning" class="btn" style="background: #ffc107; color: #333; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Tester Warning
+        </button>
+        
+        <button id="test-info" class="btn" style="background: #17a2b8; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Tester Info
+        </button>
+        
+        <button id="test-multiple" class="btn" style="background: #6c757d; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Tester Multiple
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Test Success
+            document.getElementById('test-success').addEventListener('click', function() {
+                window.FlashMessage.success('Félicitations ! Votre véhicule a été ajouté aux favoris avec succès.');
+            });
+            
+            // Test Error
+            document.getElementById('test-error').addEventListener('click', function() {
+                window.FlashMessage.error('Une erreur est survenue lors de l\'enregistrement. Veuillez réessayer.');
+            });
+            
+            // Test Warning
+            document.getElementById('test-warning').addEventListener('click', function() {
+                window.FlashMessage.warning('Attention : Votre session expire dans 5 minutes.', {
+                    noAutoClose: true
+                });
+            });
+            
+            // Test Info
+            document.getElementById('test-info').addEventListener('click', function() {
+                window.FlashMessage.info('Information : Un nouveau véhicule Audi RS7 est disponible !', {
+                    duration: 8000
+                });
+            });
+            
+            // Test Multiple
+            document.getElementById('test-multiple').addEventListener('click', function() {
+                window.FlashMessage.success('Message 1 : Connexion réussie !');
+                setTimeout(() => {
+                    window.FlashMessage.info('Message 2 : Bienvenue sur Quernel Auto');
+                }, 500);
+                setTimeout(() => {
+                    window.FlashMessage.warning('Message 3 : N\'oubliez pas de compléter votre profil');
+                }, 1000);
+            });
+        });
+    </script>
+{% endblock %} 

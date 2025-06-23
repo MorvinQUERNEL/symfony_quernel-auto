@@ -1,46 +1,51 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Erreur serveur - Quernel Auto</title>
-    <link rel="icon" href="{{ asset('images/logo_quernel_auto.png') }}">
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur serveur - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/error.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
-    <div class="error-container error-500">
-        <div class="error-icon">
-            <i class="fas fa-exclamation-triangle"></i>
-        </div>
-        
-        <div class="error-code">500</div>
-        
-        <h1 class="error-title">Erreur serveur</h1>
-        
-        <p class="error-description">
-            Une erreur inattendue s'est produite sur nos serveurs. 
-            Notre équipe technique a été notifiée et travaille à résoudre le problème.
-        </p>
-        
-        <div class="error-actions">
-            <a href="{{ path('app_home') }}" class="btn btn-primary">
-                <i class="fas fa-home"></i>
-                Retour à l'accueil
-            </a>
-            <a href="{{ path('app_contact') }}" class="btn btn-secondary">
-                <i class="fas fa-envelope"></i>
-                Nous contacter
-            </a>
-        </div>
-        
-        <div class="error-details">
-            <h4>En attendant, vous pouvez :</h4>
-            <p><i class="fas fa-clock"></i> Réessayer dans quelques minutes</p>
-            <p><i class="fas fa-arrow-left"></i> Utiliser le bouton retour de votre navigateur</p>
-            <p><i class="fas fa-refresh"></i> Actualiser la page</p>
-            <p><i class="fas fa-phone"></i> Nous appeler au +33 1 23 45 67 89</p>
+{% endblock %}
+
+{% block body %}
+    <div class="error-page-container">
+        <div class="error-content error-500">
+            <div class="error-animation">
+                <div class="error-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <div class="error-code">500</div>
+            </div>
+            
+            <div class="error-message">
+                <h1 class="error-title">Erreur serveur</h1>
+                
+                <p class="error-description">
+                    Oups ! Notre serveur semble avoir des difficultés techniques. 
+                    Nos mécaniciens du web sont déjà sur le coup !
+                </p>
+            </div>
+            
+            <div class="error-actions">
+                <a href="{{ path('app_home') }}" class="btn btn-primary">
+                    <i class="fas fa-home"></i>
+                    Retour à l'accueil
+                </a>
+                <a href="{{ path('app_contact') }}" class="btn btn-secondary">
+                    <i class="fas fa-phone"></i>
+                    Nous appeler
+                </a>
+            </div>
+            
+            <div class="error-suggestions">
+                <h3>En attendant la réparation :</h3>
+                <ul>
+                    <li><i class="fas fa-sync"></i> Actualisez la page dans quelques instants</li>
+                    <li><i class="fas fa-history"></i> Utilisez le bouton retour de votre navigateur</li>
+                    <li><i class="fas fa-car"></i> Explorez notre catalogue hors ligne</li>
+                    <li><i class="fas fa-phone-alt"></i> Appelez-nous au +33 1 23 45 67 89</li>
+                </ul>
+            </div>
         </div>
     </div>
-</body>
-</html> 
+{% endblock %} 

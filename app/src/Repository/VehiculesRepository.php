@@ -32,6 +32,34 @@ class VehiculesRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * Récupère tous les véhicules avec leurs images (évite les requêtes N+1)
+     */
+    public function findAllWithPictures(): array
+    {
+        return $this->createQueryBuilder('v')
+            ->leftJoin('v.pictures', 'p')
+            ->addSelect('p')
+            ->orderBy('v.brand', 'ASC')
+            ->addOrderBy('v.model', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Récupère les véhicules récents avec leurs images
+     */
+    public function findRecentWithPictures(int $limit = 6): array
+    {
+        return $this->createQueryBuilder('v')
+            ->leftJoin('v.pictures', 'p')
+            ->addSelect('p')
+            ->orderBy('v.id', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Vehicules[] Returns an array of Vehicules objects
     //     */

@@ -31,7 +31,7 @@ class OrderController extends AbstractController
     public function index(OrdersRepository $ordersRepository): Response
     {
         return $this->render('order/index.html.twig', [
-            'orders' => $ordersRepository->findAll(),
+            'orders' => $ordersRepository->findAllWithRelations(),
         ]);
     }
 
@@ -44,7 +44,7 @@ class OrderController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $orders = $ordersRepository->findBy(['users' => $user], ['createdAt' => 'DESC']);
+        $orders = $ordersRepository->findByUserWithRelations($user);
 
         return $this->render('order/my_orders.html.twig', [
             'orders' => $orders,

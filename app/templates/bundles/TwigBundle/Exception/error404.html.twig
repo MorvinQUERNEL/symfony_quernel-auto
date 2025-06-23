@@ -1,46 +1,51 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page non trouvée - Quernel Auto</title>
-    <link rel="icon" href="{{ asset('images/logo_quernel_auto.png') }}">
+{% extends 'base.html.twig' %}
+
+{% block title %}Page non trouvée - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/error.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
-    <div class="error-container error-404">
-        <div class="error-icon">
-            <i class="fas fa-search"></i>
-        </div>
-        
-        <div class="error-code">404</div>
-        
-        <h1 class="error-title">Page non trouvée</h1>
-        
-        <p class="error-description">
-            Oups ! La page que vous recherchez n'existe pas ou a été déplacée. 
-            Elle a peut-être été supprimée, renommée ou temporairement indisponible.
-        </p>
-        
-        <div class="error-actions">
-            <a href="{{ path('app_home') }}" class="btn btn-primary">
-                <i class="fas fa-home"></i>
-                Retour à l'accueil
-            </a>
-            <a href="{{ path('app_vehicules_index') }}" class="btn btn-secondary">
-                <i class="fas fa-car"></i>
-                Voir nos véhicules
-            </a>
-        </div>
-        
-        <div class="error-details">
-            <h4>Que pouvez-vous faire ?</h4>
-            <p><i class="fas fa-check-circle"></i> Vérifiez l'URL dans la barre d'adresse</p>
-            <p><i class="fas fa-check-circle"></i> Utilisez notre barre de recherche</p>
-            <p><i class="fas fa-check-circle"></i> Naviguez depuis notre menu principal</p>
-            <p><i class="fas fa-check-circle"></i> Contactez-nous si le problème persiste</p>
+{% endblock %}
+
+{% block body %}
+    <div class="error-page-container">
+        <div class="error-content error-404">
+            <div class="error-animation">
+                <div class="error-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="error-code">404</div>
+            </div>
+            
+            <div class="error-message">
+                <h1 class="error-title">Page non trouvée</h1>
+                
+                <p class="error-description">
+                    Oups ! La page que vous recherchez semble avoir pris la route... 
+                    Elle a peut-être été déplacée ou n'existe plus.
+                </p>
+            </div>
+            
+            <div class="error-actions">
+                <a href="{{ path('app_home') }}" class="btn btn-primary">
+                    <i class="fas fa-home"></i>
+                    Retour à l'accueil
+                </a>
+                <a href="{{ path('app_vehicules_index') }}" class="btn btn-secondary">
+                    <i class="fas fa-car"></i>
+                    Voir nos véhicules
+                </a>
+            </div>
+            
+            <div class="error-suggestions">
+                <h3>Quelques suggestions :</h3>
+                <ul>
+                    <li><i class="fas fa-check"></i> Vérifiez l'orthographe de l'URL</li>
+                    <li><i class="fas fa-check"></i> Retournez à la page d'accueil</li>
+                    <li><i class="fas fa-check"></i> Explorez notre catalogue de véhicules</li>
+                    <li><i class="fas fa-check"></i> Contactez-nous si vous avez besoin d'aide</li>
+                </ul>
+            </div>
         </div>
     </div>
-</body>
-</html> 
+{% endblock %} 

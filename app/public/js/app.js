@@ -383,4 +383,42 @@ document.addEventListener('DOMContentLoaded', () => {
 // Export pour utilisation dans d'autres modules
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = App;
-} 
+}
+
+// Fonction de nettoyage global pour l'overlay
+function cleanupOverlays() {
+    // Supprimer tous les overlays
+    const overlays = document.querySelectorAll('.navbar-overlay');
+    overlays.forEach(overlay => {
+        if (overlay && overlay.parentNode) {
+            overlay.parentNode.removeChild(overlay);
+        }
+    });
+    
+    // Réactiver le scroll
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+}
+
+// Nettoyage automatique toutes les 5 secondes (sécurité)
+setInterval(() => {
+    // Ne nettoyer que si le menu n'est pas ouvert
+    const navbarNav = document.querySelector('.navbar-nav');
+    const isMenuOpen = navbarNav && navbarNav.classList.contains('active');
+    
+    if (!isMenuOpen) {
+        cleanupOverlays();
+    }
+}, 5000);
+
+// Nettoyage sur les changements d'état
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+        setTimeout(cleanupOverlays, 100);
+    }
+});
+
+// Nettoyage au focus de la fenêtre
+window.addEventListener('focus', () => {
+    setTimeout(cleanupOverlays, 100);
+}); 

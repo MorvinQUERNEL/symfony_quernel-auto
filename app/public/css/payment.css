@@ -1,113 +1,189 @@
-/* Variables CSS */
+/* ========================================
+   VARIABLES CSS - PAYMENT
+   ======================================== */
 :root {
+    /* Couleurs principales */
     --primary-color: #FF6B00;
+    --primary-light: #FF8533;
+    --primary-dark: #E55A00;
     --secondary-color: #2C3E50;
+    --text-color: #333333;
+    --text-light: #666666;
+    --light-color: #ffffff;
+    --gray-color: #f5f5f5;
+    --gray-light: #f8f9fa;
+    --gray-dark: #6c757d;
+    --gray-darker: #495057;
+    --gray-darkest: #343a40;
+    
+    /* Couleurs statuts */
     --success-color: #28a745;
     --info-color: #17a2b8;
     --warning-color: #ffc107;
     --danger-color: #dc3545;
-    --light-color: #f8f9fa;
-    --dark-color: #343a40;
-    --white-color: #ffffff;
-    --shadow-color: rgba(0, 0, 0, 0.1);
+    
+    /* Espacements */
+    --spacing-xs: 8px;
+    --spacing-sm: 16px;
+    --spacing-md: 24px;
+    --spacing-lg: 32px;
+    --spacing-xl: 48px;
+    --spacing-xxl: 64px;
+    
+    /* Bordures et rayons */
     --border-radius: 10px;
+    --border-radius-sm: 8px;
+    --border-radius-md: 6px;
+    --border-radius-lg: 12px;
+    --border-radius-pill: 15px;
+    --border-radius-full: 50%;
+    --border-width: 1px;
+    --border-width-thick: 2px;
+    
+    /* Ombres */
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --shadow-sm: 0 2px 8px var(--shadow-color);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.15);
+    --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
+    
+    /* Transitions */
     --transition: all 0.3s ease;
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* Typographie */
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.8rem;
+    --font-size-4xl: 2.5rem;
+    
+    /* Tailles minimales pour tactile */
+    --touch-target: 44px;
+    --input-height: 48px;
 }
 
-/* Container principal */
-.payment-container {
+/* ========================================
+   STYLES GLOBAUX - MOBILE FIRST
+   ======================================== */
+
+/* Désactiver les transitions sur mobile pour les performances */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ========================================
+   CONTAINERS - MOBILE FIRST
+   ======================================== */
+.payment-container,
+.purchase-container,
+.limit-exceeded-container {
     max-width: 100%;
     margin: 0 auto;
-    padding: 1rem;
+    padding: var(--spacing-sm);
     min-height: calc(100vh - 200px);
 }
 
-/* Header de paiement */
+/* ========================================
+   HEADER DE PAIEMENT - MOBILE FIRST
+   ======================================== */
 .payment-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-lg);
 }
 
 .payment-header h1 {
     color: var(--secondary-color);
-    font-size: 1.8rem;
+    font-size: var(--font-size-3xl);
     font-weight: 700;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.2;
 }
 
 .payment-header p {
-    color: #666;
-    font-size: 1rem;
+    color: var(--text-light);
+    font-size: var(--font-size-base);
     margin: 0;
+    line-height: 1.5;
 }
 
-/* Grille des commandes */
+/* ========================================
+   GRILLE DES COMMANDES - MOBILE FIRST
+   ======================================== */
 .orders-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
 }
 
-/* Cartes de commande */
+/* ========================================
+   CARTES DE COMMANDE - MOBILE FIRST
+   ======================================== */
 .order-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: var(--shadow-color);
+    background: var(--light-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
     overflow: hidden;
-    transition: var(--transition);
-    border: 1px solid var(--shadow-color);
+    transition: none; /* Désactivé sur mobile */
+    border: var(--border-width) solid var(--shadow-color);
     min-height: 250px;
     display: flex;
     flex-direction: column;
 }
 
-.order-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
 .order-header {
-    background: linear-gradient(135deg, var(--primary-color), #ff8533);
-    color: var(--white-color);
-    padding: 1rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: var(--light-color);
+    padding: var(--spacing-sm);
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: var(--spacing-xs);
 }
 
 .order-header h3 {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: var(--font-size-lg);
     font-weight: 600;
 }
 
 .order-status {
-    padding: 0.25rem 0.75rem;
-    border-radius: 15px;
-    font-size: 0.75rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-pill);
+    font-size: var(--font-size-xs);
     font-weight: 500;
     text-transform: uppercase;
+    align-self: flex-start;
 }
 
 .status-pending {
     background: rgba(255, 255, 255, 0.2);
-    color: white;
+    color: var(--light-color);
 }
 
 .status-paid {
     background: var(--success-color);
-    color: white;
+    color: var(--light-color);
 }
 
 .order-details {
-    padding: 1rem;
+    padding: var(--spacing-sm);
 }
 
 .order-info p {
-    margin: 0.5rem 0;
+    margin: var(--spacing-xs) 0;
     color: var(--secondary-color);
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
 }
 
 .order-info strong {
@@ -116,137 +192,134 @@
 
 .order-amount {
     text-align: center;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--shadow-color);
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: var(--border-width) solid var(--shadow-color);
 }
 
 .amount {
-    font-size: 1.5rem;
+    font-size: var(--font-size-2xl);
     font-weight: 700;
     color: var(--primary-color);
 }
 
 .order-actions {
-    padding: 1rem;
+    padding: var(--spacing-sm);
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: var(--spacing-sm);
     margin-top: auto;
 }
 
-.btn-pay {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    font-size: 0.9rem;
-}
-
+.btn-pay,
 .btn-details {
     width: 100%;
-    padding: 0.75rem 1rem;
-    font-size: 0.9rem;
+    padding: var(--spacing-sm);
+    min-height: var(--touch-target);
+    font-size: var(--font-size-sm);
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* Section sans commandes */
+/* ========================================
+   SECTION SANS COMMANDES - MOBILE FIRST
+   ======================================== */
 .no-orders {
     text-align: center;
-    padding: 3rem 1rem;
+    padding: var(--spacing-xl) var(--spacing-sm);
 }
 
 .no-orders-content {
-    max-width: 400px;
+    max-width: 100%;
     margin: 0 auto;
 }
 
 .no-orders-content i {
     font-size: 3rem;
     color: #ccc;
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-sm);
 }
 
 .no-orders-content h3 {
     color: var(--secondary-color);
-    margin-bottom: 1rem;
-    font-size: 1.3rem;
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-xl);
 }
 
 .no-orders-content p {
-    color: #666;
-    margin-bottom: 1.5rem;
+    color: var(--text-light);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.5;
 }
 
-/* Layout de paiement */
+/* ========================================
+   LAYOUT DE PAIEMENT - MOBILE FIRST
+   ======================================== */
 .payment-content {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2rem;
-    margin-top: 1.5rem;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-md);
 }
 
-.order-summary {
-    background: white;
+.order-summary,
+.payment-section,
+.payment-card {
+    background: var(--light-color);
     border-radius: var(--border-radius);
-    padding: 1.5rem;
-    box-shadow: var(--shadow-color);
-}
-
-.payment-section {
-    background: white;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-color);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
 }
 
 .payment-card {
-    padding: 1.5rem;
-    border-radius: var(--border-radius);
-    background: white;
-    box-shadow: var(--shadow-color);
-    border: 1px solid var(--shadow-color);
+    border: var(--border-width) solid var(--shadow-color);
 }
 
 .payment-card .payment-header {
     text-align: center;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--shadow-color);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: var(--border-width) solid var(--shadow-color);
 }
 
 .payment-card .payment-header h3 {
     color: var(--secondary-color);
-    font-size: 1.3rem;
+    font-size: var(--font-size-xl);
     margin: 0;
 }
 
+/* ========================================
+   MÉTHODES DE PAIEMENT - MOBILE FIRST
+   ======================================== */
 .payment-methods {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
 }
 
 .payment-methods i {
-    font-size: 1.5rem;
+    font-size: var(--font-size-2xl);
     color: var(--primary-color);
+    transition: none; /* Désactivé sur mobile */
 }
 
-.payment-form {
-    margin-bottom: 2rem;
-}
-
+/* ========================================
+   RÉSUMÉ DE PAIEMENT - MOBILE FIRST
+   ======================================== */
 .payment-summary {
-    background: var(--light-color);
-    padding: 1.5rem;
+    background: var(--gray-light);
+    padding: var(--spacing-md);
     border-radius: var(--border-radius);
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-lg);
 }
 
 .summary-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--shadow-color);
-    font-size: 0.9rem;
+    padding: var(--spacing-xs) 0;
+    border-bottom: var(--border-width) solid var(--shadow-color);
+    font-size: var(--font-size-sm);
 }
 
 .summary-row:last-child {
@@ -254,53 +327,74 @@
 }
 
 .summary-row.total {
-    font-size: 1.2rem;
+    font-size: var(--font-size-xl);
     font-weight: 700;
     color: var(--primary-color);
-    border-top: 2px solid var(--primary-color);
-    padding-top: 1rem;
-    margin-top: 0.5rem;
+    border-top: var(--border-width-thick) solid var(--primary-color);
+    padding-top: var(--spacing-sm);
+    margin-top: var(--spacing-xs);
 }
 
+/* ========================================
+   ACTIONS DE PAIEMENT - MOBILE FIRST
+   ======================================== */
 .payment-actions {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--spacing-sm);
 }
 
-.btn-pay-stripe {
+.btn-pay-stripe,
+.btn-apple-pay {
     width: 100%;
-    padding: 1rem 2rem;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    min-height: var(--input-height);
     background: var(--primary-color);
-    color: white;
+    color: var(--light-color);
     border: none;
     border-radius: var(--border-radius);
-    font-size: 1.1rem;
+    font-size: var(--font-size-lg);
     font-weight: 600;
     cursor: pointer;
-    transition: var(--transition);
+    transition: none; /* Désactivé sur mobile */
+    -webkit-tap-highlight-color: transparent;
 }
 
+.btn-apple-pay {
+    background: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+}
+
+.btn-apple-pay i {
+    font-size: var(--font-size-xl);
+}
+
+/* ========================================
+   SÉCURITÉ DE PAIEMENT - MOBILE FIRST
+   ======================================== */
 .payment-security {
-    margin-top: 2rem;
-    padding: 1rem;
-    background: var(--light-color);
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-sm);
+    background: var(--gray-light);
     border-radius: var(--border-radius);
     text-align: center;
 }
 
 .security-info {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-sm);
     color: var(--secondary-color);
 }
 
 .security-info i {
     color: var(--success-color);
-    font-size: 1rem;
+    font-size: var(--font-size-base);
 }
 
 .security-info strong {
@@ -309,10 +403,13 @@
 
 .security-info p {
     margin: 0;
-    font-size: 0.8rem;
-    color: #666;
+    font-size: var(--font-size-xs);
+    color: var(--text-light);
 }
 
+/* ========================================
+   OVERLAY DE CHARGEMENT - MOBILE FIRST
+   ======================================== */
 .loading-overlay {
     position: fixed;
     top: 0;
@@ -328,32 +425,54 @@
 }
 
 .loading-content {
-    background: white;
-    padding: 2rem;
+    background: var(--light-color);
+    padding: var(--spacing-lg);
     border-radius: var(--border-radius);
     text-align: center;
-    max-width: 400px;
-    margin: 0 1rem;
+    max-width: calc(100% - var(--spacing-lg));
+    margin: 0 var(--spacing-md);
 }
 
 .loading-content p {
-    margin-top: 1rem;
+    margin-top: var(--spacing-sm);
     color: var(--secondary-color);
 }
 
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid var(--gray-color);
+    border-top: 3px solid var(--primary-color);
+    border-radius: var(--border-radius-full);
+    animation: spin 1s linear infinite;
+}
+
+.loading-text {
+    margin-top: var(--spacing-md);
+    color: var(--secondary-color);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ========================================
+   PAGES SUCCÈS/ANNULATION - MOBILE FIRST
+   ======================================== */
 .success-content,
 .cancel-content {
     text-align: center;
-    padding: 2rem 1rem;
+    padding: var(--spacing-lg) var(--spacing-sm);
 }
 
 .success-card,
 .cancel-card {
-    background: white;
+    background: var(--light-color);
     border-radius: var(--border-radius);
-    box-shadow: var(--shadow-color);
-    padding: 2rem;
-    max-width: 600px;
+    box-shadow: var(--shadow-sm);
+    padding: var(--spacing-lg);
+    max-width: 100%;
     margin: 0 auto;
 }
 
@@ -361,11 +480,11 @@
 .cancel-icon {
     width: 80px;
     height: 80px;
-    border-radius: 50%;
+    border-radius: var(--border-radius-full);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 1.5rem;
+    margin: 0 auto var(--spacing-md);
 }
 
 .success-icon i {
@@ -381,43 +500,47 @@
 .success-header h1,
 .cancel-header h1 {
     color: var(--secondary-color);
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--spacing-xs);
 }
 
 .success-header p,
 .cancel-header p {
-    color: #666;
-    font-size: 1rem;
-    margin-bottom: 2rem;
+    color: var(--text-light);
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.5;
 }
 
+/* ========================================
+   INFO COMMANDE - MOBILE FIRST
+   ======================================== */
 .order-info {
-    background: var(--light-color);
-    padding: 1.5rem;
+    background: var(--gray-light);
+    padding: var(--spacing-md);
     border-radius: var(--border-radius);
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-lg);
     text-align: left;
 }
 
 .order-info h3 {
     color: var(--secondary-color);
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-xl);
 }
 
 .info-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 0.75rem;
+    gap: var(--spacing-sm);
 }
 
 .info-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--shadow-color);
+    padding: var(--spacing-xs) 0;
+    border-bottom: var(--border-width) solid var(--shadow-color);
 }
 
 .info-item:last-child {
@@ -427,37 +550,40 @@
 .info-item .label {
     font-weight: 600;
     color: var(--secondary-color);
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
 }
 
 .info-item .value {
     color: var(--primary-color);
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
 }
 
+/* ========================================
+   PROCHAINES ÉTAPES - MOBILE FIRST
+   ======================================== */
 .next-steps {
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-lg);
 }
 
 .next-steps h3 {
     color: var(--secondary-color);
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-xl);
 }
 
 .steps-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--spacing-sm);
 }
 
 .step {
     display: flex;
     align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem;
-    background: var(--light-color);
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: var(--gray-light);
     border-radius: var(--border-radius);
 }
 
@@ -465,359 +591,120 @@
     width: 40px;
     height: 40px;
     background: var(--primary-color);
-    color: white;
-    border-radius: 50%;
+    color: var(--light-color);
+    border-radius: var(--border-radius-full);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    font-size: 1rem;
+    font-size: var(--font-size-base);
 }
 
 .step-content h4 {
     color: var(--secondary-color);
-    margin-bottom: 0.25rem;
-    font-size: 1rem;
+    margin-bottom: var(--spacing-xs);
+    font-size: var(--font-size-base);
 }
 
 .step-content p {
-    color: #666;
-    font-size: 0.9rem;
+    color: var(--text-light);
+    font-size: var(--font-size-sm);
     margin: 0;
+    line-height: 1.4;
 }
 
+/* ========================================
+   ACTIONS SUCCÈS/ANNULATION - MOBILE FIRST
+   ======================================== */
 .success-actions,
 .cancel-actions {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-top: 2rem;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-lg);
 }
 
+/* ========================================
+   SECTION AIDE - MOBILE FIRST
+   ======================================== */
 .help-section {
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--shadow-color);
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: var(--border-width) solid var(--shadow-color);
 }
 
 .help-section h3 {
     color: var(--secondary-color);
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-xl);
 }
 
 .help-options {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--spacing-sm);
 }
 
 .help-option {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: var(--light-color);
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: var(--gray-light);
     border-radius: var(--border-radius);
-    text-decoration: none;
-    color: var(--secondary-color);
-    transition: var(--transition);
+    transition: none; /* Désactivé sur mobile */
 }
 
 .help-icon {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     background: var(--primary-color);
-    color: white;
-    border-radius: 50%;
+    color: var(--light-color);
+    border-radius: var(--border-radius-full);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    font-size: 1.2rem;
 }
 
 .help-content h4 {
     color: var(--secondary-color);
-    margin-bottom: 0.25rem;
-    font-size: 1rem;
+    margin-bottom: var(--spacing-xs);
+    font-size: var(--font-size-base);
 }
 
 .help-content p {
-    color: #666;
-    font-size: 0.9rem;
+    color: var(--text-light);
+    font-size: var(--font-size-sm);
     margin: 0;
 }
 
 /* ========================================
-   MEDIA QUERIES - TABLETTE (764px)
+   CARTE D'ACHAT VÉHICULE - MOBILE FIRST
    ======================================== */
-@media (min-width: 764px) {
-    .payment-container {
-        max-width: 720px;
-        padding: 2rem;
-    }
-
-    .payment-header h1 {
-        font-size: 2.2rem;
-    }
-
-    .payment-header p {
-        font-size: 1.1rem;
-    }
-
-    .orders-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2rem;
-        margin-top: 2rem;
-    }
-
-    .order-card {
-        min-height: 300px;
-    }
-
-    .order-card:hover {
-        transform: translateY(-5px);
-    }
-
-    .order-header {
-        padding: 1.5rem;
-    }
-
-    .order-header h3 {
-        font-size: 1.3rem;
-    }
-
-    .order-status {
-        padding: 0.5rem 1rem;
-        font-size: 0.85rem;
-    }
-
-    .order-details {
-        padding: 1.5rem;
-    }
-
-    .order-info p {
-        font-size: 0.95rem;
-    }
-
-    .amount {
-        font-size: 2rem;
-    }
-
-    .order-actions {
-        flex-direction: row;
-        gap: 1rem;
-        padding: 1.5rem;
-    }
-
-    .btn-pay,
-    .btn-details {
-        flex: 1;
-        min-width: 120px;
-        padding: 0.75rem 1rem;
-        font-size: 0.9rem;
-    }
-
-    .payment-content {
-        grid-template-columns: 1fr 1fr;
-        gap: 3rem;
-        margin-top: 2rem;
-    }
-
-    .success-card,
-    .cancel-card {
-        padding: 3rem;
-    }
-
-    .success-actions,
-    .cancel-actions {
-        flex-direction: row;
-        gap: 1rem;
-    }
-
-    .success-actions .btn,
-    .cancel-actions .btn {
-        flex: 1;
-        min-width: 150px;
-    }
-
-    .info-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-    }
-
-    .steps-list {
-        flex-direction: row;
-        gap: 1.5rem;
-    }
-
-    .step {
-        flex: 1;
-    }
-
-    .help-options {
-        flex-direction: row;
-        gap: 1.5rem;
-    }
-
-    .help-option {
-        flex: 1;
-    }
-}
-
-/* ========================================
-   MEDIA QUERIES - ORDINATEUR (1024px)
-   ======================================== */
-@media (min-width: 1024px) {
-    .payment-container {
-        max-width: 1200px;
-        padding: 2rem;
-    }
-
-    .payment-header h1 {
-        font-size: 2.5rem;
-    }
-
-    .orders-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2rem;
-    }
-
-    .order-card {
-        min-height: 350px;
-    }
-
-    .order-header h3 {
-        font-size: 1.4rem;
-    }
-
-    .order-status {
-        padding: 0.5rem 1.25rem;
-        font-size: 0.9rem;
-    }
-
-    .amount {
-        font-size: 2.2rem;
-    }
-
-    .btn-pay,
-    .btn-details {
-        padding: 1rem 1.5rem;
-        font-size: 1rem;
-    }
-
-    .payment-content {
-        gap: 4rem;
-    }
-
-    .success-card,
-    .cancel-card {
-        padding: 4rem;
-    }
-
-    .success-icon,
-    .cancel-icon {
-        width: 100px;
-        height: 100px;
-    }
-
-    .success-icon i,
-    .cancel-icon i {
-        font-size: 3rem;
-    }
-
-    .success-header h1,
-    .cancel-header h1 {
-        font-size: 2.2rem;
-    }
-
-    .order-info h3 {
-        font-size: 1.4rem;
-    }
-
-    .info-item .label,
-    .info-item .value {
-        font-size: 1rem;
-    }
-
-    .next-steps h3 {
-        font-size: 1.4rem;
-    }
-
-    .step-content h4 {
-        font-size: 1.1rem;
-    }
-
-    .step-content p {
-        font-size: 1rem;
-    }
-
-    .help-section h3 {
-        font-size: 1.4rem;
-    }
-
-    .help-content h4 {
-        font-size: 1.1rem;
-    }
-
-    .help-content p {
-        font-size: 1rem;
-    }
-}
-
-/* ===== ANIMATIONS ===== */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.order-card,
-.payment-card {
-    animation: fadeIn 0.6s ease-out;
-}
-
-/* ===== STYLES POUR L'ACHAT ===== */
-.purchase-container {
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 1rem;
-}
-
 .purchase-card {
-    background: white;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-color);
+    background: var(--light-color);
+    border-radius: var(--border-radius-lg);
     overflow: hidden;
-    transition: var(--transition);
-    border: 1px solid var(--shadow-color);
-}
-
-.purchase-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-lg);
+    margin: var(--spacing-sm) auto;
+    max-width: 100%;
 }
 
 .purchase-header {
-    background: linear-gradient(135deg, var(--primary-color), #ff8533);
-    color: white;
-    padding: 1.5rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: var(--light-color);
+    padding: var(--spacing-lg);
     text-align: center;
     position: relative;
 }
 
 .purchase-header h2 {
-    font-size: 1.5rem;
     margin: 0;
-    font-weight: 600;
-    position: relative;
-    z-index: 2;
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .purchase-header::after {
@@ -826,113 +713,101 @@
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 60px;
+    width: 50px;
     height: 3px;
-    background: rgba(255, 255, 255, 0.5);
+    background: var(--light-color);
     border-radius: 2px;
 }
 
 .vehicle-info {
-    padding: 1.5rem;
+    padding: var(--spacing-lg);
 }
 
 .vehicle-title {
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-md);
 }
 
 .vehicle-title h4 {
+    margin: 0;
     color: var(--secondary-color);
-    font-size: 1.3rem;
-    margin: 0 0 0.5rem 0;
+    font-size: var(--font-size-xl);
     font-weight: 700;
 }
 
 .vehicle-subtitle {
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
+    color: var(--text-light);
+    font-size: var(--font-size-base);
+    margin-top: var(--spacing-xs);
 }
 
 .vehicle-price {
-    text-align: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--spacing-lg);
 }
 
 .vehicle-price .price-label {
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
+    display: block;
+    color: var(--text-light);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-xs);
 }
 
 .vehicle-price .price-value {
-    font-size: 2rem;
+    font-size: var(--font-size-3xl);
     font-weight: 700;
     color: var(--primary-color);
 }
 
 .specs-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-lg);
 }
 
 .spec-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem;
-    background: var(--light-color);
+    background: var(--gray-light);
+    padding: var(--spacing-sm);
     border-radius: var(--border-radius);
-    transition: var(--transition);
-}
-
-.spec-item:hover {
-    background: #e9ecef;
+    text-align: center;
+    transition: none; /* Désactivé sur mobile */
 }
 
 .spec-label {
-    color: var(--secondary-color);
-    font-weight: 600;
-    font-size: 0.9rem;
+    display: block;
+    color: var(--text-light);
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--spacing-xs);
 }
 
 .spec-value {
-    color: var(--primary-color);
     font-weight: 600;
-    font-size: 0.9rem;
+    color: var(--secondary-color);
+    font-size: var(--font-size-sm);
 }
 
 .vehicle-image {
     width: 100%;
-    height: 200px;
-    border-radius: var(--border-radius);
+    height: 250px;
     overflow: hidden;
-    margin-bottom: 1.5rem;
+    position: relative;
 }
 
 .vehicle-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: var(--transition);
-}
-
-.vehicle-image:hover img {
-    transform: scale(1.05);
+    transition: none; /* Désactivé sur mobile */
 }
 
 .purchase-info {
-    background: var(--light-color);
-    padding: 1.5rem;
-    border-radius: var(--border-radius);
-    margin-bottom: 1.5rem;
+    padding: var(--spacing-lg);
+    background: var(--gray-light);
 }
 
 .purchase-info h6 {
     color: var(--secondary-color);
-    font-size: 1rem;
-    margin-bottom: 1rem;
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-sm);
     font-weight: 600;
 }
 
@@ -943,11 +818,11 @@
 }
 
 .purchase-info li {
-    padding: 0.5rem 0;
-    color: #666;
-    font-size: 0.9rem;
+    color: var(--text-light);
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-xs) 0 var(--spacing-xs) var(--spacing-md);
     position: relative;
-    padding-left: 1.5rem;
+    line-height: 1.4;
 }
 
 .purchase-info li:last-child {
@@ -960,257 +835,205 @@
     left: 0;
     color: var(--success-color);
     font-weight: bold;
-    font-size: 1rem;
 }
 
 .purchase-actions {
+    padding: var(--spacing-lg);
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    padding: 1.5rem;
+    gap: var(--spacing-sm);
+}
+
+.btn-buy,
+.btn-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    min-height: var(--input-height);
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    cursor: pointer;
+    transition: none; /* Désactivé sur mobile */
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .btn-buy {
-    background: var(--success-color);
-    color: white;
-    border: none;
-    padding: 1rem 2rem;
-    border-radius: var(--border-radius);
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-    text-decoration: none;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.btn-buy:hover {
-    background: #218838;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    background: var(--primary-color);
+    color: var(--light-color);
+    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
 }
 
 .btn-back {
-    background: var(--secondary-color);
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition);
-    text-decoration: none;
-    text-align: center;
-}
-
-.btn-back:hover {
-    background: #1a252f;
-    transform: translateY(-1px);
-}
-
-.loading-container {
-    text-align: center;
-    padding: 2rem;
-}
-
-.spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid var(--light-color);
-    border-top: 4px solid var(--primary-color);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 1rem;
-}
-
-.loading-text {
+    background: var(--light-color);
     color: var(--secondary-color);
-    font-size: 1rem;
+    border: var(--border-width-thick) solid var(--secondary-color);
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* ===== STYLES POUR LA LIMITE DÉPASSÉE ===== */
-.limit-exceeded-container {
+/* ========================================
+   LIMITE DÉPASSÉE - MOBILE FIRST
+   ======================================== */
+.limit-exceeded-card {
+    background: var(--light-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
     max-width: 100%;
     margin: 0 auto;
-    padding: 1rem;
-    min-height: calc(100vh - 200px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.limit-exceeded-card {
-    background: white;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-color);
-    padding: 2rem;
-    max-width: 600px;
-    width: 100%;
-    text-align: center;
 }
 
 .limit-exceeded-header {
-    margin-bottom: 2rem;
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
 }
 
 .limit-exceeded-header i {
     font-size: 4rem;
-    color: var(--danger-color);
-    margin-bottom: 1rem;
+    color: var(--warning-color);
+    margin-bottom: var(--spacing-md);
 }
 
 .limit-exceeded-header h1 {
     color: var(--secondary-color);
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--spacing-sm);
 }
 
 .limit-exceeded-content {
-    text-align: left;
+    padding: var(--spacing-lg);
 }
 
 .order-summary {
-    background: var(--light-color);
-    padding: 1.5rem;
+    background: var(--gray-light);
+    padding: var(--spacing-md);
     border-radius: var(--border-radius);
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-lg);
 }
 
 .order-summary h2 {
     color: var(--secondary-color);
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-md);
 }
 
 .order-details {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
+    margin-bottom: var(--spacing-md);
 }
 
 .order-details p {
-    margin: 0;
-    font-size: 0.9rem;
+    margin: var(--spacing-xs) 0;
+    color: var(--text-color);
+    line-height: 1.4;
 }
 
 .price {
-    font-size: 1.5rem;
     font-weight: 700;
     color: var(--primary-color);
+    font-size: var(--font-size-lg);
 }
 
 .vehicule-info h3 {
     color: var(--secondary-color);
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-sm);
 }
 
 .vehicule-card {
-    background: white;
+    display: flex;
+    flex-direction: column;
+    background: var(--light-color);
     border-radius: var(--border-radius);
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    border: 1px solid var(--shadow-color);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
 }
 
 .vehicule-card img {
     width: 100%;
-    height: 150px;
+    height: 200px;
     object-fit: cover;
-    border-radius: var(--border-radius);
-    margin-bottom: 1rem;
 }
 
 .vehicule-details {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
+    padding: var(--spacing-md);
 }
 
 .vehicule-details h4 {
     color: var(--secondary-color);
-    font-size: 1.1rem;
-    margin: 0 0 0.5rem 0;
+    margin-bottom: var(--spacing-xs);
+    font-size: var(--font-size-lg);
 }
 
 .vehicule-details p {
-    color: #666;
-    font-size: 0.9rem;
-    margin: 0;
+    color: var(--text-light);
+    margin: var(--spacing-xs) 0;
+    font-size: var(--font-size-sm);
 }
 
 .limit-info {
-    background: rgba(220, 53, 69, 0.1);
-    border: 1px solid rgba(220, 53, 69, 0.2);
-    padding: 1.5rem;
+    background: #fff3cd;
+    border: var(--border-width) solid #ffeaa7;
     border-radius: var(--border-radius);
-    margin-bottom: 2rem;
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
 }
 
 .limit-info h2 {
-    color: var(--danger-color);
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
+    color: #856404;
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-sm);
 }
 
 .limit-info p {
-    color: var(--secondary-color);
-    font-size: 0.9rem;
-    margin: 0;
+    color: #856404;
+    margin: var(--spacing-xs) 0;
+    line-height: 1.5;
 }
 
 .payment-alternatives h2 {
     color: var(--secondary-color);
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-md);
 }
 
 .alternative-option {
-    background: var(--light-color);
-    padding: 1.5rem;
+    background: var(--gray-light);
+    padding: var(--spacing-md);
     border-radius: var(--border-radius);
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-md);
 }
 
 .alternative-option h3 {
     color: var(--secondary-color);
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-xs);
 }
 
 .alternative-option p {
-    color: #666;
-    font-size: 0.9rem;
+    color: var(--text-light);
     margin: 0;
+    line-height: 1.5;
 }
 
 .contact-info {
-    background: var(--light-color);
-    padding: 1.5rem;
+    background: var(--gray-light);
+    padding: var(--spacing-md);
     border-radius: var(--border-radius);
-    margin-bottom: 2rem;
+    margin: var(--spacing-lg) 0;
 }
 
 .contact-info h3 {
     color: var(--secondary-color);
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-sm);
 }
 
 .contact-info p {
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
+    color: var(--text-light);
+    margin-bottom: var(--spacing-sm);
 }
 
 .contact-info ul {
@@ -1220,274 +1043,205 @@
 }
 
 .contact-info li {
-    color: var(--secondary-color);
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    margin: var(--spacing-xs) 0;
 }
 
 .limit-exceeded-actions {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-top: 2rem;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-lg);
 }
 
 .limit-exceeded-actions .btn {
     width: 100%;
-    padding: 1rem 2rem;
-    font-size: 1rem;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    min-height: var(--touch-target);
+    font-size: var(--font-size-base);
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* ========================================
-   MEDIA QUERIES - TABLETTE (764px)
+   BREAKPOINT TABLETTES - 757px
    ======================================== */
-@media (min-width: 764px) {
-    .specs-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-    }
-
-    .vehicle-price .price-value {
-        font-size: 2.5rem;
-    }
-
-    .btn-buy {
-        padding: 1.25rem 2.5rem;
-        font-size: 1.2rem;
-    }
-
-    .purchase-header h2 {
-        font-size: 1.8rem;
-    }
-
+@media (min-width: 757px) {
+    /* Containers */
+    .payment-container,
+    .purchase-container,
     .limit-exceeded-container {
-        padding: 2rem;
+        padding: var(--spacing-lg);
+        max-width: 90%;
     }
-
-    .limit-exceeded-card {
-        padding: 3rem;
-    }
-
-    .limit-exceeded-content {
-        padding: 0 1rem;
-    }
-
-    .vehicule-card {
-        padding: 1.5rem;
-    }
-
-    .vehicule-card img {
-        height: 200px;
-    }
-
-    .limit-exceeded-actions .btn {
-        padding: 1.25rem 2.5rem;
-        font-size: 1.1rem;
-    }
-}
-
-/* ========================================
-   MEDIA QUERIES - ORDINATEUR (1024px)
-   ======================================== */
-@media (min-width: 1024px) {
-    .purchase-container {
-        max-width: 800px;
-        padding: 2rem;
-    }
-
-    .specs-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 1.5rem;
-    }
-
-    .vehicle-price .price-value {
-        font-size: 3rem;
-    }
-
-    .btn-buy {
-        padding: 1.5rem 3rem;
-        font-size: 1.3rem;
-    }
-
-    .purchase-header h2 {
+    
+    /* Headers */
+    .payment-header h1 {
         font-size: 2rem;
     }
-
+    
+    .payment-header p {
+        font-size: var(--font-size-lg);
+    }
+    
+    /* Grilles */
+    .orders-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-lg);
+    }
+    
+    /* Cards */
+    .order-card {
+        min-height: 280px;
+    }
+    
+    .order-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .order-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--spacing-md);
+    }
+    
+    .order-header h3 {
+        font-size: var(--font-size-xl);
+    }
+    
+    .order-status {
+        align-self: center;
+        font-size: var(--font-size-sm);
+        padding: var(--spacing-xs) var(--spacing-md);
+    }
+    
+    .order-details {
+        padding: var(--spacing-md);
+    }
+    
+    .order-info p {
+        font-size: var(--font-size-base);
+    }
+    
+    .amount {
+        font-size: 1.75rem;
+    }
+    
+    .order-actions {
+        flex-direction: row;
+        padding: var(--spacing-md);
+    }
+    
+    .btn-pay,
+    .btn-details {
+        flex: 1;
+        font-size: var(--font-size-base);
+    }
+    
+    /* Payment content */
+    .payment-content {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-xl);
+    }
+    
+    /* Success/Cancel cards */
+    .success-card,
+    .cancel-card {
+        max-width: 600px;
+        padding: var(--spacing-xl);
+    }
+    
+    .success-actions,
+    .cancel-actions {
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .success-actions .btn,
+    .cancel-actions .btn {
+        min-width: 200px;
+        flex: 0 1 auto;
+    }
+    
+    /* Info grid */
+    .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+    }
+    
+    /* Steps */
+    .steps-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+    }
+    
+    .step {
+        padding: var(--spacing-md);
+    }
+    
+    /* Help options */
+    .help-options {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+    }
+    
+    .help-option {
+        padding: var(--spacing-md);
+    }
+    
+    /* Purchase card */
+    .specs-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--spacing-sm);
+    }
+    
+    .vehicle-price .price-value {
+        font-size: 2rem;
+    }
+    
+    .btn-buy {
+        font-size: var(--font-size-lg);
+        padding: var(--spacing-md) var(--spacing-xl);
+    }
+    
+    .purchase-header h2 {
+        font-size: 1.75rem;
+    }
+    
+    /* Limit exceeded */
     .limit-exceeded-container {
-        padding: 3rem;
+        padding: var(--spacing-xl);
     }
-
+    
     .limit-exceeded-card {
-        padding: 4rem;
+        max-width: 900px;
     }
-
-    .limit-exceeded-header h1 {
-        font-size: 2.2rem;
+    
+    .limit-exceeded-content {
+        padding: var(--spacing-xl);
     }
-
-    .order-summary h2 {
-        font-size: 1.5rem;
+    
+    .vehicule-card {
+        flex-direction: row;
     }
-
-    .vehicule-info h3 {
-        font-size: 1.4rem;
+    
+    .vehicule-card img {
+        width: 300px;
+        height: auto;
     }
-
-    .vehicule-details h4 {
-        font-size: 1.2rem;
-    }
-
-    .limit-info h2 {
-        font-size: 1.5rem;
-    }
-
-    .payment-alternatives h2 {
-        font-size: 1.5rem;
-    }
-
-    .alternative-option h3 {
-        font-size: 1.2rem;
-    }
-
-    .contact-info h3 {
-        font-size: 1.4rem;
-    }
-
+    
     .limit-exceeded-actions .btn {
-        padding: 1.5rem 3rem;
-        font-size: 1.2rem;
+        flex: 1;
+        max-width: 300px;
     }
-}
-
-/* ========================================
-   BOUTON APPLE PAY
-   ======================================== */
-.apple-pay-button {
-    margin-bottom: 1rem;
-}
-
-.btn-apple-pay {
-    background: #000000;
-    color: #ffffff;
-    border: none;
-    border-radius: var(--border-radius);
-    padding: 0.875rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    width: 100%;
-    transition: var(--transition);
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-
-.btn-apple-pay:hover {
-    background: #333333;
-    color: #ffffff;
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-color);
-}
-
-.btn-apple-pay:active {
-    transform: translateY(0);
-}
-
-.btn-apple-pay i {
-    font-size: 1.2rem;
-}
-
-/* Style spécifique pour le bouton Apple Pay natif */
-.stripe-payment-request-button {
-    width: 100% !important;
-    height: 48px !important;
-    border-radius: var(--border-radius) !important;
-    margin-bottom: 1rem !important;
-}
-
-/* ========================================
-   AMÉLIORATIONS DES BOUTONS DE PAIEMENT
-   ======================================== */
-.payment-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-top: 2rem;
-}
-
-.payment-actions .btn {
-    padding: 0.875rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: var(--border-radius);
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-}
-
-.payment-actions .btn-primary {
-    background: var(--primary-color);
-    color: var(--white-color);
-}
-
-.payment-actions .btn-primary:hover {
-    background: var(--primary-color);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-color);
-}
-
-.payment-actions .btn-outline-secondary {
-    background: transparent;
-    color: var(--secondary-color);
-    border: 1px solid var(--shadow-color);
-}
-
-.payment-actions .btn-outline-secondary:hover {
-    background: var(--light-color);
-    color: var(--secondary-color);
-    transform: translateY(-1px);
-}
-
-/* ========================================
-   MÉTHODES DE PAIEMENT
-   ======================================== */
-.payment-methods {
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-    margin-top: 0.5rem;
-}
-
-.payment-methods i {
-    font-size: 1.5rem;
-    color: var(--secondary-color);
-    transition: var(--transition);
-}
-
-.payment-methods i:hover {
-    color: var(--primary-color);
-    transform: scale(1.1);
-}
-
-.payment-methods .fa-apple-pay {
-    color: #000000;
-}
-
-/* ========================================
-   RESPONSIVE POUR APPLE PAY
-   ======================================== */
-@media (min-width: 764px) {
+    
+    /* Payment actions */
     .payment-actions {
         flex-direction: row;
-        gap: 1rem;
+        gap: var(--spacing-md);
     }
     
     .payment-actions .btn {
@@ -1495,53 +1249,293 @@
     }
     
     .apple-pay-button {
-        margin-bottom: 0;
+        margin: 0;
+    }
+    
+    /* Security info */
+    .security-info {
+        flex-direction: row;
+        justify-content: center;
     }
 }
 
+/* ========================================
+   BREAKPOINT DESKTOP - 1024px
+   ======================================== */
 @media (min-width: 1024px) {
+    /* Réactiver les transitions sur desktop */
+    .order-card,
+    .payment-methods i,
+    .help-option,
+    .spec-item,
+    .vehicle-image img,
+    .btn-buy,
+    .btn-back {
+        transition: var(--transition);
+    }
+    
+    /* Containers */
+    .payment-container {
+        max-width: 1200px;
+        padding: var(--spacing-xl);
+    }
+    
+    .purchase-container {
+        max-width: 800px;
+        padding: var(--spacing-xl);
+    }
+    
+    /* Headers */
+    .payment-header h1 {
+        font-size: var(--font-size-4xl);
+    }
+    
+    /* Grilles */
+    .orders-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing-xl);
+    }
+    
+    /* Cards */
+    .order-card {
+        min-height: 300px;
+    }
+    
+    .order-header h3 {
+        font-size: 1.3rem;
+    }
+    
+    .order-status {
+        font-size: var(--font-size-base);
+        padding: var(--spacing-xs) var(--spacing-lg);
+    }
+    
+    .amount {
+        font-size: 2rem;
+    }
+    
+    .btn-pay,
+    .btn-details {
+        font-size: var(--font-size-lg);
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+    
+    /* Payment content */
+    .payment-content {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    /* Success/Cancel */
+    .success-card,
+    .cancel-card {
+        padding: var(--spacing-xxl);
+    }
+    
+    .success-icon,
+    .cancel-icon {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .success-icon i,
+    .cancel-icon i {
+        font-size: 3rem;
+    }
+    
+    .success-header h1,
+    .cancel-header h1 {
+        font-size: 2rem;
+    }
+    
+    /* Order info */
+    .order-info h3 {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .info-item .label,
+    .info-item .value {
+        font-size: var(--font-size-base);
+    }
+    
+    /* Next steps */
+    .next-steps h3 {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .step-content h4 {
+        font-size: var(--font-size-lg);
+    }
+    
+    .step-content p {
+        font-size: var(--font-size-base);
+    }
+    
+    /* Help section */
+    .help-section h3 {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .help-content h4 {
+        font-size: var(--font-size-lg);
+    }
+    
+    .help-content p {
+        font-size: var(--font-size-base);
+    }
+    
+    /* Purchase card */
+    .specs-grid {
+        gap: var(--spacing-md);
+    }
+    
+    .vehicle-price .price-value {
+        font-size: var(--font-size-4xl);
+    }
+    
+    .btn-buy {
+        font-size: var(--font-size-xl);
+        padding: var(--spacing-lg) var(--spacing-xxl);
+    }
+    
+    .purchase-header h2 {
+        font-size: 2rem;
+    }
+    
+    /* Interactions */
+    .spec-item:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+    
+    .vehicle-image:hover img {
+        transform: scale(1.05);
+    }
+    
+    .btn-buy:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
+    }
+    
+    .btn-back:hover {
+        background: var(--gray-light);
+        transform: translateY(-2px);
+    }
+    
+    .payment-methods i:hover {
+        transform: scale(1.1);
+        color: var(--primary-dark);
+    }
+    
+    /* Limit exceeded */
+    .limit-exceeded-container {
+        max-width: 1000px;
+    }
+    
+    .limit-exceeded-card {
+        max-width: 100%;
+    }
+    
+    .limit-exceeded-header h1 {
+        font-size: var(--font-size-3xl);
+    }
+    
+    .order-summary h2 {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .vehicule-info h3 {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .vehicule-details h4 {
+        font-size: var(--font-size-xl);
+    }
+    
+    .limit-info h2 {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .payment-alternatives h2 {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .alternative-option h3 {
+        font-size: var(--font-size-xl);
+    }
+    
+    .contact-info h3 {
+        font-size: var(--font-size-xl);
+    }
+    
+    .limit-exceeded-actions .btn {
+        font-size: var(--font-size-lg);
+        padding: var(--spacing-md) var(--spacing-xl);
+    }
+    
+    /* Apple Pay button */
     .btn-apple-pay {
-        padding: 1rem 2rem;
-        font-size: 1.1rem;
+        font-size: var(--font-size-lg);
+        padding: var(--spacing-md) var(--spacing-xl);
     }
     
     .payment-actions .btn {
-        padding: 1rem 2rem;
-        font-size: 1.1rem;
+        font-size: var(--font-size-lg);
+        padding: var(--spacing-md) var(--spacing-xl);
     }
 }
 
 /* ========================================
-   ANIMATIONS POUR APPLE PAY
+   ANIMATIONS - DESKTOP UNIQUEMENT
    ======================================== */
-@keyframes applePayPulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+@media (min-width: 1024px) {
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
-    70% {
-        box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+    
+    .order-card,
+    .success-card,
+    .cancel-card {
+        animation: fadeIn 0.6s ease-out;
     }
-    100% {
-        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    
+    @keyframes applePayPulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+        }
+        70% {
+            box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+        }
     }
-}
-
-.btn-apple-pay:focus {
-    animation: applePayPulse 1.5s infinite;
+    
+    .btn-apple-pay:focus {
+        animation: applePayPulse 2s infinite;
+    }
 }
 
 /* ========================================
-   ÉTATS DE CHARGEMENT
+   ÉTATS DES BOUTONS - GLOBAL
    ======================================== */
 .btn-apple-pay:disabled,
-.payment-actions .btn:disabled {
+.btn-pay-stripe:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-    transform: none !important;
+    background: var(--gray-dark);
 }
 
 .btn-apple-pay:disabled:hover,
-.payment-actions .btn:disabled:hover {
-    transform: none !important;
-    box-shadow: none !important;
+.btn-pay-stripe:disabled:hover {
+    transform: none;
+    box-shadow: none;
 } 

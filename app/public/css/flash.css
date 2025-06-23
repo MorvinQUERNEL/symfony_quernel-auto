@@ -1,41 +1,411 @@
+/* ========================================
+   MESSAGES FLASH - QUERNEL AUTO
+   Notifications animées et responsives
+   ======================================== */
+
+/* ========================================
+   VARIABLES CSS - FLASH
+   ======================================== */
+:root {
+    /* Couleurs principales */
+    --flash-success-bg: #d4edda;
+    --flash-success-border: #c3e6cb;
+    --flash-success-color: #155724;
+    --flash-success-icon: #28a745;
+    
+    --flash-error-bg: #f8d7da;
+    --flash-error-border: #f5c6cb;
+    --flash-error-color: #721c24;
+    --flash-error-icon: #dc3545;
+    
+    --flash-warning-bg: #fff3cd;
+    --flash-warning-border: #ffeaa7;
+    --flash-warning-color: #856404;
+    --flash-warning-icon: #ffc107;
+    
+    --flash-info-bg: #d1ecf1;
+    --flash-info-border: #bee5eb;
+    --flash-info-color: #0c5460;
+    --flash-info-icon: #17a2b8;
+    
+    /* Animations */
+    --flash-animation-duration: 0.4s;
+    --flash-animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
+    --flash-auto-dismiss: 5s;
+}
+
+/* ========================================
+   CONTAINER DES MESSAGES - MOBILE FIRST
+   ======================================== */
 .flash-messages {
     position: fixed;
-    top: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    width: 90%;
-    max-width: 600px;
+    top: 80px; /* Hauteur navbar mobile + marge */
+    right: 0;
+    left: 0;
+    z-index: 9999;
+    padding: var(--spacing-sm);
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
 }
 
+/* ========================================
+   MESSAGE FLASH - MOBILE FIRST
+   ======================================== */
 .flash-message {
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 5px;
-    text-align: center;
-    animation: slideDown 0.5s ease-out;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 100%;
+    background: var(--light-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    pointer-events: auto;
+    transform-origin: top center;
+    animation: flashSlideIn var(--flash-animation-duration) var(--flash-animation-timing) forwards;
+    position: relative;
+    border: 2px solid transparent;
 }
 
+/* États de sortie */
+.flash-message.flash-hiding {
+    animation: flashSlideOut var(--flash-animation-duration) var(--flash-animation-timing) forwards;
+}
+
+/* ========================================
+   CONTENU DU MESSAGE - MOBILE FIRST
+   ======================================== */
+.flash-content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    position: relative;
+}
+
+.flash-content i {
+    font-size: var(--font-size-xl);
+    flex-shrink: 0;
+}
+
+.flash-content span {
+    flex: 1;
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: left;
+}
+
+/* ========================================
+   BOUTON DE FERMETURE - MOBILE FIRST
+   ======================================== */
+.flash-close {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    background: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    border-radius: var(--border-radius-sm);
+    opacity: 0.7;
+    transition: opacity var(--transition-fast);
+    min-width: var(--touch-target);
+    min-height: var(--touch-target);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.flash-close:hover,
+.flash-close:focus {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.flash-close i {
+    font-size: var(--font-size-base);
+}
+
+/* ========================================
+   BARRE DE PROGRESSION - MOBILE FIRST
+   ======================================== */
+.flash-message::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: currentColor;
+    opacity: 0.3;
+    animation: flashProgress var(--flash-auto-dismiss) linear forwards;
+    transform-origin: left center;
+}
+
+.flash-message.flash-no-auto-dismiss::before {
+    display: none;
+}
+
+/* ========================================
+   TYPES DE MESSAGES - MOBILE FIRST
+   ======================================== */
 .flash-success {
-    background-color: #28a745;
-    color: white;
-    border: 1px solid #218838;
+    background: var(--flash-success-bg);
+    border-color: var(--flash-success-border);
+    color: var(--flash-success-color);
+}
+
+.flash-success .flash-content i {
+    color: var(--flash-success-icon);
 }
 
 .flash-error {
-    background-color: #dc3545;
-    color: white;
-    border: 1px solid #c82333;
+    background: var(--flash-error-bg);
+    border-color: var(--flash-error-border);
+    color: var(--flash-error-color);
 }
 
-@keyframes slideDown {
+.flash-error .flash-content i {
+    color: var(--flash-error-icon);
+}
+
+.flash-warning {
+    background: var(--flash-warning-bg);
+    border-color: var(--flash-warning-border);
+    color: var(--flash-warning-color);
+}
+
+.flash-warning .flash-content i {
+    color: var(--flash-warning-icon);
+}
+
+.flash-info {
+    background: var(--flash-info-bg);
+    border-color: var(--flash-info-border);
+    color: var(--flash-info-color);
+}
+
+.flash-info .flash-content i {
+    color: var(--flash-info-icon);
+}
+
+/* ========================================
+   ANIMATIONS - MOBILE FIRST
+   ======================================== */
+@keyframes flashSlideIn {
     from {
-        transform: translateY(-100%);
         opacity: 0;
+        transform: translateY(-100%) scale(0.9);
     }
     to {
-        transform: translateY(0);
         opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes flashSlideOut {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+}
+
+@keyframes flashProgress {
+    from {
+        transform: scaleX(1);
+    }
+    to {
+        transform: scaleX(0);
+    }
+}
+
+/* Animation de shake pour les erreurs */
+@keyframes flashShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-5px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(5px);
+    }
+}
+
+.flash-error {
+    animation: flashSlideIn var(--flash-animation-duration) var(--flash-animation-timing) forwards,
+              flashShake 0.5s ease-in-out 0.4s;
+}
+
+/* ========================================
+   BREAKPOINT TABLETTES - 757px
+   ======================================== */
+@media (min-width: 757px) {
+    .flash-messages {
+        top: 90px; /* Hauteur navbar tablette + marge */
+        right: var(--spacing-lg);
+        left: auto;
+        padding: 0;
+        align-items: flex-end;
+    }
+    
+    .flash-message {
+        max-width: 400px;
+        animation: flashSlideInDesktop var(--flash-animation-duration) var(--flash-animation-timing) forwards;
+    }
+    
+    .flash-message.flash-hiding {
+        animation: flashSlideOutDesktop var(--flash-animation-duration) var(--flash-animation-timing) forwards;
+    }
+    
+    .flash-content {
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+    
+    .flash-content i {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .flash-content span {
+        font-size: var(--font-size-lg);
+    }
+    
+    .flash-close {
+        top: var(--spacing-md);
+        right: var(--spacing-md);
+    }
+    
+    /* Animations desktop depuis la droite */
+    @keyframes flashSlideInDesktop {
+        from {
+            opacity: 0;
+            transform: translateX(100%) scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+        }
+    }
+    
+    @keyframes flashSlideOutDesktop {
+        from {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(50%) scale(0.95);
+        }
+    }
+}
+
+/* ========================================
+   BREAKPOINT DESKTOP - 1024px
+   ======================================== */
+@media (min-width: 1024px) {
+    .flash-messages {
+        top: 100px;
+        right: var(--spacing-xl);
+    }
+    
+    .flash-message {
+        max-width: 450px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+    
+    .flash-message:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    }
+    
+    .flash-content {
+        padding: var(--spacing-lg) var(--spacing-xl);
+    }
+    
+    /* Effet de brillance au survol */
+    .flash-message::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+    
+    .flash-message:hover::after {
+        left: 100%;
+    }
+}
+
+/* ========================================
+   ACCESSIBILITÉ
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+    .flash-message {
+        animation-duration: 0.01ms !important;
+    }
+    
+    .flash-message::before {
+        animation: none !important;
+    }
+    
+    .flash-message::after {
+        display: none;
+    }
+    
+    @keyframes flashSlideIn {
+        from, to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+    
+    @keyframes flashSlideOut {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+        }
+    }
+}
+
+/* Mode sombre */
+@media (prefers-color-scheme: dark) {
+    .flash-message {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+    
+    .flash-success {
+        background: #1e4620;
+        border-color: #28a745;
+        color: #d4edda;
+    }
+    
+    .flash-error {
+        background: #4a1f24;
+        border-color: #dc3545;
+        color: #f8d7da;
+    }
+    
+    .flash-warning {
+        background: #453a19;
+        border-color: #ffc107;
+        color: #fff3cd;
+    }
+    
+    .flash-info {
+        background: #1a3a42;
+        border-color: #17a2b8;
+        color: #d1ecf1;
     }
 } 

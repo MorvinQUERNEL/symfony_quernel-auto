@@ -6,6 +6,7 @@ use App\Entity\Vehicules;
 use App\Entity\Pictures;
 use App\Entity\Orders;
 use App\Form\VehiculeType;
+use App\Service\PictureUploadService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,15 +25,18 @@ class VehiculeController extends AbstractController
     private StripeClient $stripeClient;
     private string $stripePublicKey;
     private LoggerInterface $logger;
+    private PictureUploadService $pictureUploadService;
 
     public function __construct(
         StripeClient $stripeClient,
         string $stripePublicKey,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        PictureUploadService $pictureUploadService
     ) {
         $this->stripeClient = $stripeClient;
         $this->stripePublicKey = $stripePublicKey;
         $this->logger = $logger;
+        $this->pictureUploadService = $pictureUploadService;
     }
 
     #[Route('/', name: 'app_vehicules_index', methods: ['GET'])]
@@ -47,7 +51,7 @@ class VehiculeController extends AbstractController
         } else {
             $vehicules = $entityManager
                 ->getRepository(Vehicules::class)
-                ->findAll();
+                ->findAllWithPictures();
         }
 
         return $this->render('vehicule/index.html.twig', [
@@ -58,7 +62,7 @@ class VehiculeController extends AbstractController
 
     #[Route('/new', name: 'app_vehicules_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $vehicule = new Vehicules();
         $form = $this->createForm(VehiculeType::class, $vehicule);
@@ -72,23 +76,11 @@ class VehiculeController extends AbstractController
                 $imageFile = $form->get('pictures')->get($picturesData->indexOf($picture))->get('imageFile')->getData();
                 
                 if ($imageFile && $imageFile instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
-                    $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    $safeFilename = $slugger->slug($originalFilename);
-                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
-
-                    // Déplacer le fichier vers le répertoire uploads
                     try {
-                        $imageFile->move(
-                            $this->getParameter('vehicules_directory'),
-                            $newFilename
-                        );
-
-                        // Mettre à jour le nom du fichier dans l'entité Pictures
-                        $picture->setName($newFilename);
-                        $picture->setVehicules($vehicule);
-                        
+                        $this->pictureUploadService->uploadPicture($imageFile, $picture, $vehicule);
                     } catch (\Exception $e) {
                         $this->addFlash('error', 'Erreur lors de l\'upload de l\'image : ' . $e->getMessage());
+                        $this->logger->error('Erreur upload image', ['error' => $e->getMessage()]);
                     }
                 } else {
                     // Si pas de fichier, supprimer cette entité Pictures
@@ -119,7 +111,7 @@ class VehiculeController extends AbstractController
 
     #[Route('/{id}/edit', name: 'app_vehicules_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function edit(Request $request, Vehicules $vehicule, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function edit(Request $request, Vehicules $vehicule, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(VehiculeType::class, $vehicule);
         $form->handleRequest($request);
@@ -132,23 +124,15 @@ class VehiculeController extends AbstractController
                 $imageFile = $form->get('pictures')->get($picturesData->indexOf($picture))->get('imageFile')->getData();
                 
                 if ($imageFile && $imageFile instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
-                    $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    $safeFilename = $slugger->slug($originalFilename);
-                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
-
-                    // Déplacer le fichier vers le répertoire uploads
                     try {
-                        $imageFile->move(
-                            $this->getParameter('vehicules_directory'),
-                            $newFilename
-                        );
-
-                        // Mettre à jour le nom du fichier dans l'entité Pictures
-                        $picture->setName($newFilename);
-                        $picture->setVehicules($vehicule);
-                        
+                        // Si l'image avait déjà un nom, supprimer l'ancienne
+                        if ($picture->getName()) {
+                            $this->pictureUploadService->deletePicture($picture);
+                        }
+                        $this->pictureUploadService->uploadPicture($imageFile, $picture, $vehicule);
                     } catch (\Exception $e) {
                         $this->addFlash('error', 'Erreur lors de l\'upload de l\'image : ' . $e->getMessage());
+                        $this->logger->error('Erreur upload image', ['error' => $e->getMessage()]);
                     }
                 } else {
                     // Si pas de fichier et que l'image n'a pas déjà un nom, supprimer cette entité Pictures
@@ -175,10 +159,21 @@ class VehiculeController extends AbstractController
     public function delete(Request $request, Vehicules $vehicule, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$vehicule->getId(), $request->request->get('_token'))) {
+            // Supprimer les images du système de fichiers
+            foreach ($vehicule->getPictures() as $picture) {
+                try {
+                    $this->pictureUploadService->deletePicture($picture);
+                } catch (\Exception $e) {
+                    $this->logger->error('Erreur suppression image', ['error' => $e->getMessage()]);
+                }
+            }
+            
             $entityManager->remove($vehicule);
             $entityManager->flush();
             
             $this->addFlash('success', 'Le véhicule a été supprimé avec succès !');
+        } else {
+            $this->addFlash('error', 'Token CSRF invalide');
         }
 
         return $this->redirectToRoute('app_vehicules_index');

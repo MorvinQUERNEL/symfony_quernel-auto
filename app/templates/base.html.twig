@@ -2,14 +2,18 @@
 <html lang="fr">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <meta name="description" content="Quernel Auto - Vente de véhicules d'exception">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="format-detection" content="telephone=no">
         <title>{% block title %}Quernel Auto - Véhicules d'exception{% endblock %}</title>
         <link rel="icon" href="{{ asset('images/logo_quernel_auto.png') }}">
         
         {% block stylesheets %}
             <!-- CSS principal -->
             <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/flash.css') }}">
             
             <!-- Font Awesome -->
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -22,6 +26,7 @@
             <!-- JavaScript principal -->
             <script src="{{ asset('js/navigation.js') }}" defer></script>
             <script src="{{ asset('js/carousel.js') }}" defer></script>
+            <script src="{{ asset('js/flash.js') }}" defer></script>
             <script src="{{ asset('js/app.js') }}" defer></script>
             
             <!-- JavaScript spécifiques à la page -->
@@ -29,10 +34,6 @@
         {% endblock %}
     </head>
     <body>
-        <!-- Skip link pour l'accessibilité -->
-        <a href="#main-content" class="skip-link">Aller au contenu principal</a>
-        
-        <!-- Navigation principale -->
         <nav class="navbar">
             <div class="navbar-container">
                 <!-- Logo et marque -->
@@ -155,13 +156,13 @@
             </div>
         </nav>
 
-        <!-- Messages flash -->
-        {% for label, messages in app.flashes %}
-            <div class="flash-messages" aria-live="polite">
+        <!-- Container permanent pour les messages flash -->
+        <div class="flash-messages" aria-live="polite">
+            {% for label, messages in app.flashes %}
                 {% for message in messages %}
                     <div class="flash-message flash-{{ label }}" role="alert">
                         <div class="flash-content">
-                            <i class="fas fa-{{ label == 'success' ? 'check-circle' : (label == 'error' ? 'exclamation-circle' : 'info-circle') }}"></i>
+                            <i class="fas fa-{{ label == 'success' ? 'check-circle' : (label == 'error' ? 'exclamation-circle' : (label == 'warning' ? 'exclamation-triangle' : 'info-circle')) }}"></i>
                             <span>{{ message }}</span>
                         </div>
                         <button class="flash-close" aria-label="Fermer le message">
@@ -169,8 +170,8 @@
                         </button>
                     </div>
                 {% endfor %}
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
 
         <!-- Contenu principal -->
         <main id="main-content" class="site-wrapper">

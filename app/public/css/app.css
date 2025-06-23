@@ -14,69 +14,9 @@
    COMPOSANTS SPÉCIFIQUES
    ======================================== */
 
-/* Flash Messages */
-.flash-messages {
-    position: fixed;
-    top: 80px;
-    right: var(--spacing-md);
-    z-index: var(--z-modal);
-    max-width: 400px;
-}
-
-.flash-message {
-    background: var(--light-color);
-    border-radius: var(--border-radius-md);
-    padding: var(--spacing-md);
-    margin-bottom: var(--spacing-sm);
-    box-shadow: var(--shadow-lg);
-    border-left: 4px solid var(--primary-color);
-    animation: slideInRight 0.3s ease-out;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--spacing-md);
-}
-
-.flash-content {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    flex: 1;
-}
-
-.flash-close {
-    background: none;
-    border: none;
-    color: var(--gray-dark);
-    cursor: pointer;
-    padding: var(--spacing-xs);
-    border-radius: var(--border-radius-sm);
-    transition: all var(--transition-fast);
-    flex-shrink: 0;
-}
-
-.flash-close:hover {
-    background: var(--gray-color);
-    color: var(--text-color);
-}
-
-.flash-success {
-    border-left-color: var(--success-color);
-    background: linear-gradient(135deg, var(--success-color) 0%, #d4edda 100%);
-    color: var(--light-color);
-}
-
-.flash-error {
-    border-left-color: var(--error-color);
-    background: linear-gradient(135deg, var(--error-color) 0%, #f8d7da 100%);
-    color: var(--light-color);
-}
-
-.flash-warning {
-    border-left-color: var(--warning-color);
-    background: linear-gradient(135deg, var(--warning-color) 0%, #fff3cd 100%);
-    color: var(--secondary-color);
-}
+/* Flash Messages - Déplacé dans flash.css */
+/* Les styles des messages flash sont maintenant dans flash.css
+   pour une meilleure organisation et des animations avancées */
 
 /* Back to Top Button */
 .back-to-top {
@@ -196,11 +136,6 @@
    RESPONSIVE - TABLETTES (min-width: 768px)
    ======================================== */
 @media (min-width: 768px) {
-    .flash-messages {
-        right: var(--spacing-lg);
-        max-width: 450px;
-    }
-    
     .back-to-top {
         bottom: var(--spacing-xl);
         right: var(--spacing-xl);
@@ -214,11 +149,6 @@
    RESPONSIVE - DESKTOP (min-width: 1024px)
    ======================================== */
 @media (min-width: 1024px) {
-    .flash-messages {
-        right: var(--spacing-xl);
-        max-width: 500px;
-    }
-    
     .back-to-top {
         bottom: var(--spacing-2xl);
         right: var(--spacing-2xl);
@@ -232,7 +162,6 @@
    SUPPORT POUR LES PRÉFÉRENCES
    ======================================== */
 @media (prefers-reduced-motion: reduce) {
-    .flash-message,
     .back-to-top,
     .skip-link {
         transition: none;
@@ -261,7 +190,6 @@
     .navbar,
     .carousel-nav,
     .back-to-top,
-    .flash-messages,
     .footer {
         display: none !important;
     }
