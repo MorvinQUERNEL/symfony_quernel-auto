@@ -6,18 +6,17 @@ on:
       - main # The branch name your are commit the new changes
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     name: Push
     steps:
-      - name: git-checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@main
 
-      - name: Push
+      - name: Deploy
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self
           BRANCH: build # The branch name where you want to push the assets
-          FOLDER: . # The directory where your assets are generated
+          FOLDER: app # The directory where your assets are generated
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
           MESSAGE: "Build: ({sha}) {msg}" # The commit message
