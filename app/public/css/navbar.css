@@ -174,7 +174,7 @@
 
 /* ===== STYLES POUR LE BODY ===== */
 body {
-    padding-top: 70px;
+    padding-top: 0;
 }
 
 /* ========================================
@@ -260,7 +260,7 @@ body {
     }
 
     body {
-        padding-top: 80px;
+        padding-top: 0; /* Suppression du padding pour éliminer l'espacement */
     }
 }
 
@@ -305,7 +305,7 @@ body {
     }
 
     body {
-        padding-top: 90px;
+        padding-top: 0; /* Suppression du padding pour éliminer l'espacement */
     }
 }
 

@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Test des pages d'erreur - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/error.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="error-page-container">
+        <div class="error-content">
+            <div class="error-animation">
+                <div class="error-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <div class="error-code">TEST</div>
+            </div>
+            
+            <div class="error-message">
+                <h1 class="error-title">Test des pages d'erreur</h1>
+                
+                <p class="error-description">
+                    Cette page vous permet de tester toutes les pages d'erreur de l'application.
+                    Utilisez les liens ci-dessous pour voir les pages d'erreur avec leur style complet.
+                </p>
+            </div>
+            
+            <div class="error-suggestions">
+                <h3>🎨 Prévisualisations stylées (recommandé) :</h3>
+                <ul>
+                    <li><i class="fas fa-eye"></i> <a href="{{ path('app_preview_error_404') }}" style="color: var(--primary-color);">Voir la page d'erreur 404 stylée</a></li>
+                    <li><i class="fas fa-eye"></i> <a href="{{ path('app_preview_error_403') }}" style="color: var(--primary-color);">Voir la page d'erreur 403 stylée</a></li>
+                    <li><i class="fas fa-eye"></i> <a href="{{ path('app_preview_error_500') }}" style="color: var(--primary-color);">Voir la page d'erreur 500 stylée</a></li>
+                    <li><i class="fas fa-eye"></i> <a href="{{ path('app_preview_error_generic') }}" style="color: var(--primary-color);">Voir la page d'erreur générique stylée</a></li>
+                </ul>
+            </div>
+            
+            <div class="error-actions">
+                <a href="{{ path('app_preview_error_404') }}" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                    Page 404 stylée
+                </a>
+                <a href="{{ path('app_preview_error_403') }}" class="btn btn-secondary">
+                    <i class="fas fa-lock"></i>
+                    Page 403 stylée
+                </a>
+            </div>
+            
+            <div class="error-actions">
+                <a href="{{ path('app_preview_error_500') }}" class="btn btn-primary">
+                    <i class="fas fa-server"></i>
+                    Page 500 stylée
+                </a>
+                <a href="{{ path('app_preview_error_generic') }}" class="btn btn-secondary">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Page générique stylée
+                </a>
+            </div>
+            
+            <div class="error-suggestions">
+                <h3>⚠️ Tests avec vraies erreurs (pour développeurs) :</h3>
+                <ul>
+                    <li><i class="fas fa-bug"></i> <a href="{{ path('app_test_error_404') }}" style="color: var(--text-light);">Déclencher vraie erreur 404</a></li>
+                    <li><i class="fas fa-bug"></i> <a href="{{ path('app_test_error_403') }}" style="color: var(--text-light);">Déclencher vraie erreur 403</a></li>
+                    <li><i class="fas fa-bug"></i> <a href="{{ path('app_test_error_500') }}" style="color: var(--text-light);">Déclencher vraie erreur 500</a></li>
+                    <li><i class="fas fa-bug"></i> <a href="{{ path('app_test_error_generic') }}" style="color: var(--text-light);">Déclencher vraie erreur générique</a></li>
+                </ul>
+            </div>
+            
+            <div class="error-suggestions">
+                <h3>Instructions de test :</h3>
+                <ul>
+                    <li><i class="fas fa-info-circle"></i> Cette page n'est disponible qu'en mode développement</li>
+                    <li><i class="fas fa-palette"></i> Les "prévisualisations stylées" montrent le design complet</li>
+                    <li><i class="fas fa-mobile-alt"></i> Testez sur différentes tailles d'écran</li>
+                    <li><i class="fas fa-mouse-pointer"></i> Vérifiez les animations et interactions</li>
+                    <li><i class="fas fa-home"></i> Utilisez les boutons de retour pour revenir ici</li>
+                </ul>
+            </div>
+            
+            <div class="error-actions">
+                <a href="{{ path('app_home') }}" class="btn btn-primary">
+                    <i class="fas fa-home"></i>
+                    Retour à l'accueil
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %} 

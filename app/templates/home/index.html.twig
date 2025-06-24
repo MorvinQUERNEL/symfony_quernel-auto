@@ -18,7 +18,11 @@
         <div class="hero-content">
             <h1>QUERNEL AUTO</h1>
             <p>QUERNEL AUTO simplifie l'import-export de voitures, offrant des solutions fiables et transparentes pour l'achat et la vente de véhicules à l'international. Avec une expertise reconnue et un réseau mondial, nous vous accompagnons à chaque étape pour rendre vos transactions automobiles fluides et sécurisées.</p>
-            <a href="#contact" class="cta-button">Remplir un formulaire</a>
+            {% if app.user %}
+                <a href="{{ path('app_preference_add') }}" class="cta-button">Ajouter une préférence</a>
+            {% else %}
+                <a href="{{ path('app_combined_form') }}" class="cta-button">Remplir un formulaire</a>
+            {% endif %}
         </div>
     </section>
 
@@ -119,109 +123,6 @@
         {% endif %}
     </section>
     {% endif %}
-
-    <!-- Section Inscription -->
-    <section id="contact" class="registration">
-        <h2>Créez votre compte</h2>
-        <div class="form-container">
-            {{ form_start(registrationForm, {'attr': {'class': 'registration-form'}}) }}
-                {% if not registrationForm.vars.valid %}
-                    <div class="flash-message flash-error">
-                        Veuillez corriger les erreurs ci-dessous
-                    </div>
-                {% endif %}
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        {{ form_label(registrationForm.firstname) }}
-                        {{ form_widget(registrationForm.firstname, {
-                            'attr': {
-                                'class': registrationForm.firstname.vars.valid ? '' : 'is-invalid'
-                            }
-                        }) }}
-                        {{ form_errors(registrationForm.firstname) }}
-                    </div>
-                    <div class="form-group">
-                        {{ form_label(registrationForm.lastname) }}
-                        {{ form_widget(registrationForm.lastname, {
-                            'attr': {
-                                'class': registrationForm.lastname.vars.valid ? '' : 'is-invalid'
-                            }
-                        }) }}
-                        {{ form_errors(registrationForm.lastname) }}
-                    </div>
-                </div>
-                <div class="form-group">
-                    {{ form_label(registrationForm.email) }}
-                    {{ form_widget(registrationForm.email, {
-                        'attr': {
-                            'class': registrationForm.email.vars.valid ? '' : 'is-invalid'
-                        }
-                    }) }}
-                    {{ form_errors(registrationForm.email) }}
-                </div>
-                <div class="form-group">
-                    {{ form_label(registrationForm.password) }}
-                    {{ form_widget(registrationForm.password, {
-                        'attr': {
-                            'class': registrationForm.password.vars.valid ? '' : 'is-invalid'
-                        }
-                    }) }}
-                    {{ form_errors(registrationForm.password) }}
-                </div>
-                <div class="form-group">
-                    {{ form_label(registrationForm.address) }}
-                    {{ form_widget(registrationForm.address, {
-                        'attr': {
-                            'class': registrationForm.address.vars.valid ? '' : 'is-invalid'
-                        }
-                    }) }}
-                    {{ form_errors(registrationForm.address) }}
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        {{ form_label(registrationForm.city) }}
-                        {{ form_widget(registrationForm.city, {
-                            'attr': {
-                                'class': registrationForm.city.vars.valid ? '' : 'is-invalid'
-                            }
-                        }) }}
-                        {{ form_errors(registrationForm.city) }}
-                    </div>
-                    <div class="form-group">
-                        {{ form_label(registrationForm.postalCode) }}
-                        {{ form_widget(registrationForm.postalCode, {
-                            'attr': {
-                                'class': registrationForm.postalCode.vars.valid ? '' : 'is-invalid'
-                            }
-                        }) }}
-                        {{ form_errors(registrationForm.postalCode) }}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        {{ form_label(registrationForm.country) }}
-                        {{ form_widget(registrationForm.country, {
-                            'attr': {
-                                'class': 'form-select ' ~ (registrationForm.country.vars.valid ? '' : 'is-invalid')
-                            }
-                        }) }}
-                        {{ form_errors(registrationForm.country) }}
-                    </div>
-                    <div class="form-group">
-                        {{ form_label(registrationForm.phoneNumber) }}
-                        {{ form_widget(registrationForm.phoneNumber, {
-                            'attr': {
-                                'class': registrationForm.phoneNumber.vars.valid ? '' : 'is-invalid'
-                            }
-                        }) }}
-                        {{ form_errors(registrationForm.phoneNumber) }}
-                    </div>
-                </div>
-                <button type="submit" class="submit-button">S'inscrire</button>
-            {{ form_end(registrationForm) }}
-        </div>
-    </section>
 {% endblock %}
 
 {% block page_javascripts %}

@@ -1,0 +1,407 @@
+/* ========================================
+   VARIABLES CSS - COMBINED FORM
+   ======================================== */
+:root {
+    /* Couleurs principales */
+    --primary-color: #FF6B00;
+    --primary-light: #FF8533;
+    --primary-dark: #E55A00;
+    --secondary-color: #000000;
+    --text-color: #333333;
+    --text-light: #666666;
+    --light-color: #ffffff;
+    --gray-color: #f5f5f5;
+    --gray-light: #f8f9fa;
+    --gray-dark: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --info-color: #17a2b8;
+    --border-color: #e0e0e0;
+    
+    /* Espacements */
+    --spacing-xs: 8px;
+    --spacing-sm: 16px;
+    --spacing-md: 24px;
+    --spacing-lg: 32px;
+    --spacing-xl: 48px;
+    --spacing-xxl: 64px;
+    
+    /* Bordures et rayons */
+    --border-radius: 12px;
+    --border-radius-sm: 8px;
+    --border-radius-lg: 20px;
+    --border-width: 1px;
+    --border-width-thick: 2px;
+    
+    /* Ombres */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
+    --shadow-focus: 0 0 0 4px rgba(255, 107, 0, 0.15);
+    
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* Typographie */
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 2rem;
+    --font-size-4xl: 2.5rem;
+    
+    /* Tailles minimales pour tactile */
+    --touch-target: 44px;
+    --input-height: 48px;
+}
+
+/* ========================================
+   STYLES GLOBAUX - MOBILE FIRST
+   ======================================== */
+
+/* Désactiver les transitions sur mobile pour les performances */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    font-size: var(--font-size-base);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   CONTAINER COMBINED FORM - MOBILE FIRST
+   ======================================== */
+.combined-form-container {
+    min-height: calc(100vh - 60px); /* Hauteur navbar mobile */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../images/homeBackground.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: scroll; /* Éviter fixed sur mobile */
+    padding: var(--spacing-md);
+}
+
+/* Liens spécifiques au container */
+.combined-form-container a {
+    color: var(--primary-color) !important;
+    text-decoration: none;
+    transition: var(--transition-normal);
+}
+
+.combined-form-container a:hover,
+.combined-form-container a:focus {
+    color: var(--primary-dark) !important;
+    transform: translateY(-1px);
+}
+
+/* S'assurer que la navigation garde ses couleurs originales */
+.navbar a,
+.navbar .nav-link,
+.navbar .navbar-brand {
+    color: var(--light-color) !important;
+}
+
+.navbar a:hover,
+.navbar .nav-link:hover,
+.navbar .navbar-brand:hover {
+    color: var(--primary-color) !important;
+}
+
+/* ========================================
+   CARTE FORMULAIRE - MOBILE FIRST
+   ======================================== */
+.form-card {
+    background: var(--light-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--spacing-lg);
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    transition: var(--transition-normal);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.form-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* ========================================
+   EN-TÊTE FORMULAIRE
+   ======================================== */
+.form-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.form-header h1 {
+    color: var(--secondary-color);
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   SECTIONS FORMULAIRE
+   ======================================== */
+.form-section {
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background: var(--gray-light);
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--primary-color);
+}
+
+.form-section h2 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-lg);
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.form-section h2 i {
+    font-size: var(--font-size-lg);
+}
+
+/* ========================================
+   STYLES FORMULAIRES
+   ======================================== */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.form-group label {
+    color: var(--secondary-color) !important;
+    font-weight: 600;
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-xs);
+    display: block;
+}
+
+.form-control,
+.form-select {
+    color: var(--secondary-color) !important;
+    background-color: var(--light-color) !important;
+    border: var(--border-width-thick) solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm);
+    font-size: var(--font-size-base);
+    width: 100%;
+    min-height: var(--input-height);
+    transition: var(--transition-normal);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.form-control:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-focus);
+    background-color: var(--light-color) !important;
+    color: var(--secondary-color) !important;
+}
+
+.form-control::placeholder {
+    color: var(--text-light) !important;
+}
+
+.form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+/* ========================================
+   BOUTON SOUMISSION
+   ======================================== */
+.submit-button {
+    background: var(--primary-color);
+    color: var(--light-color);
+    padding: var(--spacing-md) var(--spacing-xl);
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    margin-top: var(--spacing-xl);
+    width: 100%;
+    min-height: var(--touch-target);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    box-shadow: var(--shadow-md);
+}
+
+.submit-button:hover,
+.submit-button:focus {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
+}
+
+.submit-button:active {
+    transform: translateY(0);
+}
+
+.submit-button i {
+    font-size: var(--font-size-base);
+}
+
+/* ========================================
+   ÉLÉMENTS UTILITAIRES
+   ======================================== */
+.required-field {
+    color: var(--danger-color);
+    font-weight: 600;
+}
+
+.help-text {
+    font-size: var(--font-size-sm);
+    color: var(--text-light);
+    margin-top: var(--spacing-xs);
+    line-height: 1.4;
+}
+
+.form-errors {
+    color: var(--danger-color) !important;
+    font-size: var(--font-size-sm);
+    margin-top: var(--spacing-xs);
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-3 {
+    margin-top: var(--spacing-md);
+}
+
+.mb-3 {
+    margin-bottom: var(--spacing-md);
+}
+
+.mb-4 {
+    margin-bottom: var(--spacing-lg);
+}
+
+/* ========================================
+   RESPONSIVE - TABLETTE
+   ======================================== */
+@media (min-width: 757px) {
+    .combined-form-container {
+        min-height: calc(100vh - 80px); /* Hauteur navbar desktop */
+        padding: var(--spacing-xl);
+    }
+    
+    .form-card {
+        padding: var(--spacing-xl);
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .form-header h1 {
+        font-size: var(--font-size-4xl);
+    }
+    
+    .form-section h2 {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .form-control,
+    .form-select {
+        font-size: var(--font-size-lg);
+    }
+    
+    .submit-button {
+        font-size: var(--font-size-xl);
+        padding: var(--spacing-lg) var(--spacing-xxl);
+    }
+}
+
+/* ========================================
+   RESPONSIVE - DESKTOP
+   ======================================== */
+@media (min-width: 1024px) {
+    * {
+        cursor: default;
+    }
+    
+    .combined-form-container {
+        background-attachment: fixed;
+    }
+    
+    .form-card {
+        max-width: 900px;
+    }
+    
+    .form-card:hover {
+        transform: translateY(-4px);
+    }
+    
+    .form-control:hover,
+    .form-select:hover {
+        border-color: var(--primary-light);
+    }
+    
+    .submit-button {
+        cursor: pointer;
+    }
+    
+    .submit-button:hover {
+        transform: translateY(-3px);
+    }
+    
+    .submit-button i {
+        transition: var(--transition-normal);
+    }
+    
+    .submit-button:hover i {
+        transform: scale(1.1);
+    }
+} 

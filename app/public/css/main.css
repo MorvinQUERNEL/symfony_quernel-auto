@@ -99,8 +99,8 @@ body {
     background-color: var(--light-color);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Padding pour compenser la navbar fixe */
-    padding-top: 60px;
+    /* Suppression du padding-top pour la navbar */
+    padding-top: 0;
 }
 
 /* ========================================
@@ -535,7 +535,7 @@ a {
    ======================================== */
 @media (min-width: 757px) {
     body {
-        padding-top: 70px;
+        padding-top: 0; /* Suppression du padding pour éliminer l'espacement */
     }
     
     .container {

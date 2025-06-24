@@ -137,9 +137,7 @@
                                 <a href="{{ path('app_vehicules_edit', {'id': vehicule.id}) }}" class="btn btn-warning">
                                     <i class="fas fa-edit"></i> Modifier
                                 </a>
-                                <form method="post" action="{{ path('app_vehicules_delete', {'id': vehicule.id}) }}" 
-                                      style="display: inline;" 
-                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce véhicule ? Cette action est irréversible.');">
+                                <form method="post" action="{{ path('app_vehicules_delete', {'id': vehicule.id}) }}" style="display: inline;">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vehicule.id) }}">
                                     <button type="submit" class="btn btn-danger">
                                         <i class="fas fa-trash"></i> Supprimer
@@ -153,31 +151,9 @@
         </div>
     {% endif %}
 </div>
+{% endblock %}
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    const searchForm = document.getElementById('searchForm');
-
-    // Gestion de la soumission du formulaire (clic sur la loupe ou touche Entrée)
-    searchForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const searchTerm = searchInput.value.trim();
-        
-        if (searchTerm) {
-            const url = new URL(window.location);
-            url.searchParams.set('search', searchTerm);
-            window.location.href = url.toString();
-        }
-    });
-
-    // Recherche quand on appuie sur Entrée dans le champ
-    searchInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            searchForm.dispatchEvent(new Event('submit'));
-        }
-    });
-});
-</script>
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/vehicules.js') }}" defer></script>
 {% endblock %} 

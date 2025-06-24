@@ -1,0 +1,146 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription et Préférences - Quernel Auto{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/combined_form.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="combined-form-container">
+    <div class="form-card">
+        <div class="form-header">
+            <h1>Inscription et Préférences</h1>
+        </div>
+        
+        {{ form_start(form) }}
+        
+        <!-- Section Inscription -->
+        <div class="form-section">
+            <h2><i class="fas fa-user"></i> Informations personnelles</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(form.firstname) }}
+                    <span class="required-field">*</span>
+                    {{ form_widget(form.firstname, {'attr': {'class': 'form-control'}}) }}
+                    <div class="form-errors">{{ form_errors(form.firstname) }}</div>
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.lastname) }}
+                    <span class="required-field">*</span>
+                    {{ form_widget(form.lastname, {'attr': {'class': 'form-control'}}) }}
+                    <div class="form-errors">{{ form_errors(form.lastname) }}</div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(form.email) }}
+                    <span class="required-field">*</span>
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                    <div class="form-errors">{{ form_errors(form.email) }}</div>
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.plainPassword) }}
+                    <span class="required-field">*</span>
+                    {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control'}}) }}
+                    <div class="form-errors">{{ form_errors(form.plainPassword) }}</div>
+                    <div class="help-text">Minimum 6 caractères</div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                {{ form_label(form.address) }}
+                <span class="required-field">*</span>
+                {{ form_widget(form.address, {'attr': {'class': 'form-control'}}) }}
+                <div class="form-errors">{{ form_errors(form.address) }}</div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(form.city) }}
+                    <span class="required-field">*</span>
+                    {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
+                    <div class="form-errors">{{ form_errors(form.city) }}</div>
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.postalCode) }}
+                    <span class="required-field">*</span>
+                    {{ form_widget(form.postalCode, {'attr': {'class': 'form-control'}}) }}
+                    <div class="form-errors">{{ form_errors(form.postalCode) }}</div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(form.country) }}
+                    <span class="required-field">*</span>
+                    {{ form_widget(form.country, {'attr': {'class': 'form-select'}}) }}
+                    <div class="form-errors">{{ form_errors(form.country) }}</div>
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.phoneNumber) }}
+                    <span class="required-field">*</span>
+                    {{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control'}}) }}
+                    <div class="form-errors">{{ form_errors(form.phoneNumber) }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Section Préférences -->
+        <div class="form-section">
+            <h2><i class="fas fa-car"></i> Vos préférences véhicules</h2>
+            <p class="help-text mb-3">Ces informations nous permettront de vous proposer des véhicules correspondant à vos critères. Tous les champs sont optionnels.</p>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(form.prefereneceBrand) }}
+                    {{ form_widget(form.prefereneceBrand, {'attr': {'class': 'form-control'}}) }}
+                    <div class="form-errors">{{ form_errors(form.prefereneceBrand) }}</div>
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.preferenceModel) }}
+                    {{ form_widget(form.preferenceModel, {'attr': {'class': 'form-control'}}) }}
+                    <div class="form-errors">{{ form_errors(form.preferenceModel) }}</div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(form.minYear) }}
+                    {{ form_widget(form.minYear, {'attr': {'class': 'form-control'}}) }}
+                    <div class="form-errors">{{ form_errors(form.minYear) }}</div>
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.maxPrice) }}
+                    {{ form_widget(form.maxPrice, {'attr': {'class': 'form-control'}}) }}
+                    <div class="form-errors">{{ form_errors(form.maxPrice) }}</div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                {{ form_label(form.preferenceFuelType) }}
+                {{ form_widget(form.preferenceFuelType, {'attr': {'class': 'form-select'}}) }}
+                <div class="form-errors">{{ form_errors(form.preferenceFuelType) }}</div>
+            </div>
+        </div>
+        
+        <button type="submit" class="submit-button">
+            <i class="fas fa-check-circle"></i> Valider mon inscription et mes préférences
+        </button>
+        
+        {{ form_end(form) }}
+        
+        <div class="text-center mt-3">
+            <p>Déjà inscrit ? <a href="{{ path('app_login') }}">Connectez-vous</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/combined_form.js') }}" defer></script>
+{% endblock %} 

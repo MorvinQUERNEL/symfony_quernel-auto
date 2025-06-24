@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Orders;
 use App\Entity\Users;
+use App\Entity\Preference;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
@@ -13,6 +14,50 @@ class EmailService
     public function __construct(
         private MailerInterface $mailer
     ) {}
+
+    /**
+     * Envoie un email générique avec template
+     */
+    public function sendEmail(string $to, string $subject, string $template, array $context = []): void
+    {
+        $email = (new TemplatedEmail())
+            ->from(new Address('noreply@quernel-auto.fr', 'Quernel Auto'))
+            ->to(new Address($to))
+            ->subject($subject)
+            ->htmlTemplate($template)
+            ->context($context);
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * Envoie un email de bienvenue pour l'inscription
+     */
+    public function sendRegistrationEmail(Users $user): void
+    {
+        $this->sendEmail(
+            $user->getEmail(),
+            'Bienvenue chez Quernel Auto',
+            'emails/registration.html.twig',
+            ['user' => $user]
+        );
+    }
+
+    /**
+     * Envoie un email de confirmation des préférences
+     */
+    public function sendPreferenceConfirmationEmail(Users $user, Preference $preference): void
+    {
+        $this->sendEmail(
+            $user->getEmail(),
+            'Vos préférences ont été enregistrées',
+            'emails/preference_confirmation.html.twig',
+            [
+                'user' => $user,
+                'preference' => $preference
+            ]
+        );
+    }
 
     /**
      * Envoie un email de confirmation d'achat

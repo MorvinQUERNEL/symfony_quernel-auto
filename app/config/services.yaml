@@ -44,9 +44,10 @@ services:
         arguments:
             - '%stripe_secret_key%'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
-    
+    # Configuration du service PictureUploadService
     App\Service\PictureUploadService:
         arguments:
-            $vehiculesDirectory: '%kernel.project_dir%/public/uploads/vehicules' 
+            $vehiculesDirectory: '%vehicules_directory%'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones 

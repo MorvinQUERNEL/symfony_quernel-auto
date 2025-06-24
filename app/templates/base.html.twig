@@ -12,8 +12,8 @@
         
         {% block stylesheets %}
             <!-- CSS principal -->
-            <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-            <link rel="stylesheet" href="{{ asset('css/flash.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=2.3">
+            <link rel="stylesheet" href="{{ asset('css/flash.css') }}?v=2.3">
             
             <!-- Font Awesome -->
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -24,10 +24,11 @@
 
         {% block javascripts %}
             <!-- JavaScript principal -->
-            <script src="{{ asset('js/navigation.js') }}" defer></script>
-            <script src="{{ asset('js/carousel.js') }}" defer></script>
-            <script src="{{ asset('js/flash.js') }}" defer></script>
-            <script src="{{ asset('js/app.js') }}" defer></script>
+            <script src="{{ asset('js/navigation.js') }}?v=2.3" defer></script>
+            <script src="{{ asset('js/carousel.js') }}?v=2.3" defer></script>
+            <script src="{{ asset('js/flash.js') }}?v=2.3" defer></script>
+            <script src="{{ asset('js/forms.js') }}?v=2.3" defer></script>
+            <script src="{{ asset('js/app.js') }}?v=2.3" defer></script>
             
             <!-- JavaScript spécifiques à la page -->
             {% block page_javascripts %}{% endblock %}
@@ -56,7 +57,7 @@
                             <span>Véhicules</span>
                         </a>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown desktop-only">
                         <a href="#" class="nav-link dropdown-toggle">
                             <i class="fas fa-cogs"></i>
                             <span>Services</span>
@@ -78,22 +79,103 @@
                             {% endif %}
                         </div>
                     </li>
+                    <!-- Liens Services pour mobile uniquement -->
+                    {% if app.user %}
+                        <li class="nav-item mobile-only">
+                            <a href="{{ path('app_chat_index') }}" class="nav-link">
+                                <i class="fas fa-comments"></i>
+                                <span>Chat support</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item mobile-only">
+                        <a href="{{ path('app_contact') }}" class="nav-link">
+                            <i class="fas fa-envelope"></i>
+                            <span>Contact</span>
+                        </a>
+                    </li>
+                    {% if app.user %}
+                        <li class="nav-item mobile-only">
+                            <a href="{{ path('app_preference_add') }}" class="nav-link">
+                                <i class="fas fa-heart"></i>
+                                <span>Ajouter préférence</span>
+                            </a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a href="{{ path('app_processus') }}" class="nav-link" aria-current="{{ app.request.get('_route') == 'app_processus' ? 'page' : 'false' }}">
                             <i class="fas fa-route"></i>
                             <span>Processus</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item desktop-only">
                         <a href="{{ path('app_contact') }}" class="nav-link" aria-current="{{ app.request.get('_route') == 'app_contact' ? 'page' : 'false' }}">
                             <i class="fas fa-envelope"></i>
                             <span>Contact</span>
                         </a>
                     </li>
+                    
+                    <!-- Liens du profil utilisateur pour mobile -->
+                    {% if app.user %}
+                        <li class="nav-item mobile-only">
+                            <a href="{{ path('app_profile') }}" class="nav-link">
+                                <i class="fas fa-user"></i>
+                                <span>Mon profil</span>
+                            </a>
+                        </li>
+                        <li class="nav-item mobile-only">
+                            <a href="{{ path('app_orders_my_orders') }}" class="nav-link">
+                                <i class="fas fa-shopping-bag"></i>
+                                <span>Mes commandes</span>
+                            </a>
+                        </li>
+                        
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class="nav-item mobile-only">
+                                <a href="{{ path('app_vehicules_index') }}" class="nav-link">
+                                    <i class="fas fa-car"></i>
+                                    <span>Gestion Véhicules</span>
+                                </a>
+                            </li>
+                            <li class="nav-item mobile-only">
+                                <a href="{{ path('app_admin_users') }}" class="nav-link">
+                                    <i class="fas fa-users"></i>
+                                    <span>Gestion Utilisateurs</span>
+                                </a>
+                            </li>
+                            <li class="nav-item mobile-only">
+                                <a href="{{ path('app_chat_admin') }}" class="nav-link">
+                                    <i class="fas fa-comments"></i>
+                                    <span>Chat Admin</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        <li class="nav-item mobile-only">
+                            <a href="{{ path('app_logout') }}" class="nav-link">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Déconnexion</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <!-- Liens connexion/inscription pour mobile -->
+                        <li class="nav-item mobile-only">
+                            <a href="{{ path('app_login') }}" class="nav-link">
+                                <i class="fas fa-sign-in-alt"></i>
+                                <span>Connexion</span>
+                            </a>
+                        </li>
+                        <li class="nav-item mobile-only">
+                            <a href="{{ path('app_register') }}" class="nav-link">
+                                <i class="fas fa-user-plus"></i>
+                                <span>Inscription</span>
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
                 
-                <!-- Actions utilisateur -->
-                <div class="navbar-actions">
+                <!-- Actions utilisateur (desktop uniquement) -->
+                <div class="navbar-actions desktop-only">
                     {% if app.user %}
                         <!-- Menu utilisateur connecté -->
                         <div class="dropdown">
