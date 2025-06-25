@@ -4,6 +4,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 {% endblock %}
 
@@ -70,9 +71,12 @@
     <!-- Section Véhicules Récents -->
     {% if recentVehicules is not empty %}
     <section class="recent-vehicles">
-        <h2>Véhicules Récemment Importés</h2>
+        <div class="recent-vehicles__header">
+            <h2 class="recent-vehicles__title">Nos véhicules du moment</h2>
+            <p class="recent-vehicles__subtitle">Découvrez notre sélection de véhicules récents, prêts à être importés.</p>
+        </div>
         <div class="vehicles-carousel">
-            <!-- Flèches de navigation (masquées sur mobile) -->
+            <!-- Flèches de navigation -->
             <button class="carousel-nav carousel-nav-prev" aria-label="Véhicule précédent">
                 <i class="fas fa-chevron-left"></i>
             </button>
@@ -91,6 +95,7 @@
                                 {% else %}
                                     <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Aucune image disponible pour {{ vehicule.brand }} {{ vehicule.model }}">
                                 {% endif %}
+                                <div class="vehicle-image__overlay"></div>
                             </div>
                             <div class="vehicle-content">
                                 <h3 class="vehicle-title">{{ vehicule.brand }} {{ vehicule.model }}</h3>
@@ -98,11 +103,11 @@
                                 <div class="vehicle-details">
                                     <div class="vehicle-detail-item">
                                         <i class="fas fa-calendar"></i>
-                                        {{ vehicule.year ? vehicule.year|date('Y') : 'N/A' }}
+                                        <span>{{ vehicule.year ? vehicule.year|date('Y') : 'N/A' }}</span>
                                     </div>
                                     <div class="vehicle-detail-item">
                                         <i class="fas fa-gas-pump"></i>
-                                        {{ vehicule.fuelType }}
+                                        <span>{{ vehicule.fuelType }}</span>
                                     </div>
                                 </div>
                                 <div class="vehicle-price">{{ vehicule.salePrice|number_format(0, ',', ' ') }} €</div>
@@ -125,10 +130,17 @@
             
             <!-- Indicateurs de pagination -->
             <div class="carousel-indicators">
-                {% set maxPages = (recentVehicules|length / 1)|round(0, 'ceil') %}
-                {% for i in 0..(maxPages - 1) %}
+                {# The number of dots is handled by the JS, this is just for server-side rendering #}
+                {% set itemsPerPage = 1 %} 
+                {% set totalPages = (recentVehicules|length / itemsPerPage)|round(0, 'ceil') %}
+                {% for i in 0..(totalPages - 1) %}
                     <button class="carousel-dot{% if i == 0 %} active{% endif %}" data-page="{{ i }}" aria-label="Page {{ i + 1 }}"></button>
                 {% endfor %}
+            </div>
+
+            <!-- Barre de progression -->
+            <div class="carousel-progress">
+                <div class="carousel-progress-bar"></div>
             </div>
         </div>
     </section>

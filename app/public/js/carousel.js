@@ -399,6 +399,16 @@ class VehiclesCarousel {
             indicator.classList.toggle('active', isActive);
             indicator.setAttribute('aria-selected', isActive);
         });
+
+        this.updateProgressBar();
+    }
+    
+    updateProgressBar() {
+        const progressBar = this.container.querySelector('.carousel-progress-bar');
+        if (!progressBar) return;
+    
+        const progress = ((this.currentIndex + 1) / this.totalPages) * 100;
+        progressBar.style.width = `${progress}%`;
     }
     
     getItemWidth() {
