@@ -40,4 +40,19 @@ class MessagesRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    /**
+     * Compte le nombre de messages non lus envoyés par les utilisateurs aux administrateurs.
+     */
+    public function countUnreadMessagesForAdmin(): int
+    {
+        return (int) $this->createQueryBuilder('m')
+            ->select('count(m.id)')
+            ->where('m.isRead = :isRead')
+            ->andWhere('m.isFromUser = :isFromUser')
+            ->setParameter('isRead', false)
+            ->setParameter('isFromUser', true)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Users;
 use App\Form\RegistrationType;
 use App\Repository\VehiculesRepository;
+use App\Repository\MessagesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -73,5 +74,23 @@ class HomeController extends AbstractController
             'registrationForm' => $form->createView(),
             'recentVehicules' => $recentVehicules,
         ]);
+    }
+
+    public function navbar(MessagesRepository $messagesRepository): Response
+    {
+        $unreadMessagesCount = 0;
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $unreadMessagesCount = $messagesRepository->countUnreadMessagesForAdmin();
+        }
+
+        return $this->render('_navbar.html.twig', [
+            'unreadMessagesCount' => $unreadMessagesCount,
+        ]);
+    }
+
+    #[Route('/test-flash', name: 'app_test_flash')]
+    public function testFlash(): Response
+    {
+        // ... existing code ...
     }
 }

@@ -24,31 +24,31 @@ class ContactController extends AbstractController
             $data = $form->getData();
             
             try {
-                // Email principal vers contact@quernel-auto.fr
-                $mainEmail = (new Email())
-                    ->from(new Address('noreply@quernel-auto.fr', 'Site Web Quernel Auto'))
-                    ->to(new Address('contact@quernel-auto.fr', 'Quernel Auto'))
-                    ->subject('Nouveau message de contact via le site web')
-                    ->html($this->renderView('emails/contact_notification.html.twig', [
-                        'email' => $data['email'],
-                        'message' => $data['message'],
-                        'date' => new \DateTime()
-                    ]));
+                $user_email = $form->get('email')->getData();
+                $user_message = $form->get('message')->getData();
 
-                $mailer->send($mainEmail);
+                // Email principal vers contact@quernelauto.fr
+                $email_to_admin = (new Email())
+                    ->from(new Address($user_email))
+                    ->to(new Address('contact@quernelauto.fr', 'Quernel Auto'))
+                    ->subject('Nouveau message de contact de ' . $user_email)
+                    ->text($user_message);
 
-                // Email de confirmation vers l'utilisateur
-                $confirmationEmail = (new Email())
-                    ->from(new Address('contact@quernel-auto.fr', 'Quernel Auto'))
-                    ->to(new Address($data['email']))
-                    ->subject('Confirmation de votre message à Quernel Auto')
+                $mailer->send($email_to_admin);
+
+                // Email de confirmation à l'utilisateur
+                $email_to_user = (new Email())
+                    ->from(new Address('contact@quernelauto.fr', 'Quernel Auto'))
+                    ->to(new Address($user_email))
+                    ->subject('Confirmation de votre message')
+                    ->htmlTemplate('emails/contact_confirmation.html.twig')
                     ->html($this->renderView('emails/contact_confirmation.html.twig', [
-                        'email' => $data['email'],
-                        'message' => $data['message'],
+                        'email' => $user_email,
+                        'message' => $user_message,
                         'date' => new \DateTime()
                     ]));
 
-                $mailer->send($confirmationEmail);
+                $mailer->send($email_to_user);
 
                 $this->addFlash('success', 'Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.');
                 
@@ -58,7 +58,7 @@ class ContactController extends AbstractController
             } catch (\Exception $e) {
                 $logger->error('Erreur lors de l\'envoi du message de contact', [
                     'error' => $e->getMessage(),
-                    'email' => $data['email']
+                    'email' => $user_email
                 ]);
                 
                 $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi de votre message. Veuillez réessayer plus tard.');

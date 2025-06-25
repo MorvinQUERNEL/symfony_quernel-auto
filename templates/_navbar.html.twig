@@ -1,0 +1,210 @@
+<nav class="navbar">
+    <div class="navbar-container">
+        <!-- Logo et marque -->
+        <a href="{{ path('app_home') }}" class="navbar-brand">
+            <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="navbar-logo">
+            <span>Quernel Auto</span>
+        </a>
+        
+        <!-- Menu principal -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="{{ path('app_home') }}" class="nav-link" aria-current="{{ app.request.get('_route') == 'app_home' ? 'page' : 'false' }}">
+                    <i class="fas fa-home"></i>
+                    <span>Accueil</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ path('app_vehicules_index') }}" class="nav-link" aria-current="{{ app.request.get('_route') starts with 'app_vehicules' ? 'page' : 'false' }}">
+                    <i class="fas fa-car"></i>
+                    <span>Véhicules</span>
+                </a>
+            </li>
+            <li class="nav-item dropdown desktop-only">
+                <a href="#" class="nav-link dropdown-toggle">
+                    <i class="fas fa-cogs"></i>
+                    <span>Services</span>
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+                <div class="dropdown-menu">
+                    {% if app.user %}
+                        <a href="{{ path('app_chat_index') }}" class="dropdown-item">
+                            <i class="fas fa-comments"></i> Chat support
+                        </a>
+                    {% endif %}
+                    <a href="{{ path('app_contact') }}" class="dropdown-item">
+                        <i class="fas fa-envelope"></i> Contact
+                    </a>
+                    {% if app.user %}
+                        <a href="{{ path('app_preference_add') }}" class="dropdown-item">
+                            <i class="fas fa-heart"></i> Ajouter préférence
+                        </a>
+                    {% endif %}
+                </div>
+            </li>
+            <!-- Liens Services pour mobile uniquement -->
+            {% if app.user %}
+                <li class="nav-item mobile-only">
+                    <a href="{{ path('app_chat_index') }}" class="nav-link">
+                        <i class="fas fa-comments"></i>
+                        <span>Chat support</span>
+                    </a>
+                </li>
+            {% endif %}
+            <li class="nav-item mobile-only">
+                <a href="{{ path('app_contact') }}" class="nav-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Contact</span>
+                </a>
+            </li>
+            {% if app.user %}
+                <li class="nav-item mobile-only">
+                    <a href="{{ path('app_preference_add') }}" class="nav-link">
+                        <i class="fas fa-heart"></i>
+                        <span>Ajouter préférence</span>
+                    </a>
+                </li>
+            {% endif %}
+            <li class="nav-item">
+                <a href="{{ path('app_processus') }}" class="nav-link" aria-current="{{ app.request.get('_route') == 'app_processus' ? 'page' : 'false' }}">
+                    <i class="fas fa-route"></i>
+                    <span>Processus</span>
+                </a>
+            </li>
+            <li class="nav-item desktop-only">
+                <a href="{{ path('app_contact') }}" class="nav-link" aria-current="{{ app.request.get('_route') == 'app_contact' ? 'page' : 'false' }}">
+                    <i class="fas fa-envelope"></i>
+                    <span>Contact</span>
+                </a>
+            </li>
+            
+            <!-- Liens du profil utilisateur pour mobile -->
+            {% if app.user %}
+                <li class="nav-item mobile-only">
+                    <a href="{{ path('app_profile') }}" class="nav-link">
+                        <i class="fas fa-user"></i>
+                        <span>Mon profil</span>
+                    </a>
+                </li>
+                <li class="nav-item mobile-only">
+                    <a href="{{ path('app_orders_my_orders') }}" class="nav-link">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>Mes commandes</span>
+                    </a>
+                </li>
+                
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item mobile-only">
+                        <a href="{{ path('app_vehicules_index') }}" class="nav-link">
+                            <i class="fas fa-car"></i>
+                            <span>Gestion Véhicules</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mobile-only">
+                        <a href="{{ path('app_admin_users') }}" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span>Gestion Utilisateurs</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mobile-only">
+                        <a href="{{ path('app_chat_admin') }}" class="nav-link">
+                            <i class="fas fa-comments"></i>
+                            <span>Chat Admin</span>
+                        </a>
+                    </li>
+                {% endif %}
+                
+                <li class="nav-item mobile-only">
+                    <a href="{{ path('app_logout') }}" class="nav-link">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Déconnexion</span>
+                    </a>
+                </li>
+            {% else %}
+                <!-- Liens connexion/inscription pour mobile -->
+                <li class="nav-item mobile-only">
+                    <a href="{{ path('app_login') }}" class="nav-link">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Connexion</span>
+                    </a>
+                </li>
+                <li class="nav-item mobile-only">
+                    <a href="{{ path('app_register') }}" class="nav-link">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Inscription</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+        
+        <!-- Actions utilisateur (desktop uniquement) -->
+        <div class="navbar-actions desktop-only">
+            {% if app.user %}
+                <!-- Menu utilisateur connecté -->
+                <div class="dropdown">
+                    <a href="#" class="user-menu dropdown-toggle">
+                        <div class="user-avatar">
+                            {{ app.user.firstname|first|upper }}
+                        </div>
+                        <span>
+                            {{ app.user.firstname }}
+                            {% if is_granted('ROLE_ADMIN') and unreadMessagesCount > 0 %}
+                                <span class="notification-badge">{{ unreadMessagesCount }}</span>
+                            {% endif %}
+                        </span>
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="{{ path('app_profile') }}" class="dropdown-item">
+                            <i class="fas fa-user"></i> Mon profil
+                        </a>
+                        <a href="{{ path('app_orders_my_orders') }}" class="dropdown-item">
+                            <i class="fas fa-shopping-bag"></i> Mes commandes
+                        </a>
+                        <a href="{{ path('app_preference_add') }}" class="dropdown-item">
+                            <i class="fas fa-heart"></i> Ajouter préférence
+                        </a>
+                        
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <div class="dropdown-divider"></div>
+                            <a href="{{ path('app_vehicules_index') }}" class="dropdown-item">
+                                <i class="fas fa-car"></i> Gestion Véhicules
+                            </a>
+                            <a href="{{ path('app_admin_users') }}" class="dropdown-item">
+                                <i class="fas fa-users"></i> Gestion Utilisateurs
+                            </a>
+                            <a href="{{ path('app_chat_admin') }}" class="dropdown-item">
+                                <i class="fas fa-comments"></i> Chat Admin
+                                {% if unreadMessagesCount > 0 %}
+                                    <span class="notification-badge">{{ unreadMessagesCount }}</span>
+                                {% endif %}
+                            </a>
+                        {% endif %}
+                        
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ path('app_logout') }}" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i> Déconnexion
+                        </a>
+                    </div>
+                </div>
+            {% else %}
+                <!-- Boutons de connexion/inscription -->
+                <a href="{{ path('app_login') }}" class="btn-login">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Connexion</span>
+                </a>
+                <a href="{{ path('app_register') }}" class="btn-register">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Inscription</span>
+                </a>
+            {% endif %}
+        </div>
+        
+        <!-- Bouton burger pour mobile -->
+        <button class="navbar-toggler" aria-label="Menu principal" aria-expanded="false">
+            <span class="navbar-toggler-line"></span>
+            <span class="navbar-toggler-line"></span>
+            <span class="navbar-toggler-line"></span>
+        </button>
+    </div>
+</nav> 
