@@ -1,557 +1,291 @@
 /**
- * CARROUSEL - QUERNEL AUTO
- * Carrousel moderne avec animations fluides et effets visuels
- * @author Quernel Auto
- * @version 2.0.0
+ * Nouveau Carrousel de Véhicules - Version 4.0.0
+ * Carrousel moderne avec support tactile et navigation responsive
  */
 
-class Carousel {
-    constructor(container, options = {}) {
-        this.container = typeof container === 'string' ? document.querySelector(container) : container;
-        this.options = {
-            autoplay: options.autoplay || false,
-            autoplaySpeed: options.autoplaySpeed || 5000,
-            infinite: options.infinite || true,
-            slidesToShow: options.slidesToShow || 1,
-            slidesToScroll: options.slidesToScroll || 1,
-            dots: options.dots !== false,
-            arrows: options.arrows !== false,
-            responsive: options.responsive || {},
-            ...options
+class VehiclesCarousel {
+    constructor(container) {
+        this.container = container;
+        this.track = container.querySelector('.vehicles-track');
+        this.cards = Array.from(container.querySelectorAll('.vehicle-card'));
+        this.prevBtn = container.querySelector('.carousel-nav-prev');
+        this.nextBtn = container.querySelector('.carousel-nav-next');
+        this.indicators = container.querySelectorAll('.carousel-dot');
+        
+        // Configuration responsive
+        this.breakpoints = {
+            mobile: 757,
+            desktop: 1024
         };
         
+        // État du carrousel
         this.currentIndex = 0;
-        this.isAnimating = false;
-        this.autoplayTimer = null;
+        this.itemsPerPage = this.getItemsPerPage();
+        this.totalPages = Math.ceil(this.cards.length / this.itemsPerPage);
+        
+        // Support tactile
         this.touchStartX = 0;
         this.touchStartY = 0;
         this.isDragging = false;
-        this.dragStartX = 0;
-        this.dragOffset = 0;
-        
-        this.track = null;
-        this.items = [];
-        this.dots = [];
-        this.prevBtn = null;
-        this.nextBtn = null;
-        this.progressBar = null;
+        this.startTransform = 0;
         
         this.init();
     }
     
     init() {
-        if (!this.container) {
-            console.error('Carousel: Container not found');
-            return;
-        }
+        if (this.cards.length === 0) return;
         
-        this.setupElements();
-        this.setupResponsive();
         this.setupEventListeners();
-        this.setupAutoplay();
-        this.updateCarousel();
-        this.setupIntersectionObserver();
+        this.updateView();
+        this.updateNavigation();
         
-        console.log('Carousel initialized with', this.items.length, 'items');
+        // Mise à jour responsive
+        window.addEventListener('resize', () => {
+            this.handleResize();
+        });
+        
+        console.log('🚗 Carrousel de véhicules initialisé avec', this.cards.length, 'véhicules');
     }
     
-    /**
-     * Configuration des éléments du carrousel
-     */
-    setupElements() {
-        this.track = this.container.querySelector('.carousel-track');
-        this.items = Array.from(this.container.querySelectorAll('.carousel-item'));
-        this.dots = Array.from(this.container.querySelectorAll('.carousel-dot'));
-        this.prevBtn = this.container.querySelector('.carousel-nav-prev');
-        this.nextBtn = this.container.querySelector('.carousel-nav-next');
-        this.progressBar = this.container.querySelector('.carousel-progress-bar');
+    getItemsPerPage() {
+        const width = window.innerWidth;
+        if (width >= this.breakpoints.desktop) return 3; // Desktop: 3 cartes
+        if (width >= this.breakpoints.mobile) return 2;  // Tablette: 2 cartes
+        return 1; // Mobile: 1 carte
+    }
+    
+    setupEventListeners() {
+        // Navigation par boutons
+        if (this.prevBtn) {
+            this.prevBtn.addEventListener('click', () => this.prev());
+        }
+        if (this.nextBtn) {
+            this.nextBtn.addEventListener('click', () => this.next());
+        }
         
-        if (!this.track || this.items.length === 0) {
-            console.error('Carousel: Required elements not found');
+        // Indicateurs
+        this.indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => this.goToPage(index));
+        });
+        
+        // Support tactile
+        this.track.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false });
+        this.track.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
+        this.track.addEventListener('touchend', (e) => this.handleTouchEnd(e));
+        
+        // Support clavier
+        this.container.addEventListener('keydown', (e) => this.handleKeyboard(e));
+        
+        // Rendre le container focusable pour le clavier
+        this.container.setAttribute('tabindex', '0');
+    }
+    
+    handleTouchStart(e) {
+        this.touchStartX = e.touches[0].clientX;
+        this.touchStartY = e.touches[0].clientY;
+        this.isDragging = true;
+        this.startTransform = this.getCurrentTransform();
+        
+        // Arrêter les transitions pendant le drag
+        this.track.style.transition = 'none';
+    }
+    
+    handleTouchMove(e) {
+        if (!this.isDragging) return;
+        
+        const touchX = e.touches[0].clientX;
+        const touchY = e.touches[0].clientY;
+        const deltaX = touchX - this.touchStartX;
+        const deltaY = touchY - this.touchStartY;
+        
+        // Détecter si c'est un swipe horizontal ou un scroll vertical
+        if (Math.abs(deltaY) > Math.abs(deltaX)) {
+            // C'est un scroll vertical, on laisse faire
+            this.isDragging = false;
+            this.track.style.transition = '';
             return;
         }
         
-        // Ajout des attributs ARIA pour l'accessibilité
-        this.container.setAttribute('role', 'region');
-        this.container.setAttribute('aria-label', 'Carrousel de véhicules');
+        // C'est un swipe horizontal, on empêche le scroll
+        e.preventDefault();
         
-        this.items.forEach((item, index) => {
-            item.setAttribute('role', 'group');
-            item.setAttribute('aria-label', `Slide ${index + 1} sur ${this.items.length}`);
-        });
+        // Appliquer le déplacement en temps réel
+        const newTransform = this.startTransform + deltaX;
+        this.track.style.transform = `translateX(${newTransform}px)`;
     }
     
-    /**
-     * Configuration responsive
-     */
-    setupResponsive() {
-        this.updateSlidesToShow();
+    handleTouchEnd(e) {
+        if (!this.isDragging) return;
         
-        window.addEventListener('resize', this.debounce(() => {
-            this.updateSlidesToShow();
-            this.updateCarousel();
-        }, 250));
-    }
-    
-    /**
-     * Mise à jour du nombre de slides visibles selon la taille d'écran
-     */
-    updateSlidesToShow() {
-        const width = window.innerWidth;
+        this.isDragging = false;
+        this.track.style.transition = '';
         
-        if (width >= 1024) {
-            this.options.slidesToShow = 3;
-        } else if (width >= 768) {
-            this.options.slidesToShow = 2;
-        } else {
-            this.options.slidesToShow = 1;
-        }
+        const touchEndX = e.changedTouches[0].clientX;
+        const deltaX = touchEndX - this.touchStartX;
+        const threshold = 50; // Seuil de déclenchement
         
-        this.maxIndex = Math.max(0, this.items.length - this.options.slidesToShow);
-    }
-    
-    /**
-     * Configuration des écouteurs d'événements
-     */
-    setupEventListeners() {
-        // Boutons de navigation
-        if (this.prevBtn) {
-            this.prevBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
+        if (Math.abs(deltaX) > threshold) {
+            if (deltaX > 0) {
                 this.prev();
-            });
-        }
-        
-        if (this.nextBtn) {
-            this.nextBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.next();
-            });
-        }
-        
-        // Navigation par dots
-        this.dots.forEach((dot, index) => {
-            dot.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.goTo(index);
-            });
-        });
-        
-        // Navigation au clavier
-        this.container.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                this.prev();
-            } else if (e.key === 'ArrowRight') {
-                e.preventDefault();
-                this.next();
-            } else if (e.key === 'Home') {
-                e.preventDefault();
-                this.goTo(0);
-            } else if (e.key === 'End') {
-                e.preventDefault();
-                this.goTo(this.maxIndex);
-            }
-        });
-        
-        // Gestion tactile
-        this.setupTouchEvents();
-        
-        // Gestion de la souris
-        this.setupMouseEvents();
-        
-        // Pause autoplay au hover
-        if (this.options.autoplay) {
-            this.container.addEventListener('mouseenter', () => this.pauseAutoplay());
-            this.container.addEventListener('mouseleave', () => this.resumeAutoplay());
-        }
-    }
-    
-    /**
-     * Configuration des événements tactiles
-     */
-    setupTouchEvents() {
-        if (!('ontouchstart' in window)) return;
-        
-        this.container.addEventListener('touchstart', (e) => {
-            this.touchStartX = e.touches[0].clientX;
-            this.touchStartY = e.touches[0].clientY;
-            this.isDragging = false;
-        });
-        
-        this.container.addEventListener('touchmove', (e) => {
-            if (!this.touchStartX) return;
-            
-            const touchX = e.touches[0].clientX;
-            const touchY = e.touches[0].clientY;
-            const diffX = this.touchStartX - touchX;
-            const diffY = this.touchStartY - touchY;
-            
-            if (!this.isDragging && Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 10) {
-                this.isDragging = true;
-                this.dragStartX = touchX;
-                this.dragOffset = 0;
-            }
-            
-            if (this.isDragging) {
-                e.preventDefault();
-                this.dragOffset = diffX;
-                this.updateDragPosition();
-            }
-        });
-        
-        this.container.addEventListener('touchend', () => {
-            if (this.isDragging) {
-                this.handleDragEnd();
-            }
-            this.touchStartX = 0;
-            this.touchStartY = 0;
-            this.isDragging = false;
-        });
-    }
-    
-    /**
-     * Configuration des événements de souris
-     */
-    setupMouseEvents() {
-        let isMouseDown = false;
-        let startX = 0;
-        let startOffset = 0;
-        
-        this.container.addEventListener('mousedown', (e) => {
-            isMouseDown = true;
-            startX = e.clientX;
-            startOffset = 0;
-            this.container.style.cursor = 'grabbing';
-        });
-        
-        document.addEventListener('mousemove', (e) => {
-            if (!isMouseDown) return;
-            
-            const diffX = startX - e.clientX;
-            startOffset = diffX;
-            this.updateDragPosition();
-        });
-        
-        document.addEventListener('mouseup', () => {
-            if (isMouseDown) {
-                this.handleDragEnd();
-                isMouseDown = false;
-                this.container.style.cursor = '';
-            }
-        });
-    }
-    
-    /**
-     * Mise à jour de la position pendant le drag
-     */
-    updateDragPosition() {
-        if (!this.track) return;
-        
-        const itemWidth = this.getItemWidth();
-        const currentOffset = this.currentIndex * itemWidth;
-        const dragOffset = this.dragOffset || 0;
-        
-        this.track.style.transform = `translateX(${-(currentOffset - dragOffset)}px)`;
-    }
-    
-    /**
-     * Gestion de la fin du drag
-     */
-    handleDragEnd() {
-        const itemWidth = this.getItemWidth();
-        const threshold = itemWidth * 0.3;
-        
-        if (Math.abs(this.dragOffset) > threshold) {
-            if (this.dragOffset > 0) {
-                this.next();
             } else {
-                this.prev();
-            }
-        } else {
-            this.updateCarousel();
-        }
-        
-        this.dragOffset = 0;
-    }
-    
-    /**
-     * Configuration de l'autoplay
-     */
-    setupAutoplay() {
-        if (!this.options.autoplay) return;
-        
-        this.startAutoplay();
-    }
-    
-    /**
-     * Démarrage de l'autoplay
-     */
-    startAutoplay() {
-        if (this.autoplayTimer) return;
-        
-        this.autoplayTimer = setInterval(() => {
-            if (!this.isAnimating) {
                 this.next();
             }
-        }, this.options.autoplaySpeed);
-    }
-    
-    /**
-     * Pause de l'autoplay
-     */
-    pauseAutoplay() {
-        if (this.autoplayTimer) {
-            clearInterval(this.autoplayTimer);
-            this.autoplayTimer = null;
+        } else {
+            // Retour à la position originale
+            this.updateView();
         }
     }
     
-    /**
-     * Reprise de l'autoplay
-     */
-    resumeAutoplay() {
-        if (this.options.autoplay && !this.autoplayTimer) {
-            this.startAutoplay();
+    handleKeyboard(e) {
+        switch(e.key) {
+            case 'ArrowLeft':
+                e.preventDefault();
+                this.prev();
+                break;
+            case 'ArrowRight':
+                e.preventDefault();
+                this.next();
+                break;
+            case 'Home':
+                e.preventDefault();
+                this.goToPage(0);
+                break;
+            case 'End':
+                e.preventDefault();
+                this.goToPage(this.totalPages - 1);
+                break;
         }
     }
     
-    /**
-     * Configuration de l'Intersection Observer
-     */
-    setupIntersectionObserver() {
-        if (!('IntersectionObserver' in window)) return;
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    this.resumeAutoplay();
-                } else {
-                    this.pauseAutoplay();
-                }
-            });
-        }, { threshold: 0.1 });
-        
-        observer.observe(this.container);
-    }
-    
-    /**
-     * Mise à jour du carrousel
-     */
-    updateCarousel() {
-        if (!this.track || this.isAnimating) return;
-        
-        this.isAnimating = true;
-        
-        const itemWidth = this.getItemWidth();
-        const translateX = -this.currentIndex * itemWidth;
-        
-        // Animation fluide
-        this.track.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-        this.track.style.transform = `translateX(${translateX}px)`;
-        
-        // Mise à jour des classes active
-        this.updateActiveItems();
-        
-        // Mise à jour des dots
-        this.updateDots();
-        
-        // Mise à jour des boutons
-        this.updateButtons();
-        
-        // Mise à jour de la barre de progression
-        this.updateProgressBar();
-        
-        // Fin de l'animation
-        setTimeout(() => {
-            this.isAnimating = false;
-        }, 600);
-    }
-    
-    /**
-     * Mise à jour des items actifs
-     */
-    updateActiveItems() {
-        this.items.forEach((item, index) => {
-            item.classList.remove('active');
-            
-            if (index >= this.currentIndex && index < this.currentIndex + this.options.slidesToShow) {
-                item.classList.add('active');
-            }
-        });
-    }
-    
-    /**
-     * Mise à jour des dots
-     */
-    updateDots() {
-        this.dots.forEach((dot, index) => {
-            dot.classList.remove('active');
-            dot.setAttribute('aria-current', 'false');
-            
-            if (index === this.currentIndex) {
-                dot.classList.add('active');
-                dot.setAttribute('aria-current', 'true');
-            }
-        });
-    }
-    
-    /**
-     * Mise à jour des boutons
-     */
-    updateButtons() {
-        if (this.prevBtn) {
-            const isDisabled = this.currentIndex === 0 && !this.options.infinite;
-            this.prevBtn.disabled = isDisabled;
-            this.prevBtn.setAttribute('aria-disabled', isDisabled);
-        }
-        
-        if (this.nextBtn) {
-            const isDisabled = this.currentIndex >= this.maxIndex && !this.options.infinite;
-            this.nextBtn.disabled = isDisabled;
-            this.nextBtn.setAttribute('aria-disabled', isDisabled);
-        }
-    }
-    
-    /**
-     * Mise à jour de la barre de progression
-     */
-    updateProgressBar() {
-        if (!this.progressBar) return;
-        
-        const progress = (this.currentIndex / this.maxIndex) * 100;
-        this.progressBar.style.width = `${progress}%`;
-    }
-    
-    /**
-     * Calcul de la largeur d'un item
-     */
-    getItemWidth() {
-        if (this.items.length === 0) return 0;
-        
-        const firstItem = this.items[0];
-        const itemStyle = window.getComputedStyle(firstItem);
-        const itemWidth = firstItem.offsetWidth;
-        const itemMargin = parseInt(itemStyle.marginLeft) + parseInt(itemStyle.marginRight);
-        const gap = 24; // Gap défini dans le CSS
-        
-        return itemWidth + itemMargin + gap;
-    }
-    
-    /**
-     * Navigation vers le slide précédent
-     */
     prev() {
-        if (this.isAnimating) return;
-        
         if (this.currentIndex > 0) {
             this.currentIndex--;
-        } else if (this.options.infinite) {
-            this.currentIndex = this.maxIndex;
-        } else {
-            return;
+            this.updateView();
+            this.updateNavigation();
         }
-        
-        this.updateCarousel();
     }
     
-    /**
-     * Navigation vers le slide suivant
-     */
     next() {
-        if (this.isAnimating) return;
-        
-        if (this.currentIndex < this.maxIndex) {
+        if (this.currentIndex < this.totalPages - 1) {
             this.currentIndex++;
-        } else if (this.options.infinite) {
-            this.currentIndex = 0;
-        } else {
-            return;
+            this.updateView();
+            this.updateNavigation();
+        }
+    }
+    
+    goToPage(pageIndex) {
+        if (pageIndex >= 0 && pageIndex < this.totalPages) {
+            this.currentIndex = pageIndex;
+            this.updateView();
+            this.updateNavigation();
+        }
+    }
+    
+    updateView() {
+        const itemWidth = this.getItemWidth();
+        const translateX = -this.currentIndex * itemWidth * this.itemsPerPage;
+        
+        this.track.style.transform = `translateX(${translateX}px)`;
+        
+        // Mettre à jour les classes actives
+        this.updateActiveCards();
+    }
+    
+    updateActiveCards() {
+        this.cards.forEach((card, index) => {
+            const isVisible = this.isCardVisible(index);
+            card.classList.toggle('active', isVisible);
+        });
+    }
+    
+    isCardVisible(cardIndex) {
+        const startIndex = this.currentIndex * this.itemsPerPage;
+        const endIndex = startIndex + this.itemsPerPage;
+        return cardIndex >= startIndex && cardIndex < endIndex;
+    }
+    
+    updateNavigation() {
+        // Boutons
+        if (this.prevBtn) {
+            this.prevBtn.disabled = this.currentIndex === 0;
+        }
+        if (this.nextBtn) {
+            this.nextBtn.disabled = this.currentIndex === this.totalPages - 1;
         }
         
-        this.updateCarousel();
+        // Indicateurs
+        this.indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === this.currentIndex);
+        });
     }
     
-    /**
-     * Navigation vers un slide spécifique
-     */
-    goTo(index) {
-        if (this.isAnimating) return;
-        
-        const targetIndex = Math.max(0, Math.min(index, this.maxIndex));
-        
-        if (targetIndex === this.currentIndex) return;
-        
-        this.currentIndex = targetIndex;
-        this.updateCarousel();
+    getItemWidth() {
+        if (this.cards.length === 0) return 0;
+        const cardStyle = getComputedStyle(this.cards[0]);
+        const cardWidth = this.cards[0].offsetWidth;
+        const marginLeft = parseFloat(cardStyle.marginLeft) || 0;
+        const marginRight = parseFloat(cardStyle.marginRight) || 0;
+        return cardWidth + marginLeft + marginRight;
     }
     
-    /**
-     * Méthode utilitaire pour debounce
-     */
-    debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
+    getCurrentTransform() {
+        const style = getComputedStyle(this.track);
+        const matrix = style.transform;
+        if (matrix === 'none') return 0;
+        
+        const values = matrix.match(/matrix.*\((.+)\)/)[1].split(', ');
+        return parseFloat(values[4]) || 0;
+    }
+    
+    handleResize() {
+        const newItemsPerPage = this.getItemsPerPage();
+        
+        if (newItemsPerPage !== this.itemsPerPage) {
+            this.itemsPerPage = newItemsPerPage;
+            this.totalPages = Math.ceil(this.cards.length / this.itemsPerPage);
+            
+            // Ajuster l'index si nécessaire
+            if (this.currentIndex >= this.totalPages) {
+                this.currentIndex = Math.max(0, this.totalPages - 1);
+            }
+            
+            this.updateView();
+            this.updateNavigation();
+        }
+    }
+    
+    // Méthodes publiques pour contrôle externe
+    destroy() {
+        window.removeEventListener('resize', this.handleResize);
+        // Nettoyer les autres event listeners si nécessaire
+    }
+    
+    reset() {
+        this.currentIndex = 0;
+        this.updateView();
+        this.updateNavigation();
+    }
+    
+    getState() {
+        return {
+            currentIndex: this.currentIndex,
+            totalPages: this.totalPages,
+            itemsPerPage: this.itemsPerPage,
+            totalCards: this.cards.length
         };
     }
-    
-    /**
-     * Destruction du carrousel
-     */
-    destroy() {
-        this.pauseAutoplay();
-        
-        if (this.track) {
-            this.track.style.transition = '';
-            this.track.style.transform = '';
-        }
-        
-        this.items.forEach(item => {
-            item.classList.remove('active');
-        });
-        
-        this.dots.forEach(dot => {
-            dot.classList.remove('active');
-        });
-        
-        // Suppression des écouteurs d'événements
-        this.container.removeEventListener('keydown', this.handleKeydown);
-        this.container.removeEventListener('mouseenter', this.pauseAutoplay);
-        this.container.removeEventListener('mouseleave', this.resumeAutoplay);
-    }
 }
 
-// Initialisation automatique
-document.addEventListener('DOMContentLoaded', () => {
-    const carousels = document.querySelectorAll('.carousel-container');
+// Auto-initialisation
+document.addEventListener('DOMContentLoaded', function() {
+    const carouselContainer = document.querySelector('.vehicles-carousel');
     
-    carousels.forEach((container, index) => {
-        const carousel = new Carousel(container, {
-            autoplay: true,
-            autoplaySpeed: 5000,
-            infinite: true,
-            dots: true,
-            arrows: true
-        });
-        
-        // Stockage de l'instance pour accès externe
-        container.carouselInstance = carousel;
-    });
+    if (carouselContainer) {
+        window.vehiclesCarousel = new VehiclesCarousel(carouselContainer);
+    }
 });
 
-// Export pour utilisation dans d'autres modules
+// Export pour utilisation modulaire si nécessaire
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = Carousel;
-}
-
-// Rendre la classe Carousel disponible globalement
-window.Carousel = Carousel; 
+    module.exports = VehiclesCarousel;
+} 
