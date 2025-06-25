@@ -110,7 +110,7 @@
                                         <span>{{ vehicule.fuelType }}</span>
                                     </div>
                                 </div>
-                                <div class="vehicle-price">{{ vehicule.salePrice|number_format(0, ',', ' ') }} €</div>
+                                <div class="vehicle-price">{{ (vehicule.salePrice / 100)|number_format(0, ',', ' ') }} €</div>
                                 <div class="vehicle-actions">
                                     <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="btn-vehicle btn-view">
                                         Voir les détails

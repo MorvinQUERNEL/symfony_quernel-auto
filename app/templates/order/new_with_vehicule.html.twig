@@ -8,120 +8,89 @@
     <link rel="stylesheet" href="{{ asset('css/payment.css') }}">
 {% endblock %}
 
-{% block head %}
-    <!-- Métadonnées pour Apple Pay -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Quernel Auto">
-    
-    <!-- Apple Pay Domain Association -->
-    <link rel="apple-touch-icon" href="{{ asset('images/logo_quernel_auto.png') }}">
-{% endblock %}
+{% block body_class %}order-page-new{% endblock %}
 
 {% block body %}
-<div class="form-container">
-    <div class="form-header">
-        <h1>Commander ce véhicule</h1>
-        <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Retour au véhicule
-        </a>
-    </div>
+<div class="order-container">
+    <header class="order-header">
+        <h1>Finaliser ma commande</h1>
+    </header>
 
-    <div class="order-summary">
-        <div class="vehicule-card">
-            <div class="vehicule-image">
-                {% if vehicule.pictures is not empty %}
-                    <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures.first.name) }}" 
-                         alt="{{ vehicule.brand }} {{ vehicule.model }}">
-                {% else %}
-                    <div class="no-image">
-                        <i class="fas fa-car"></i>
-                        <span>Aucune image</span>
+    <div class="order-content">
+        <!-- Étape 1: Récapitulatif du Véhicule -->
+        <section class="order-step">
+            <div class="step-header">
+                <span class="step-number">1</span>
+                <h2 class="step-title">Votre véhicule</h2>
+            </div>
+            <div class="summary-vehicule">
+                <div class="summary-vehicule-image">
+                    {% if vehicule.pictures is not empty %}
+                        <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures.first.name) }}" alt="{{ vehicule.brand }} {{ vehicule.model }}">
+                    {% else %}
+                        <div class="no-image"><i class="fas fa-car-side"></i></div>
+                    {% endif %}
+                </div>
+                <div class="summary-vehicule-details">
+                    <h4>{{ vehicule.brand }} {{ vehicule.model }}</h4>
+                    <p class="year">{{ vehicule.year|date('Y') }}</p>
+                    <div class="summary-vehicule-specs">
+                        <span class="spec"><i class="fas fa-tachometer-alt"></i>{{ vehicule.mileage|number_format(0, ',', ' ') }} km</span>
+                        <span class="spec"><i class="fas fa-gas-pump"></i>{{ vehicule.fuelType }}</span>
+                        <span class="spec"><i class="fas fa-cogs"></i>{{ vehicule.trasmission }}</span>
+                        <span class="spec"><i class="fas fa-palette"></i>{{ vehicule.color }}</span>
                     </div>
-                {% endif %}
-            </div>
-            <div class="vehicule-info">
-                <h3>{{ vehicule.brand }} {{ vehicule.model }}</h3>
-                <p class="vehicule-year">{{ vehicule.year|date('Y') }} - {{ vehicule.mileage|number_format(0, ',', ' ') }} km</p>
-                <div class="vehicule-specs">
-                    <span class="spec">{{ vehicule.fuelType }}</span>
-                    <span class="spec">{{ vehicule.trasmission }}</span>
-                    <span class="spec">{{ vehicule.color }}</span>
-                </div>
-                <div class="vehicule-price">
-                    <span class="price">{{ (vehicule.salePrice / 100)|number_format(2, ',', ' ') }} €</span>
+                    <p class="summary-price">{{ (vehicule.salePrice / 100)|number_format(2, ',', ' ') }} €</p>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <div class="form-content">
         {{ form_start(form) }}
-            <div class="form-section">
-                <h3>Informations de livraison</h3>
+            <!-- Étape 2: Informations de Livraison -->
+            <section class="order-step">
+                <div class="step-header">
+                    <span class="step-number">2</span>
+                    <h2 class="step-title">Adresse de livraison</h2>
+                </div>
+                {{ form_errors(form) }}
                 <div class="form-row">
-                    <div class="form-group">
-                        {{ form_label(form.deliveryAdress, 'Adresse de livraison') }}
-                        {{ form_widget(form.deliveryAdress, {'attr': {'class': 'form-control', 'placeholder': '123 Rue de la Paix'}}) }}
-                        {{ form_errors(form.deliveryAdress) }}
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        {{ form_label(form.deliveryAdress) }}
+                        {{ form_widget(form.deliveryAdress) }}
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        {{ form_label(form.deliveryPostalCode, 'Code postal') }}
-                        {{ form_widget(form.deliveryPostalCode, {'attr': {'class': 'form-control', 'placeholder': '75001'}}) }}
-                        {{ form_errors(form.deliveryPostalCode) }}
+                        {{ form_label(form.deliveryPostalCode) }}
+                        {{ form_widget(form.deliveryPostalCode) }}
                     </div>
                     <div class="form-group">
-                        {{ form_label(form.deliveryCity, 'Ville') }}
-                        {{ form_widget(form.deliveryCity, {'attr': {'class': 'form-control', 'placeholder': 'Paris'}}) }}
-                        {{ form_errors(form.deliveryCity) }}
+                        {{ form_label(form.deliveryCity) }}
+                        {{ form_widget(form.deliveryCity) }}
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group">
-                        {{ form_label(form.deliveryCountry, 'Pays') }}
-                        {{ form_widget(form.deliveryCountry, {'attr': {'class': 'form-control'}}) }}
-                        {{ form_errors(form.deliveryCountry) }}
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        {{ form_label(form.deliveryCountry) }}
+                        {{ form_widget(form.deliveryCountry) }}
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="form-section">
-                <h3>Récapitulatif de la commande</h3>
-                <div class="order-summary-details">
-                    <div class="summary-item">
-                        <span class="summary-label">Véhicule :</span>
-                        <span class="summary-value">{{ vehicule.brand }} {{ vehicule.model }}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Prix :</span>
-                        <span class="summary-value price">{{ (vehicule.salePrice / 100)|number_format(2, ',', ' ') }} €</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Client :</span>
-                        <span class="summary-value">{{ app.user.firstName }} {{ app.user.lastName }}</span>
-                    </div>
+            <!-- Étape 3: Paiement -->
+            <section class="order-step">
+                <div class="step-header">
+                    <span class="step-number">3</span>
+                    <h2 class="step-title">Paiement</h2>
                 </div>
-            </div>
-
-            <div class="form-actions">
-                <!-- Bouton Apple Pay -->
-                <div class="apple-pay-button" id="apple-pay-button" style="display: none;">
-                    <button type="button" class="btn btn-apple-pay btn-lg" onclick="initiateApplePayPurchase()">
-                        <i class="fab fa-apple-pay"></i> Acheter avec Apple Pay
-                    </button>
+                <div class="payment-actions">
+                    <div id="apple-pay-button" style="display: none;">
+                        <button type="button" class="btn-payment" onclick="initiateApplePayPurchase()"><i class="fab fa-apple"></i> Payer avec Apple Pay</button>
+                    </div>
+                    <button type="submit" class="btn-payment" id="stripe-pay-button"><i class="fas fa-credit-card"></i> Payer par carte</button>
                 </div>
-                
-                <!-- Bouton Stripe classique -->
-                <button type="submit" class="btn btn-primary btn-lg" id="stripe-pay-button">
-                    <i class="fas fa-credit-card"></i> Procéder au paiement
-                </button>
-                
-                <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="btn btn-secondary">
-                    <i class="fas fa-times"></i> Annuler
-                </a>
-            </div>
+                <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="back-link-order">Retour au véhicule</a>
+            </section>
         {{ form_end(form) }}
     </div>
 </div>
@@ -132,7 +101,7 @@
         <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Chargement...</span>
         </div>
-        <p>Traitement du paiement...</p>
+        <p>Traitement du paiement en cours...</p>
     </div>
 </div>
 {% endblock %}
@@ -157,8 +126,6 @@
             if (window.ApplePaySession && ApplePaySession.canMakePayments()) {
                 applePaySupported = true;
                 document.getElementById('apple-pay-button').style.display = 'block';
-                // Masquer le bouton Stripe classique si Apple Pay est disponible
-                document.getElementById('stripe-pay-button').style.display = 'none';
             }
         }
 

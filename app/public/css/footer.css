@@ -205,6 +205,12 @@
         text-align: left;
     }
     
+    .footer-section.footer-links-section,
+    .footer-section.footer-contact-section,
+    .footer-section.footer-social-section {
+        text-align: center;
+    }
+    
     .footer-contact p {
         justify-content: flex-start;
     }
@@ -238,6 +244,12 @@
         grid-template-columns: 2fr 1fr 1fr 1fr;
         gap: var(--spacing-3xl);
         align-items: start;
+    }
+    
+    .footer-section.footer-links-section,
+    .footer-section.footer-contact-section,
+    .footer-section.footer-social-section {
+        text-align: center;
     }
     
     .footer-logo {

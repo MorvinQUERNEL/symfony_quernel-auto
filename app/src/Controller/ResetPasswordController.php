@@ -42,7 +42,7 @@ class ResetPasswordController extends AbstractController
                 ]);
 
                 $email = (new TemplatedEmail())
-                    ->from(new Address('contact@quernel-auto.fr', 'Quernel Auto'))
+                    ->from(new Address('contact@quernelauto.fr', 'Quernel Auto'))
                     ->to($user->getEmail())
                     ->subject('Votre demande de réinitialisation de mot de passe')
                     ->htmlTemplate('reset_password/email.html.twig')

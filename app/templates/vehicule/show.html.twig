@@ -45,7 +45,7 @@
                 <span class="price-label">Prix</span>
                 <span class="price">{{ (vehicule.salePrice / 100)|number_format(0, ',', ' ') }} €</span>
                  {% if vehicule.status == 'Disponible' %}
-                    <a href="#" class="btn-buy"><i class="fas fa-shopping-cart"></i> Acheter ce véhicule</a>
+                    <a href="{{ path('app_orders_new_with_vehicule', {'vehicule_id': vehicule.id}) }}" class="btn-buy"><i class="fas fa-shopping-cart"></i> Acheter ce véhicule</a>
                 {% else %}
                     <div class="status-badge-detail {{ vehicule.status|lower|replace({' ': '-'}) }}">
                         {{ vehicule.status }}
