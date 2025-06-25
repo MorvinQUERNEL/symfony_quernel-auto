@@ -5,114 +5,92 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/vehicules.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/vehicule-detail.css') }}">
 {% endblock %}
 
 {% block body %}
-<div class="vehicule-detail-container">
-    <div class="vehicule-detail-card">
-        <div class="vehicule-detail-header">
+<div class="vehicule-detail-page">
+    <header class="detail-page-header">
+        <div class="header-content">
+            <a href="{{ path('app_vehicules_index') }}" class="back-link"><i class="fas fa-arrow-left"></i> Retour au catalogue</a>
             <h1>{{ vehicule.brand }} {{ vehicule.model }}</h1>
-            <div class="vehicule-actions">
-                <a href="{{ path('app_vehicules_index') }}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Retour à la liste
-                </a>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('app_vehicules_edit', {'id': vehicule.id}) }}" class="btn btn-warning">
-                        <i class="fas fa-edit"></i> Modifier
-                    </a>
+            <p class="header-year">{{ vehicule.year|date('Y') }}</p>
+        </div>
+    </header>
+
+    <div class="vehicule-detail-layout">
+        <!-- Colonne de la galerie d'images -->
+        <div class="gallery-container">
+            <div class="main-image-wrapper">
+                 {% if vehicule.pictures is not empty %}
+                    <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures.first.name) }}" alt="Vue principale de {{ vehicule.brand }} {{ vehicule.model }}" id="main-image">
+                {% else %}
+                    <div class="no-image-placeholder-detail"><i class="fas fa-car-side"></i></div>
                 {% endif %}
             </div>
+            {% if vehicule.pictures|length > 1 %}
+                <div class="thumbnail-gallery" id="thumbnail-gallery">
+                    {% for picture in vehicule.pictures %}
+                        <div class="thumbnail-item {{ loop.first ? 'active' : '' }}" data-image-url="{{ asset('uploads/vehicules/' ~ picture.name) }}">
+                            <img src="{{ asset('uploads/vehicules/' ~ picture.name) }}" alt="Miniature {{ loop.index }}">
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
 
-        {% for message in app.flashes('success') %}
-            <div class="alert alert-success">
-                {{ message }}
-            </div>
-        {% endfor %}
-
-        <div class="vehicule-detail-content">
-            <div class="vehicule-images">
-                {% if vehicule.pictures is not empty %}
-                    <div class="main-image">
-                        <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures.first.name) }}" 
-                             alt="{{ vehicule.brand }} {{ vehicule.model }}">
-                    </div>
-                    {% if vehicule.pictures|length > 1 %}
-                        <div class="image-gallery">
-                            {% for picture in vehicule.pictures %}
-                                <div class="gallery-thumbnail">
-                                    <img src="{{ asset('uploads/vehicules/' ~ picture.name) }}" 
-                                         alt="{{ vehicule.brand }} {{ vehicule.model }}">
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+        <!-- Colonne des informations -->
+        <div class="info-container">
+            <div class="info-block price-block">
+                <span class="price-label">Prix</span>
+                <span class="price">{{ (vehicule.salePrice / 100)|number_format(0, ',', ' ') }} €</span>
+                 {% if vehicule.status == 'Disponible' %}
+                    <a href="#" class="btn-buy"><i class="fas fa-shopping-cart"></i> Acheter ce véhicule</a>
                 {% else %}
-                    <div class="no-image">
-                        <i class="fas fa-car"></i>
-                        <span>Aucune image disponible</span>
+                    <div class="status-badge-detail {{ vehicule.status|lower|replace({' ': '-'}) }}">
+                        {{ vehicule.status }}
                     </div>
                 {% endif %}
             </div>
 
-            <div class="vehicule-info">
-                <div class="vehicule-status {{ vehicule.status|lower|replace({' ': '-'}) }}">
-                    {{ vehicule.status|default('Disponible') }}
-                </div>
-
-                <div class="vehicule-price">
-                    <span class="price">{{ (vehicule.salePrice / 100)|number_format(2, ',', ' ') }} €</span>
-                </div>
-
-                {% if vehicule.status == 'Disponible' %}
-                    <div class="vehicule-actions-buy">
-                        <a href="{{ path('app_vehicules_buy', {'id': vehicule.id}) }}" class="btn btn-success btn-lg">
-                            <i class="fas fa-credit-card me-2"></i>
-                            Acheter ce véhicule
-                        </a>
-                    </div>
-                {% elseif vehicule.status == 'Vendu' %}
-                    <div class="alert alert-warning">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        Ce véhicule a déjà été vendu.
-                    </div>
-                {% endif %}
-
-                <div class="vehicule-specs">
+            <div class="info-block specs-block">
+                <h4><i class="fas fa-list-ul"></i> Caractéristiques</h4>
+                <div class="specs-grid">
                     <div class="spec-item">
-                        <i class="fas fa-calendar"></i>
-                        <span><strong>Année :</strong> {{ vehicule.year|date('Y') }}</span>
+                        <span class="spec-label">Kilométrage</span>
+                        <span class="spec-value">{{ vehicule.mileage|number_format(0, ',', ' ') }} km</span>
                     </div>
                     <div class="spec-item">
-                        <i class="fas fa-road"></i>
-                        <span><strong>Kilométrage :</strong> {{ vehicule.mileage|number_format(0, ',', ' ') }} km</span>
+                        <span class="spec-label">Carburant</span>
+                        <span class="spec-value">{{ vehicule.fuelType }}</span>
                     </div>
                     <div class="spec-item">
-                        <i class="fas fa-gas-pump"></i>
-                        <span><strong>Carburant :</strong> {{ vehicule.fuelType }}</span>
+                        <span class="spec-label">Transmission</span>
+                        <span class="spec-value">{{ vehicule.trasmission }}</span>
                     </div>
                     <div class="spec-item">
-                        <i class="fas fa-cog"></i>
-                        <span><strong>Transmission :</strong> {{ vehicule.trasmission }}</span>
+                        <span class="spec-label">Couleur</span>
+                        <span class="spec-value">{{ vehicule.color }}</span>
                     </div>
                     <div class="spec-item">
-                        <i class="fas fa-palette"></i>
-                        <span><strong>Couleur :</strong> {{ vehicule.color }}</span>
-                    </div>
-                    <div class="spec-item">
-                        <i class="fas fa-door-open"></i>
-                        <span><strong>Portes :</strong> {{ vehicule.doorCount }}</span>
+                        <span class="spec-label">Portes</span>
+                        <span class="spec-value">{{ vehicule.doorCount }}</span>
                     </div>
                 </div>
-
-                {% if vehicule.description %}
-                    <div class="vehicule-description">
-                        <h3>Description</h3>
-                        <p>{{ vehicule.description }}</p>
-                    </div>
-                {% endif %}
             </div>
+
+            {% if vehicule.description %}
+            <div class="info-block description-block">
+                <h4><i class="fas fa-align-left"></i> Description</h4>
+                <p>{{ vehicule.description|nl2br }}</p>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/vehicule_detail.js') }}" defer></script>
 {% endblock %} 

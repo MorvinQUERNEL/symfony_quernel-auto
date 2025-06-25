@@ -9,147 +9,97 @@
 
 {% block body %}
 <div class="vehicules-container">
-    <div class="vehicules-header">
-        <h1>Nos Véhicules</h1>
-        {% if is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('app_vehicules_new') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Ajouter un véhicule
-            </a>
-        {% endif %}
-    </div>
+    <header class="vehicules-page-header">
+        <h1>Nos Véhicules d'Occasion</h1>
+        <p>Parcourez notre catalogue de voitures sélectionnées avec soin.</p>
+    </header>
 
-    <!-- Barre de recherche -->
-    <div class="search-section">
-        <form method="GET" action="{{ path('app_vehicules_index') }}" class="search-form" id="searchForm">
-            <div class="search-input-group">
-                <input type="text" 
-                       name="search" 
-                       value="{{ search }}" 
-                       placeholder="Rechercher par marque, modèle, carburant, couleur..."
-                       class="search-input"
-                       id="searchInput">
-                <button type="submit" class="search-btn">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
-            {% if search %}
-                <a href="{{ path('app_vehicules_index') }}" class="clear-search">
-                    <i class="fas fa-times"></i> Effacer la recherche
-                </a>
-            {% endif %}
-        </form>
-    </div>
-
-    <!-- Statistiques -->
-    <div class="stats-section">
-        <div class="stat-card">
-            <i class="fas fa-car"></i>
-            <div class="stat-content">
-                <span class="stat-number">{{ vehicules|length }}</span>
-                <span class="stat-label">Véhicules</span>
-            </div>
-        </div>
-        <div class="stat-card">
-            <i class="fas fa-check-circle"></i>
-            <div class="stat-content">
-                <span class="stat-number">{{ vehicules|filter(v => v.status == 'Disponible')|length }}</span>
-                <span class="stat-label">Disponibles</span>
-            </div>
-        </div>
-        {% if search %}
-            <div class="stat-card">
-                <i class="fas fa-search"></i>
-                <div class="stat-content">
-                    <span class="stat-number">{{ vehicules|length }}</span>
-                    <span class="stat-label">Résultats pour "{{ search }}"</span>
-                </div>
-            </div>
-        {% endif %}
-    </div>
-
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ message }}
-        </div>
-    {% endfor %}
-
-    {% if vehicules is empty %}
-        <div class="no-vehicules">
-            <i class="fas fa-car"></i>
-            <h2>Aucun véhicule disponible</h2>
-            <p>Il n'y a actuellement aucun véhicule dans notre catalogue.</p>
-            {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('app_vehicules_new') }}" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Ajouter le premier véhicule
-                </a>
-            {% endif %}
-        </div>
-    {% else %}
-        <div class="vehicules-grid">
-            {% for vehicule in vehicules %}
-                <div class="vehicule-card">
-                    <div class="vehicule-image">
-                        {% if vehicule.pictures is not empty %}
-                            <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures.first.name) }}" alt="{{ vehicule.brand }} {{ vehicule.model }}">
-                        {% else %}
-                            <div class="no-image">
-                                <i class="fas fa-car"></i>
-                                <span>Aucune image</span>
-                            </div>
-                        {% endif %}
-                        <div class="vehicule-status {{ vehicule.status|lower|replace({' ': '-'}) }}">
-                            {{ vehicule.status|default('Disponible') }}
-                        </div>
+    <div class="vehicules-layout">
+        <aside class="vehicules-filters">
+            <div class="filter-block">
+                <h4><i class="fas fa-search"></i> Recherche</h4>
+                <form method="GET" action="{{ path('app_vehicules_index') }}" id="searchForm">
+                    <div class="search-input-group">
+                        <input type="text" 
+                               name="search" 
+                               value="{{ app.request.query.get('search') }}" 
+                               placeholder="Marque, modèle..."
+                               class="search-input">
+                        <button type="submit" class="search-btn" aria-label="Rechercher">
+                            <i class="fas fa-search"></i>
+                        </button>
                     </div>
-                    
-                    <div class="vehicule-info">
-                        <h3>{{ vehicule.brand }} {{ vehicule.model }}</h3>
-                        <p class="vehicule-year">{{ vehicule.year|date('Y') }}</p>
-                        
-                        <div class="vehicule-details">
-                            <div class="detail">
-                                <i class="fas fa-road"></i>
-                                <span>{{ vehicule.mileage|number_format(0, ',', ' ') }} km</span>
+                    {% if app.request.query.get('search') %}
+                        <a href="{{ path('app_vehicules_index') }}" class="clear-search-btn">
+                            <i class="fas fa-times"></i> Effacer
+                        </a>
+                    {% endif %}
+                </form>
+            </div>
+            {# D'autres filtres pourraient être ajoutés ici (prix, km, etc.) #}
+        </aside>
+
+        <main class="vehicules-main-content">
+            <div class="list-header">
+                <p>{{ vehicules|length }} véhicule(s) trouvé(s).</p>
+                {# Un tri pourrait être ajouté ici #}
+            </div>
+
+            {% if vehicules is not empty %}
+                <div class="vehicules-list">
+                    {% for vehicule in vehicules %}
+                        <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="vehicule-card">
+                            <div class="vehicule-card-image">
+                                {% if vehicule.pictures is not empty %}
+                                    <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures.first.name) }}" alt="{{ vehicule.brand }} {{ vehicule.model }}">
+                                {% else %}
+                                    <div class="no-image-placeholder"><i class="fas fa-car-side"></i></div>
+                                {% endif %}
+                                <div class="vehicule-card-status {{ vehicule.status|lower|replace({' ': '-'}) }}">
+                                    {{ vehicule.status|default('Disponible') }}
+                                </div>
                             </div>
-                            <div class="detail">
-                                <i class="fas fa-gas-pump"></i>
-                                <span>{{ vehicule.fuelType }}</span>
+                            <div class="vehicule-card-info">
+                                <div class="info-header">
+                                    <div>
+                                        <h3>{{ vehicule.brand }} {{ vehicule.model }}</h3>
+                                        <p class="year">{{ vehicule.year|date('Y') }}</p>
+                                    </div>
+                                    <div class="price">
+                                        {{ (vehicule.salePrice / 100)|number_format(0, ',', ' ') }} €
+                                    </div>
+                                </div>
+                                <div class="info-details">
+                                    <span class="detail-item"><i class="fas fa-road"></i> {{ vehicule.mileage|number_format(0, ',', ' ') }} km</span>
+                                    <span class="detail-item"><i class="fas fa-gas-pump"></i> {{ vehicule.fuelType }}</span>
+                                    <span class="detail-item"><i class="fas fa-cog"></i> {{ vehicule.trasmission }}</span>
+                                </div>
                             </div>
-                            <div class="detail">
-                                <i class="fas fa-cog"></i>
-                                <span>{{ vehicule.trasmission }}</span>
-                            </div>
-                            <div class="detail">
-                                <i class="fas fa-palette"></i>
-                                <span>{{ vehicule.color }}</span>
-                            </div>
-                        </div>
-                        
-                        <div class="vehicule-price">
-                            <span class="price">{{ vehicule.salePrice|number_format(0, ',', ' ') }} €</span>
-                        </div>
-                        
-                        <div class="vehicule-actions">
-                            <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="btn btn-secondary">
-                                <i class="fas fa-eye"></i> Voir détails
-                            </a>
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <a href="{{ path('app_vehicules_edit', {'id': vehicule.id}) }}" class="btn btn-warning">
-                                    <i class="fas fa-edit"></i> Modifier
-                                </a>
-                                <form method="post" action="{{ path('app_vehicules_delete', {'id': vehicule.id}) }}" style="display: inline;">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vehicule.id) }}">
-                                    <button type="submit" class="btn btn-danger">
-                                        <i class="fas fa-trash"></i> Supprimer
-                                    </button>
-                                </form>
+                             {% if is_granted('ROLE_ADMIN') %}
+                                <div class="admin-actions" onclick="event.stopPropagation();">
+                                    <a href="{{ path('app_vehicules_edit', {'id': vehicule.id}) }}" class="btn-admin edit" onclick="event.preventDefault(); window.location.href=this.href;">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form method="post" action="{{ path('app_vehicules_delete', {'id': vehicule.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce véhicule ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vehicule.id) }}">
+                                        <button type="submit" class="btn-admin delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             {% endif %}
-                        </div>
-                    </div>
+                        </a>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-        </div>
-    {% endif %}
+            {% else %}
+                <div class="no-vehicules-found">
+                    <h3>Aucun véhicule trouvé</h3>
+                    <p>Il n'y a aucun véhicule correspondant à vos critères de recherche.</p>
+                    <a href="{{ path('app_vehicules_index') }}" class="btn-primary">Voir tous nos véhicules</a>
+                </div>
+            {% endif %}
+        </main>
+    </div>
 </div>
 {% endblock %}
 
