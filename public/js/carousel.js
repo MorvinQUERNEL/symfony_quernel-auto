@@ -407,7 +407,7 @@ class VehiclesCarousel {
         const progressBar = this.container.querySelector('.carousel-progress-bar');
         if (!progressBar) return;
     
-        const progress = ((this.currentIndex + 1) / this.totalPages) * 100;
+        const progress = this.totalPages > 1 ? ((this.currentIndex) / (this.totalPages - 1)) * 100 : 100;
         progressBar.style.width = `${progress}%`;
     }
     
