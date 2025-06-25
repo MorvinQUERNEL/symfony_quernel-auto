@@ -118,6 +118,13 @@
                     {{ form_errors(registrationForm.phoneNumber) }}
                 </div>
             </div>
+            <div class="form-group">
+                <div class="checkbox-simple">
+                    {{ form_widget(registrationForm.rgpdConsent) }}
+                    {{ form_label(registrationForm.rgpdConsent) }}
+                </div>
+                {{ form_errors(registrationForm.rgpdConsent) }}
+            </div>
             <div class="form-group text-center">
                 <button type="submit" class="btn btn-login">S'inscrire</button>
             </div>
