@@ -87,6 +87,16 @@
                     <div class="form-errors">{{ form_errors(form.phoneNumber) }}</div>
                 </div>
             </div>
+            
+            <!-- Case à cocher RGPD -->
+            <div class="form-group">
+                <div class="checkbox-simple">
+                    {{ form_widget(form.rgpdConsent) }}
+                    {{ form_label(form.rgpdConsent) }}
+                    <span class="required-field">*</span>
+                </div>
+                <div class="form-errors">{{ form_errors(form.rgpdConsent) }}</div>
+            </div>
         </div>
         
         <!-- Section Préférences -->
