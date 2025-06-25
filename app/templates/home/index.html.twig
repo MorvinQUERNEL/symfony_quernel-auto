@@ -71,90 +71,70 @@
     {% if recentVehicules is not empty %}
     <section class="recent-vehicles">
         <h2>Véhicules Récemment Importés</h2>
-        <div class="carousel carousel-container">
-            <div class="carousel-track" id="carouselTrack">
-                {% for vehicule in recentVehicules %}
-                    <div class="vehicle-card carousel-item" data-index="{{ loop.index0 }}">
-                        {% if vehicule.pictures is not empty %}
-                            <div class="carousel-image-container">
-                                <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures|first.name) }}" alt="{{ vehicule.brand }} {{ vehicule.model }}" class="carousel-image">
-                                <div class="carousel-image-overlay"></div>
-                            </div>
-                        {% endif %}
-                        <div class="carousel-content">
-                            <h3 class="carousel-vehicle-title">{{ vehicule.brand }} {{ vehicule.model }}</h3>
-                            <p class="carousel-vehicle-subtitle">{{ vehicule.description|length > 100 ? vehicule.description|slice(0, 100) ~ '...' : vehicule.description }}</p>
-                            <div class="carousel-vehicle-details">
-                                <div class="carousel-detail-item">
-                                    <i class="fas fa-calendar"></i>
-                                    <span>{{ vehicule.year ? vehicule.year|date('Y') : 'N/A' }}</span>
+        <div class="vehicles-carousel">
+            <!-- Flèches de navigation (masquées sur mobile) -->
+            <button class="carousel-nav carousel-nav-prev" aria-label="Véhicule précédent">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-nav carousel-nav-next" aria-label="Véhicule suivant">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            
+            <!-- Wrapper pour le swipe -->
+            <div class="carousel-wrapper">
+                <div class="vehicles-track">
+                    {% for vehicule in recentVehicules %}
+                        <div class="vehicle-card">
+                            {% if vehicule.pictures is not empty %}
+                                <div class="vehicle-image">
+                                    <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures|first.name) }}" alt="{{ vehicule.brand }} {{ vehicule.model }}">
                                 </div>
-                                <div class="carousel-detail-item">
-                                    <i class="fas fa-gas-pump"></i>
-                                    <span>{{ vehicule.fuelType }}</span>
+                            {% endif %}
+                            <div class="vehicle-content">
+                                <h3 class="vehicle-title">{{ vehicule.brand }} {{ vehicule.model }}</h3>
+                                <p class="vehicle-description">{{ vehicule.description|length > 100 ? vehicule.description|slice(0, 100) ~ '...' : vehicule.description }}</p>
+                                <div class="vehicle-details">
+                                    <div class="vehicle-detail-item">
+                                        <i class="fas fa-calendar"></i>
+                                        {{ vehicule.year ? vehicule.year|date('Y') : 'N/A' }}
+                                    </div>
+                                    <div class="vehicle-detail-item">
+                                        <i class="fas fa-gas-pump"></i>
+                                        {{ vehicule.fuelType }}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="carousel-price">
-                                <span class="price">{{ vehicule.salePrice|number_format(0, ',', ' ') }} €</span>
-                            </div>
-                            <div class="carousel-actions">
-                                <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="carousel-btn-view">
-                                    Voir les détails
-                                </a>
-                                {% if vehicule.status == 'Disponible' %}
-                                    <a href="{{ path('app_vehicules_buy', {'id': vehicule.id}) }}" class="carousel-btn-buy">
-                                        <i class="fas fa-credit-card"></i>
-                                        Acheter
+                                <div class="vehicle-price">{{ vehicule.salePrice|number_format(0, ',', ' ') }} €</div>
+                                <div class="vehicle-actions">
+                                    <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="btn-vehicle btn-view">
+                                        Voir les détails
                                     </a>
-                                {% endif %}
+                                    {% if vehicule.status == 'Disponible' %}
+                                        <a href="{{ path('app_vehicules_buy', {'id': vehicule.id}) }}" class="btn-vehicle btn-buy">
+                                            <i class="fas fa-credit-card"></i>
+                                            Acheter
+                                        </a>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Indicateurs de pagination -->
+            <div class="carousel-indicators">
+                {% set maxPages = (recentVehicules|length / 1)|round(0, 'ceil') %}
+                {% for i in 0..(maxPages - 1) %}
+                    <button class="carousel-dot{% if i == 0 %} active{% endif %}" data-page="{{ i }}" aria-label="Page {{ i + 1 }}"></button>
                 {% endfor %}
             </div>
-
         </div>
-        {% if recentVehicules|length > 1 %}
-        <div class="carousel-indicators" id="carouselDots">
-            {% for vehicule in recentVehicules %}
-                <button class="carousel-dot" data-index="{{ loop.index0 }}"></button>
-            {% endfor %}
-        </div>
-        {% endif %}
     </section>
     {% endif %}
 {% endblock %}
 
 {% block page_javascripts %}
     {{ parent() }}
-    <script>
-        // Démonstration des messages flash dynamiques (à retirer en production)
-        document.addEventListener('DOMContentLoaded', function() {
-            // Exemple d'utilisation des messages flash dynamiques
-            const testButton = document.createElement('button');
-            testButton.textContent = 'Tester les notifications';
-            testButton.style.cssText = 'position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; background: var(--primary-color); color: white; border: none; border-radius: 5px; cursor: pointer; z-index: 1000;';
-            
-            let messageIndex = 0;
-            const messages = [
-                { type: 'success', text: 'Votre véhicule a été ajouté aux favoris !' },
-                { type: 'error', text: 'Une erreur est survenue lors de la connexion.' },
-                { type: 'warning', text: 'Votre session expire dans 5 minutes.' },
-                { type: 'info', text: 'Nouveau véhicule disponible dans notre catalogue !' }
-            ];
-            
-            testButton.addEventListener('click', function() {
-                const msg = messages[messageIndex % messages.length];
-                window.FlashMessage[msg.type](msg.text, {
-                    duration: messageIndex === 1 ? 8000 : 5000, // Message d'erreur plus long
-                    noAutoClose: messageIndex === 2 // Message warning sans auto-fermeture
-                });
-                messageIndex++;
-            });
-            
-            // Commenter cette ligne pour désactiver le bouton de test
-            // document.body.appendChild(testButton);
-        });
-    </script>
+    {# Le carrousel s'initialise automatiquement via carousel.js #}
 {% endblock %}
 
