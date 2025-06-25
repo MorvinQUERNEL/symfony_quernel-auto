@@ -1,7 +1,7 @@
 /* ========================================
    VARIABLES CSS
    ======================================== */
-:root {
+   :root {
     /* Couleurs principales */
     --primary-color: #FF6B00;
     --primary-light: #FF8533;
@@ -268,145 +268,6 @@ body {
 }
 
 /* ========================================
-   REGISTRATION SECTION - MOBILE FIRST
-   ======================================== */
-.registration {
-    padding: var(--spacing-xxl) var(--spacing-md);
-}
-
-.registration h2 {
-    text-align: center;
-    margin-bottom: var(--spacing-xl);
-    color: var(--secondary-color);
-    font-size: var(--font-size-2xl);
-}
-
-.form-container {
-    max-width: 100%;
-    margin: 0 auto;
-    background-color: var(--light-color);
-    padding: var(--spacing-lg);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-sm);
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
-}
-
-.form-group {
-    margin-bottom: var(--spacing-sm);
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: var(--spacing-xs);
-    font-weight: 500;
-    color: var(--text-color);
-    font-size: var(--font-size-sm);
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-    width: 100%;
-    padding: var(--spacing-sm);
-    min-height: var(--input-height);
-    border: var(--border-width-thick) solid #ddd;
-    border-radius: var(--border-radius);
-    font-size: var(--font-size-base);
-    color: var(--secondary-color);
-    background-color: var(--light-color);
-    transition: var(--transition-normal);
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
-    color: var(--secondary-color);
-    background-color: var(--light-color);
-}
-
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-    color: var(--text-light);
-}
-
-.form-group input:focus::placeholder,
-.form-group textarea:focus::placeholder {
-    color: var(--gray-dark);
-}
-
-.form-select {
-    background-color: var(--light-color);
-    cursor: pointer;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right 12px center;
-    background-repeat: no-repeat;
-    background-size: 16px;
-    padding-right: 40px;
-}
-
-.submit-button {
-    width: 100%;
-    padding: var(--spacing-sm) var(--spacing-md);
-    min-height: var(--touch-target);
-    background-color: var(--primary-color);
-    color: var(--light-color);
-    border: none;
-    border-radius: var(--border-radius);
-    font-size: var(--font-size-base);
-    font-weight: bold;
-    cursor: pointer;
-    transition: var(--transition-normal);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-xs);
-    -webkit-tap-highlight-color: transparent;
-}
-
-.submit-button:hover,
-.submit-button:focus {
-    background-color: var(--primary-dark);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
-}
-
-.submit-button:active {
-    transform: translateY(0);
-}
-
-.submit-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-}
-
-/* Styles d'erreur pour les formulaires */
-.form-error {
-    color: var(--error-color);
-    font-size: var(--font-size-sm);
-    margin-top: var(--spacing-xs);
-}
-
-.form-group input.is-invalid,
-.form-group textarea.is-invalid,
-.form-group select.is-invalid {
-    border-color: var(--error-color);
-    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
-}
-
-/* ========================================
    BREAKPOINT TABLETTES - 757px
    ======================================== */
 @media (min-width: 757px) {
@@ -452,21 +313,6 @@ body {
     
     .step img {
         height: 220px;
-    }
-    
-    /* Registration */
-    .registration {
-        padding: var(--spacing-xxl) var(--spacing-xl);
-    }
-    
-    .form-container {
-        max-width: 600px;
-        padding: var(--spacing-xl);
-    }
-    
-    .form-row {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--spacing-md);
     }
 }
 
@@ -537,36 +383,6 @@ body {
     
     .step img {
         height: 200px;
-    }
-
-    /* Registration */
-    .registration {
-        padding: 100px var(--spacing-xxl);
-    }
-    
-    .form-container {
-        max-width: 800px;
-        padding: var(--spacing-xxl);
-    }
-    
-    .form-row {
-        gap: var(--spacing-lg);
-    }
-    
-    .form-group {
-        margin-bottom: var(--spacing-md);
-    }
-    
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-        padding: var(--spacing-md);
-        font-size: var(--font-size-lg);
-    }
-    
-    .submit-button {
-        padding: var(--spacing-md) var(--spacing-xl);
-        font-size: var(--font-size-lg);
     }
 }
 
