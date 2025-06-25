@@ -293,36 +293,103 @@ body {
     margin: 0 auto;
     padding: 0 var(--spacing-md);
     overflow: hidden;
+    /* Amélioration pour iOS Safari */
+    -webkit-overflow-scrolling: touch;
+    /* Support pour tous les navigateurs */
+    will-change: transform;
 }
 
 /* Wrapper pour le swipe */
 .carousel-wrapper {
     overflow: hidden;
     border-radius: var(--border-radius-lg);
+    /* Fallback pour les anciens navigateurs */
+    -webkit-border-radius: var(--border-radius-lg);
+    -moz-border-radius: var(--border-radius-lg);
+    /* Optimisation GPU */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 /* Track qui contient toutes les cartes */
 .vehicles-track {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
+    
+    /* Transitions cross-browser */
+    -webkit-transition: -webkit-transform 0.4s ease-out;
+    -moz-transition: -moz-transform 0.4s ease-out;
+    -o-transition: -o-transform 0.4s ease-out;
     transition: transform 0.4s ease-out;
+    
+    /* Gap avec fallback */
     gap: var(--spacing-md);
+    -webkit-gap: var(--spacing-md);
+    
     padding: var(--spacing-md) 0;
+    
+    /* Optimisation pour performances */
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    
+    /* Touch action pour éviter les conflits */
+    touch-action: pan-y pinch-zoom;
 }
 
 /* Cartes individuelles */
 .vehicle-card {
+    /* Flexbox cross-browser */
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 calc(100% - var(--spacing-lg));
+    -ms-flex: 0 0 calc(100% - var(--spacing-lg));
     flex: 0 0 calc(100% - var(--spacing-lg));
+    
+    /* Fallback pour le calc() */
+    width: 90%;
+    width: calc(100% - var(--spacing-lg));
+    
     background-color: var(--light-color);
+    
+    /* Border-radius cross-browser */
     border-radius: var(--border-radius-lg);
+    -webkit-border-radius: var(--border-radius-lg);
+    -moz-border-radius: var(--border-radius-lg);
+    
     overflow: hidden;
+    
+    /* Box-shadow cross-browser */
     box-shadow: var(--shadow-sm);
-    transition: var(--transition-normal);
+    -webkit-box-shadow: var(--shadow-sm);
+    -moz-box-shadow: var(--shadow-sm);
+    
+    /* Transitions cross-browser */
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    
     min-width: 280px;
+    
+    /* Optimisation GPU */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
-.vehicle-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+/* Hover avec détection de support */
+@media (hover: hover) and (pointer: fine) {
+    .vehicle-card:hover {
+        box-shadow: var(--shadow-md);
+        -webkit-box-shadow: var(--shadow-md);
+        -moz-box-shadow: var(--shadow-md);
+        
+        -webkit-transform: translateY(-2px) translateZ(0);
+        -moz-transform: translateY(-2px) translateZ(0);
+        -o-transform: translateY(-2px) translateZ(0);
+        transform: translateY(-2px) translateZ(0);
+    }
 }
 
 /* Image du véhicule */
@@ -331,17 +398,41 @@ body {
     height: 180px;
     overflow: hidden;
     position: relative;
+    /* Optimisation pour les images */
+    background-color: var(--gray-color);
 }
 
 .vehicle-image img {
     width: 100%;
     height: 100%;
+    
+    /* Object-fit avec fallback */
     object-fit: cover;
-    transition: var(--transition-normal);
+    -o-object-fit: cover;
+    
+    /* Transitions cross-browser */
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    
+    /* Optimisation GPU */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    
+    /* Amélioration du rendu */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
-.vehicle-image:hover img {
-    transform: scale(1.05);
+/* Hover images avec détection de support */
+@media (hover: hover) and (pointer: fine) {
+    .vehicle-image:hover img {
+        -webkit-transform: scale(1.05) translateZ(0);
+        -moz-transform: scale(1.05) translateZ(0);
+        -o-transform: scale(1.05) translateZ(0);
+        transform: scale(1.05) translateZ(0);
+    }
 }
 
 /* Contenu de la carte */
@@ -398,34 +489,76 @@ body {
 
 /* Boutons */
 .vehicle-actions {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
+    
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
     flex-direction: column;
+    
     gap: var(--spacing-xs);
+    -webkit-gap: var(--spacing-xs);
 }
 
 .btn-vehicle {
     padding: var(--spacing-sm);
+    
+    /* Border-radius cross-browser */
     border-radius: var(--border-radius);
+    -webkit-border-radius: var(--border-radius);
+    -moz-border-radius: var(--border-radius);
+    
     text-decoration: none;
     text-align: center;
     font-weight: 500;
-    transition: var(--transition-normal);
+    
+    /* Transitions cross-browser */
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    
+    /* Flexbox pour centrage */
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
+    
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
     align-items: center;
+    
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    
     gap: var(--spacing-xs);
+    -webkit-gap: var(--spacing-xs);
+    
     min-height: var(--touch-target);
+    
+    /* Optimisation tactile */
     -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    
+    /* Optimisation GPU */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 .btn-view {
     background-color: var(--secondary-color);
     color: var(--light-color);
-}
-
-.btn-view:hover {
-    background-color: var(--gray-dark);
-    transform: translateY(-1px);
 }
 
 .btn-buy {
@@ -434,36 +567,95 @@ body {
     font-weight: 600;
 }
 
-.btn-buy:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-1px);
+/* Hover pour boutons avec détection de support */
+@media (hover: hover) and (pointer: fine) {
+    .btn-view:hover {
+        background-color: var(--gray-dark);
+        -webkit-transform: translateY(-1px) translateZ(0);
+        -moz-transform: translateY(-1px) translateZ(0);
+        -o-transform: translateY(-1px) translateZ(0);
+        transform: translateY(-1px) translateZ(0);
+    }
+    
+    .btn-buy:hover {
+        background-color: var(--primary-dark);
+        -webkit-transform: translateY(-1px) translateZ(0);
+        -moz-transform: translateY(-1px) translateZ(0);
+        -o-transform: translateY(-1px) translateZ(0);
+        transform: translateY(-1px) translateZ(0);
+    }
 }
 
 /* Flèches de navigation - cachées par défaut sur mobile */
 .carousel-nav {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
+    
+    /* Transform cross-browser */
+    -webkit-transform: translateY(-50%) translateZ(0);
+    -moz-transform: translateY(-50%) translateZ(0);
+    -o-transform: translateY(-50%) translateZ(0);
+    transform: translateY(-50%) translateZ(0);
+    
     background-color: var(--light-color);
     border: none;
     width: 50px;
     height: 50px;
+    
+    /* Border-radius cross-browser */
     border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    
     display: none;
+    
+    /* Flexbox cross-browser */
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
     align-items: center;
+    
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    
     cursor: pointer;
+    
+    /* Box-shadow cross-browser */
     box-shadow: var(--shadow-md);
-    transition: var(--transition-normal);
+    -webkit-box-shadow: var(--shadow-md);
+    -moz-box-shadow: var(--shadow-md);
+    
+    /* Transitions cross-browser */
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    
     z-index: 10;
     color: var(--text-color);
     font-size: var(--font-size-lg);
+    
+    /* Optimisation tactile */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
-.carousel-nav:hover {
-    background-color: var(--primary-color);
-    color: var(--light-color);
-    transform: translateY(-50%) scale(1.1);
+/* Hover pour navigation avec détection de support */
+@media (hover: hover) and (pointer: fine) {
+    .carousel-nav:hover {
+        background-color: var(--primary-color);
+        color: var(--light-color);
+        -webkit-transform: translateY(-50%) scale(1.1) translateZ(0);
+        -moz-transform: translateY(-50%) scale(1.1) translateZ(0);
+        -o-transform: translateY(-50%) scale(1.1) translateZ(0);
+        transform: translateY(-50%) scale(1.1) translateZ(0);
+    }
 }
 
 .carousel-nav:disabled {
@@ -481,27 +673,89 @@ body {
 
 /* Indicateurs de pagination */
 .carousel-indicators {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
+    
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    
     gap: var(--spacing-xs);
+    -webkit-gap: var(--spacing-xs);
+    
     margin-top: var(--spacing-md);
 }
 
 .carousel-dot {
     width: 12px;
     height: 12px;
+    
+    /* Border-radius cross-browser */
     border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    
     background-color: var(--gray-dark);
     border: none;
     cursor: pointer;
-    transition: var(--transition-normal);
+    
+    /* Transitions cross-browser */
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    
+    /* Optimisation tactile */
     -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    
+    /* Optimisation GPU */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    
+    /* Taille minimale pour toucher */
+    min-width: 44px;
+    min-height: 44px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.carousel-dot::before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    background-color: currentColor;
 }
 
 .carousel-dot.active,
 .carousel-dot:hover {
     background-color: var(--primary-color);
-    transform: scale(1.2);
+    -webkit-transform: scale(1.2) translateZ(0);
+    -moz-transform: scale(1.2) translateZ(0);
+    -o-transform: scale(1.2) translateZ(0);
+    transform: scale(1.2) translateZ(0);
 }
 
 /* Classes utilitaires */
