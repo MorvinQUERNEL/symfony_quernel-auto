@@ -85,11 +85,13 @@
                 <div class="vehicles-track">
                     {% for vehicule in recentVehicules %}
                         <div class="vehicle-card">
-                            {% if vehicule.pictures is not empty %}
-                                <div class="vehicle-image">
+                            <div class="vehicle-image">
+                                {% if vehicule.pictures is not empty and vehicule.pictures|first.name %}
                                     <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures|first.name) }}" alt="{{ vehicule.brand }} {{ vehicule.model }}">
-                                </div>
-                            {% endif %}
+                                {% else %}
+                                    <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Aucune image disponible pour {{ vehicule.brand }} {{ vehicule.model }}">
+                                {% endif %}
+                            </div>
                             <div class="vehicle-content">
                                 <h3 class="vehicle-title">{{ vehicule.brand }} {{ vehicule.model }}</h3>
                                 <p class="vehicle-description">{{ vehicule.description|length > 100 ? vehicule.description|slice(0, 100) ~ '...' : vehicule.description }}</p>
