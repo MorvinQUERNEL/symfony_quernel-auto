@@ -71,8 +71,8 @@
                         <div class="order-actions">
                             <!-- Bouton Apple Pay -->
                             <div class="apple-pay-button" id="apple-pay-button-{{ order.id }}" style="display: none;">
-                                <button type="button" class="btn btn-apple-pay" onclick="initiateApplePay({{ order.id }})">
-                                    <i class="fab fa-apple-pay"></i> Payer avec Apple Pay
+                                <button type="button" class="btn btn-apple-pay">
+                                    <i class="fab fa-apple"></i> Payer avec Apple Pay
                                 </button>
                             </div>
                             
@@ -81,7 +81,7 @@
                                 <i class="fas fa-credit-card"></i> Payer maintenant
                             </a>
                             
-                            <button class="btn btn-outline-secondary btn-details" onclick="showOrderDetails({{ order.id }})">
+                            <button class="btn btn-outline-secondary btn-details">
                                 <i class="fas fa-info-circle"></i> Détails
                             </button>
                         </div>

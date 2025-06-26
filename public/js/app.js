@@ -246,33 +246,6 @@ class App {
             }
         }
         
-        // Validation téléphone
-        if (field.name === 'phone_number' && value) {
-            const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
-            if (!phoneRegex.test(value)) {
-                this.showFieldError(field, 'Format de téléphone invalide');
-                return false;
-            }
-        }
-        
-        // Validation code postal
-        if (field.name === 'postal_code' && value) {
-            const postalRegex = /^[0-9]{5}$/;
-            if (!postalRegex.test(value)) {
-                this.showFieldError(field, 'Code postal invalide');
-                return false;
-            }
-        }
-        
-        // Validation prix
-        if (field.name === 'sale_price' && value) {
-            const price = parseFloat(value);
-            if (isNaN(price) || price <= 0) {
-                this.showFieldError(field, 'Prix invalide');
-                return false;
-            }
-        }
-        
         field.classList.remove('is-invalid');
         field.classList.add('is-valid');
         return true;
@@ -342,37 +315,6 @@ class App {
             });
         });
     }
-    
-    /**
-     * Méthode utilitaire pour debounce
-     */
-    debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    }
-    
-    /**
-     * Méthode utilitaire pour throttle
-     */
-    throttle(func, limit) {
-        let inThrottle;
-        return function() {
-            const args = arguments;
-            const context = this;
-            if (!inThrottle) {
-                func.apply(context, args);
-                inThrottle = true;
-                setTimeout(() => inThrottle = false, limit);
-            }
-        };
-    }
 }
 
 // Initialisation de l'application
@@ -383,42 +325,4 @@ document.addEventListener('DOMContentLoaded', () => {
 // Export pour utilisation dans d'autres modules
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = App;
-}
-
-// Fonction de nettoyage global pour l'overlay
-function cleanupOverlays() {
-    // Supprimer tous les overlays
-    const overlays = document.querySelectorAll('.navbar-overlay');
-    overlays.forEach(overlay => {
-        if (overlay && overlay.parentNode) {
-            overlay.parentNode.removeChild(overlay);
-        }
-    });
-    
-    // Réactiver le scroll
-    document.body.style.overflow = '';
-    document.documentElement.style.overflow = '';
-}
-
-// Nettoyage automatique toutes les 5 secondes (sécurité)
-setInterval(() => {
-    // Ne nettoyer que si le menu n'est pas ouvert
-    const navbarNav = document.querySelector('.navbar-nav');
-    const isMenuOpen = navbarNav && navbarNav.classList.contains('active');
-    
-    if (!isMenuOpen) {
-        cleanupOverlays();
-    }
-}, 5000);
-
-// Nettoyage sur les changements d'état
-document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) {
-        setTimeout(cleanupOverlays, 100);
-    }
-});
-
-// Nettoyage au focus de la fenêtre
-window.addEventListener('focus', () => {
-    setTimeout(cleanupOverlays, 100);
-}); 
+} 

@@ -28,8 +28,27 @@ class PaymentManager {
 
     // Lier les événements
     bindEvents() {
-        // Event listeners déjà gérés dans le HTML pour initiateApplePay et showOrderDetails
-        // On peut ajouter d'autres événements ici si nécessaire
+        // Boutons Apple Pay
+        document.querySelectorAll('.btn-apple-pay, .apple-pay-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const orderId = e.currentTarget.closest('[data-order-id]').dataset.orderId;
+                if (orderId) {
+                    this.initiateApplePay(orderId);
+                }
+            });
+        });
+
+        // Boutons de détails de commande
+        document.querySelectorAll('.btn-details').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const orderId = e.currentTarget.closest('[data-order-id]').dataset.orderId;
+                if (orderId) {
+                    this.showOrderDetails(orderId);
+                }
+            });
+        });
     }
 
     // Initialiser Apple Pay pour une commande spécifique
@@ -165,26 +184,10 @@ class PaymentManager {
     }
 }
 
-// Variables globales pour la compatibilité avec les templates existants
-let paymentManager;
-
-// Fonctions globales pour la compatibilité
-function initiateApplePay(orderId) {
-    if (paymentManager) {
-        paymentManager.initiateApplePay(orderId);
-    }
-}
-
-function showOrderDetails(orderId) {
-    if (paymentManager) {
-        paymentManager.showOrderDetails(orderId);
-    }
-}
-
 // Initialiser au chargement de la page
 document.addEventListener('DOMContentLoaded', function() {
     const stripePublicKey = document.body.dataset.stripePublicKey;
     if (stripePublicKey) {
-        paymentManager = new PaymentManager(stripePublicKey);
+        new PaymentManager(stripePublicKey);
     }
 }); 

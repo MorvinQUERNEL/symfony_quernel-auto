@@ -8,11 +8,6 @@
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('js/carousel.js') }}" defer></script>
-{% endblock %} 
-
 {% block body %}
     <!-- Section Hero -->
     <section class="hero">
@@ -148,7 +143,6 @@
 {% endblock %}
 
 {% block page_javascripts %}
-    {{ parent() }}
-    {# Le carrousel s'initialise automatiquement via carousel.js #}
+    {# Le carrousel s'initialise automatiquement via carousel.js qui est chargé dans base.html.twig #}
 {% endblock %}
 

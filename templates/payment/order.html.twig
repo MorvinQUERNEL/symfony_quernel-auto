@@ -92,8 +92,8 @@
                         <div class="payment-actions">
                             <!-- Bouton Apple Pay -->
                             <div id="apple-pay-button" class="apple-pay-button" style="display: none;">
-                                <button type="button" class="btn btn-apple-pay" onclick="initiateApplePay()">
-                                    <i class="fab fa-apple-pay"></i> Payer avec Apple Pay
+                                <button type="button" class="btn btn-apple-pay">
+                                    <i class="fab fa-apple"></i> Payer avec Apple Pay
                                 </button>
                             </div>
                             
@@ -239,15 +239,6 @@
                     document.getElementById('apple-pay-button').style.display = 'none';
                 }
             });
-        }
-
-        // Fonction pour initier Apple Pay
-        function initiateApplePay() {
-            if (paymentRequest) {
-                paymentRequest.show();
-            } else {
-                showError('Apple Pay n\'est pas disponible sur votre appareil');
-            }
         }
 
         // Fonction pour initier le paiement Stripe classique

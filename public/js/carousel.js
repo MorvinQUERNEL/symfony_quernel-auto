@@ -474,54 +474,10 @@ class VehiclesCarousel {
             timeout = setTimeout(later, wait);
         };
     }
-    
-    // API publique
-    destroy() {
-        if (this.rafId) {
-            cancelAnimationFrame(this.rafId);
-        }
-        if (this.resizeTimeout) {
-            clearTimeout(this.resizeTimeout);
-        }
-    }
-    
-    reset() {
-        this.currentIndex = 0;
-        this.updateView();
-        this.updateNavigation();
-    }
-    
-    getState() {
-        return {
-            currentIndex: this.currentIndex,
-            totalPages: this.totalPages,
-            itemsPerPage: this.itemsPerPage,
-            totalCards: this.cards.length,
-            platform: {
-                isIOS: this.isIOS,
-                isSafari: this.isSafari,
-                supportsTouch: this.supportsTouch,
-                supportsPassive: this.supportsPassive
-            }
-        };
-    }
 }
 
-// Auto-initialisation avec vérification de compatibilité
+// Auto-initialisation
 document.addEventListener('DOMContentLoaded', function() {
-    // Vérifier que le navigateur supporte les fonctionnalités nécessaires
-    if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = window.webkitRequestAnimationFrame || 
-                                       window.mozRequestAnimationFrame || 
-                                       function(callback) { return setTimeout(callback, 16); };
-    }
-    
-    if (!window.cancelAnimationFrame) {
-        window.cancelAnimationFrame = window.webkitCancelAnimationFrame ||
-                                      window.mozCancelAnimationFrame ||
-                                      clearTimeout;
-    }
-    
     const carouselContainer = document.querySelector('.vehicles-carousel');
     
     if (carouselContainer) {
@@ -538,8 +494,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
-
-// Export pour utilisation modulaire
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = VehiclesCarousel;
-}

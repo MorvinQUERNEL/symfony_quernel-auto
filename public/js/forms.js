@@ -14,9 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Gestion de l'upload d'images
     initImageUpload();
     
-    // Gestion des messages flash auto-dismissible
-    initFlashMessages();
-    
 });
 
 /**
@@ -194,71 +191,4 @@ function removeImagePreview(button) {
     
     preview.remove();
     input.value = '';
-}
-
-/**
- * Initialise les messages flash auto-dismissible
- */
-function initFlashMessages() {
-    const flashMessages = document.querySelectorAll('.alert:not(.alert-permanent)');
-    
-    flashMessages.forEach(message => {
-        // Auto-dismiss après 5 secondes
-        setTimeout(() => {
-            if (message.parentNode) {
-                message.style.opacity = '0';
-                message.style.transform = 'translateY(-20px)';
-                setTimeout(() => {
-                    if (message.parentNode) {
-                        message.remove();
-                    }
-                }, 300);
-            }
-        }, 5000);
-    });
-}
-
-/**
- * Utilitaire pour faire des requêtes AJAX
- */
-function makeRequest(url, options = {}) {
-    const defaults = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    };
-    
-    const config = Object.assign(defaults, options);
-    
-    return fetch(url, config)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        });
-}
-
-/**
- * Utilitaire pour afficher des notifications
- */
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
-    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
-    notification.innerHTML = `
-        ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Auto-dismiss après 4 secondes
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.remove();
-        }
-    }, 4000);
 } 

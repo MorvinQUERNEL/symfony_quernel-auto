@@ -15,8 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const getMessagesUrl = chatForm.dataset.getMessagesUrl;
     const conversationId = chatForm.dataset.conversationId;
     
-    let isTyping = false;
-    
     // Auto-resize textarea
     messageInput.addEventListener('input', function() {
         this.style.height = 'auto';
