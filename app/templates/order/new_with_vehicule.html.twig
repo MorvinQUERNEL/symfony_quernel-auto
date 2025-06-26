@@ -85,7 +85,7 @@
                 </div>
                 <div class="payment-actions">
                     <div id="apple-pay-button" style="display: none;">
-                        <button type="button" class="btn-payment" onclick="initiateApplePayPurchase()"><i class="fab fa-apple"></i> Payer avec Apple Pay</button>
+                        <button type="button" class="btn-payment" id="apple-pay-button"><i class="fab fa-apple"></i> Payer avec Apple Pay</button>
                     </div>
                     <button type="submit" class="btn-payment" id="stripe-pay-button"><i class="fas fa-credit-card"></i> Payer par carte</button>
                 </div>
@@ -243,5 +243,12 @@
         document.addEventListener('DOMContentLoaded', function() {
             checkApplePayAvailability();
         });
+
+        // ... existing code ... */
+        if (result.error) {
+            showError(result.error.message);
+        } else {
+            window.location.href = result.success_url;
+        }
     </script>
 {% endblock %} 

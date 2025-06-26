@@ -127,7 +127,7 @@ class FlashMessageManager {
         this.messages.delete(messageId);
 
         // Réorganiser les messages restants
-        this.reorganizeMessages();
+        // this.reorganizeMessages();
     }
 
     startAutoClose(messageId) {
@@ -151,16 +151,7 @@ class FlashMessageManager {
         config.timeoutId = null;
     }
 
-    reorganizeMessages() {
-        // Réorganiser les messages pour éviter les espaces vides
-        const container = document.querySelector('.flash-messages');
-        if (!container) return;
-
-        const messages = Array.from(container.querySelectorAll('.flash-message'));
-        messages.forEach((message, index) => {
-            message.style.transitionDelay = `${index * 50}ms`;
-        });
-    }
+    // ... existing code ...
 
     announceMessage(message) {
         // Créer une annonce pour les lecteurs d'écran
@@ -186,7 +177,6 @@ class FlashMessageManager {
 
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
-                mutation.addedNodes.forEach((node) => {
                     if (node.nodeType === 1 && node.classList.contains('flash-message')) {
                         this.setupMessage(node);
                     }

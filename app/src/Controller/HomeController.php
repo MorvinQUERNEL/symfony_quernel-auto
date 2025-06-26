@@ -87,10 +87,4 @@ class HomeController extends AbstractController
             'unreadMessagesCount' => $unreadMessagesCount,
         ]);
     }
-
-    #[Route('/test-flash', name: 'app_test_flash')]
-    public function testFlash(): Response
-    {
-        // ... existing code ...
-    }
 }

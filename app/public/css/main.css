@@ -158,21 +158,8 @@ a {
 .section {
     padding: var(--spacing-xl) 0;
 }
-
-.section-sm {
-    padding: var(--spacing-lg) 0;
-}
-
-.section-lg {
-    padding: var(--spacing-xl) 0;
-}
-
-/* ========================================
-   BOUTONS - MOBILE FIRST
    ======================================== */
 .btn {
-    display: inline-flex;
-    align-items: center;
     justify-content: center;
     padding: var(--spacing-md) var(--spacing-lg);
     font-size: var(--font-size-base);
@@ -249,32 +236,11 @@ a {
     min-height: 52px;
 }
 
-.btn-xl {
-    padding: var(--spacing-xl) var(--spacing-2xl);
-    font-size: var(--font-size-xl);
-    min-height: 60px;
-}
-
 /* ========================================
    FORMULAIRES - MOBILE FIRST
    ======================================== */
-.form-group {
-    margin-bottom: var(--spacing-md);
-}
-
-.form-label {
     display: block;
     margin-bottom: var(--spacing-sm);
-    font-weight: 500;
-    color: var(--text-color);
-    font-size: var(--font-size-base);
-}
-
-.form-control {
-    width: 100%;
-    padding: var(--spacing-md);
-    font-size: var(--font-size-base);
-    border: 2px solid var(--gray-dark);
     border-radius: var(--border-radius-md);
     transition: none;
     background-color: var(--light-color);
@@ -363,34 +329,11 @@ input[type="radio"] {
     padding: var(--spacing-md);
 }
 
-.card-footer {
-    padding: var(--spacing-md);
-    border-top: 1px solid var(--gray-color);
-    background-color: var(--gray-light);
-}
-
 .card-img {
     width: 100%;
     height: auto;
     display: block;
 }
-
-.card-img-top {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-top-left-radius: var(--border-radius-md);
-    border-top-right-radius: var(--border-radius-md);
-}
-
-/* ========================================
-   UTILITAIRES - MOBILE FIRST
-   ======================================== */
-.text-center { text-align: center; }
-.text-left { text-align: left; }
-.text-right { text-align: right; }
-
-.text-primary { color: var(--primary-color); }
 .text-secondary { color: var(--secondary-color); }
 .text-success { color: var(--success-color); }
 .text-warning { color: var(--warning-color); }
@@ -550,48 +493,11 @@ input[type="radio"] {
 /* ========================================
    TABLETTES - min-width: 757px
    ======================================== */
-@media (min-width: 757px) {
-    body {
-        padding-top: 0; /* Suppression du padding pour éliminer l'espacement */
-    }
-    
-    .container {
-        max-width: 720px;
-        padding: 0 var(--spacing-lg);
-    }
-    
-    /* Typographie plus grande */
-    h1 { font-size: var(--font-size-4xl); }
-    h2 { font-size: var(--font-size-3xl); }
-    h3 { font-size: var(--font-size-2xl); }
-    h4 { font-size: var(--font-size-xl); }
-    
-    .section {
-        padding: var(--spacing-2xl) 0;
-    }
-    
-    .section-lg {
-        padding: var(--spacing-3xl) 0;
-    }
-    
-    /* Liens avec hover */
-    a {
-        transition: color var(--transition-fast);
-        min-height: auto;
         min-width: auto;
         display: inline;
     }
     
     a:hover {
-        color: var(--primary-dark);
-    }
-    
-    /* Boutons avec hover */
-    .btn {
-        transition: all var(--transition-normal);
-        min-height: auto;
-        min-width: auto;
-        padding: var(--spacing-sm) var(--spacing-lg);
     }
     
     .btn-primary:hover:not(:disabled) {
@@ -670,10 +576,6 @@ input[type="radio"] {
         padding: var(--spacing-3xl) 0;
     }
     
-    .section-lg {
-        padding: var(--spacing-3xl) 0 var(--spacing-3xl) 0;
-    }
-    
     /* Boutons avec effets plus prononcés */
     .btn-primary:hover:not(:disabled) {
         transform: translateY(-2px);
@@ -716,9 +618,6 @@ input[type="radio"] {
     }
     
     .animate-fade-in,
-    .animate-slide-left,
-    .animate-slide-right,
-    .animate-scale-in {
         animation: none;
     }
 } 

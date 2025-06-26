@@ -14,6 +14,7 @@ use App\Entity\Payement;
 use App\Service\StripeWebhookService;
 use App\Service\EmailService;
 use App\Service\VehiculeStatusService;
+use App\Service\StripeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -26,6 +27,7 @@ class PaymentController extends AbstractController
     private StripeWebhookService $webhookService;
     private EmailService $emailService;
     private VehiculeStatusService $vehiculeStatusService;
+    private StripeService $stripeService;
 
     public function __construct(
         StripeClient $stripeClient, 
@@ -34,7 +36,8 @@ class PaymentController extends AbstractController
         LoggerInterface $logger,
         StripeWebhookService $webhookService,
         EmailService $emailService,
-        VehiculeStatusService $vehiculeStatusService
+        VehiculeStatusService $vehiculeStatusService,
+        StripeService $stripeService
     ) {
         $this->stripeClient = $stripeClient;
         $this->stripePublicKey = $stripePublicKey;
@@ -43,6 +46,7 @@ class PaymentController extends AbstractController
         $this->webhookService = $webhookService;
         $this->emailService = $emailService;
         $this->vehiculeStatusService = $vehiculeStatusService;
+        $this->stripeService = $stripeService;
     }
 
     #[Route('/payment', name: 'app_payment')]
@@ -110,59 +114,9 @@ class PaymentController extends AbstractController
                 throw new \Exception('Cette commande ne peut plus être payée.');
             }
 
-            // Récupérer la photo principale du véhicule
-            $vehicule = $order->getVehicules()->first();
-            $vehiculeImage = null;
-            if ($vehicule && $vehicule->getPictures()->count() > 0) {
-                $vehiculeImage = $request->getSchemeAndHttpHost() . '/uploads/vehicules/' . $vehicule->getPictures()->first()->getName();
-            }
+            $checkoutData = $this->stripeService->createCheckoutSession($order, $request->getSchemeAndHttpHost());
 
-            // Configuration de base pour la session
-            $sessionConfig = [
-                'line_items' => [[
-                    'price_data' => [
-                        'currency' => 'eur',
-                        'product_data' => [
-                            'name' => 'Commande #' . $order->getId(),
-                            'description' => 'Paiement de commande',
-                            'images' => $vehiculeImage ? [$vehiculeImage] : [],
-                        ],
-                        'unit_amount' => (int)($order->getTotalPrice() * 100), // Convertir en centimes
-                    ],
-                    'quantity' => 1,
-                ]],
-                'mode' => 'payment',
-                'success_url' => $this->generateUrl('app_payment_success', [
-                    'session_id' => '{CHECKOUT_SESSION_ID}',
-                    'order_id' => $order->getId()
-                ], Response::HTTP_ABSOLUTE_URL),
-                'cancel_url' => $this->generateUrl('app_payment_cancel', [
-                    'order_id' => $order->getId()
-                ], Response::HTTP_ABSOLUTE_URL),
-                'metadata' => [
-                    'order_id' => $order->getId(),
-                    'user_id' => $user->getId(),
-                ],
-                // Configuration pour Apple Pay
-                'payment_method_types' => ['card', 'apple_pay'],
-                'payment_method_options' => [
-                    'apple_pay' => [
-                        'enabled' => true,
-                    ],
-                ],
-                'billing_address_collection' => 'required',
-                'shipping_address_collection' => [
-                    'allowed_countries' => ['FR', 'BE', 'CH', 'CA'],
-                ],
-            ];
-
-            // Créer la session de paiement Stripe
-            $checkoutSession = $this->stripeClient->checkout->sessions->create($sessionConfig);
-
-            // Mettre à jour la commande avec l'ID de session Stripe
-            $this->entityManager->flush();
-
-            return new JsonResponse(['url' => $checkoutSession->url]);
+            return new JsonResponse($checkoutData);
 
         } catch (\Exception $e) {
             $this->logger->error('Erreur lors de la création de la session de paiement', [
@@ -196,24 +150,9 @@ class PaymentController extends AbstractController
                 throw new \Exception('Cette commande ne peut plus être payée.');
             }
 
-            // Créer un PaymentIntent pour Apple Pay
-            $paymentIntent = $this->stripeClient->paymentIntents->create([
-                'amount' => (int)($order->getTotalPrice() * 100), // Convertir en centimes
-                'currency' => 'eur',
-                'automatic_payment_methods' => [
-                    'enabled' => true,
-                ],
-                'metadata' => [
-                    'order_id' => $order->getId(),
-                    'user_id' => $user->getId(),
-                ],
-            ]);
+            $paymentIntentData = $this->stripeService->createPaymentIntent($order);
 
-            return new JsonResponse([
-                'client_secret' => $paymentIntent->client_secret,
-                'amount' => $paymentIntent->amount,
-                'currency' => $paymentIntent->currency,
-            ]);
+            return new JsonResponse($paymentIntentData);
 
         } catch (\Exception $e) {
             $this->logger->error('Erreur lors de la création du PaymentIntent', [
@@ -235,51 +174,8 @@ class PaymentController extends AbstractController
 
         try {
             if ($sessionId) {
-                // Récupérer les détails de la session Stripe
-                $session = $this->stripeClient->checkout->sessions->retrieve($sessionId);
-                
-                if ($session->payment_status === 'paid') {
-                    // Mettre à jour la commande
-                    $order = $this->entityManager->getRepository(Orders::class)->find($orderId);
-                    if ($order) {
-                        $order->setOrderStatus('paid');
-                        
-                        // Marquer le véhicule comme vendu
-                        $vehicule = $order->getVehicules()->first();
-                        if ($vehicule) {
-                            $this->vehiculeStatusService->markVehiculeAsSold($order);
-                            $this->logger->info('Véhicule marqué comme vendu après paiement réussi', [
-                                'vehicule_id' => $vehicule->getId(),
-                                'order_id' => $order->getId(),
-                                'session_id' => $sessionId,
-                            ]);
-                        }
-                        
-                        // Créer un enregistrement de paiement
-                        $payment = new Payement();
-                        $payment->setOrders($order);
-                        $payment->setAmount($order->getTotalPrice());
-                        $payment->setPayementStatus('completed');
-                        $payment->setPayementAt(new \DateTimeImmutable());
-                        
-                        $this->entityManager->persist($payment);
-                        $this->entityManager->flush();
-                        
-                        // Envoyer les emails de confirmation
-                        try {
-                            $user = $order->getUsers();
-                            $this->emailService->sendPurchaseConfirmation($order, $user);
-                            $this->emailService->sendAdminNotification($order, $user);
-                        } catch (\Exception $emailException) {
-                            $this->logger->error('Erreur lors de l\'envoi des emails de confirmation', [
-                                'error' => $emailException->getMessage(),
-                                'order_id' => $order->getId(),
-                            ]);
-                        }
-                        
-                        $this->addFlash('success', 'Paiement effectué avec succès ! Votre commande a été confirmée et un email de confirmation vous a été envoyé.');
-                    }
-                }
+                $this->stripeService->processPaymentSuccess($sessionId, (int)$orderId);
+                $this->addFlash('success', 'Paiement effectué avec succès ! Votre commande a été confirmée et un email de confirmation vous a été envoyé.');
             }
 
             return $this->render('payment/success.html.twig', [
