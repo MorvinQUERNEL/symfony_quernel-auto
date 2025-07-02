@@ -1,20 +1,18 @@
-<div style="font-family: Arial, sans-serif; background: #f5f5f5; padding: 2rem;">
-    <div style="max-width: 600px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 2rem;">
-        <img src="{{ absolute_url(asset('images/logo_quernel_auto.png')) }}" alt="Quernel Auto" style="width: 120px; display: block; margin: 0 auto 1.5rem auto;">
-        <h2 style="color: #FF6B00; text-align: center;">Préférence véhicule enregistrée</h2>
-        <p>Bonjour {{ user.firstname }},</p>
-        <p>Votre préférence véhicule a bien été enregistrée sur Quernel Auto :</p>
-        <ul style="line-height: 2;">
-            <li><strong>Marque :</strong> {{ preference.prefereneceBrand ?: '-' }}</li>
-            <li><strong>Modèle :</strong> {{ preference.preferenceModel ?: '-' }}</li>
-            <li><strong>Année minimale :</strong> {{ preference.minYear ? preference.minYear|date('Y') : '-' }}</li>
-            <li><strong>Prix maximum :</strong> {{ preference.maxPrice ?: '-' }} €</li>
-            <li><strong>Carburant :</strong> {{ preference.preferenceFuelType ?: '-' }}</li>
-        </ul>
-        <p>Vous pouvez modifier ou supprimer vos préférences à tout moment depuis votre espace personnel.</p>
-        <p style="margin-top: 2rem; color: #888; font-size: 0.95rem;">Ceci est un message automatique, merci de ne pas répondre directement à cet email.</p>
-        <div style="text-align: center; margin-top: 2rem;">
-            <a href="{{ url('app_profile') }}" style="background: #FF6B00; color: #fff; padding: 0.8rem 2rem; border-radius: 8px; text-decoration: none; font-weight: bold;">Accéder à mon profil</a>
-        </div>
-    </div>
-</div> 
+{% extends 'emails/_base.html.twig' %}
+
+{% block title %}Confirmation de votre préférence{% endblock %}
+
+{% block content %}
+    <h2 style="font-size: 20px; color: #FF6B00; margin-top: 0;">Votre préférence a été enregistrée</h2>
+    <p>Bonjour {{ user.firstname }},</p>
+    <p>Nous avons bien enregistré votre préférence pour un véhicule de type <strong>{{ preference.type }}</strong>.</p>
+    <p>Notre équipe vous contactera dès que nous aurons une offre correspondant à vos critères.</p>
+    
+    <p style="text-align: center; margin-top: 30px;">
+        <a href="{{ url('app_profile') }}" style="background-color: #FF6B00; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
+            Voir mes préférences
+        </a>
+    </p>
+    
+    <p style="margin-top: 30px;">Cordialement,<br><strong>L'équipe Quernel Auto</strong></p>
+{% endblock %} 

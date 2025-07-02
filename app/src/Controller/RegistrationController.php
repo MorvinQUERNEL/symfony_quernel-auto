@@ -12,7 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -37,19 +39,23 @@ class RegistrationController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                // Envoi de l'email de confirmation
-                $email = (new Email())
-                    ->from('noreply@quernel-auto.com')
+                // Envoi de l'email de bienvenue
+                $email = (new TemplatedEmail())
+                    ->from(new Address('no-reply@quernel-auto.fr', 'Quernel Auto'))
                     ->to($user->getEmail())
-                    ->subject('Bienvenue chez Quernel Auto')
-                    ->html($this->renderView(
-                        'emails/registration.html.twig',
-                        ['user' => $user]
-                    ));
+                    ->subject('Bienvenue chez Quernel Auto !')
+                    ->htmlTemplate('emails/registration.html.twig')
+                    ->context([
+                        'user' => $user,
+                    ]);
 
-                $mailer->send($email);
-
-                $this->addFlash('success', 'Votre compte a été créé avec succès. Un email de confirmation vous a été envoyé.');
+                try {
+                    $mailer->send($email);
+                    $this->addFlash('success', 'Votre compte a été créé avec succès. Un email de bienvenue vous a été envoyé.');
+                } catch (TransportExceptionInterface $e) {
+                    // Gérer l'échec de l'envoi de l'email
+                    $this->addFlash('warning', 'Votre compte a été créé, mais l\'email de bienvenue n\'a pas pu être envoyé.');
+                }
 
                 return $this->redirectToRoute('app_home');
                 
