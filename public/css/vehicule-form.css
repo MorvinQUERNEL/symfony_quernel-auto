@@ -1,0 +1,201 @@
+/* ========================================
+   VARIABLES CSS
+   ======================================== */
+:root {
+    --primary-color: #FF6B00;
+    --primary-dark: #E55A00;
+    --secondary-color: #343a40;
+    --light-color: #ffffff;
+    --gray-light: #f8f9fa;
+    --gray-medium: #e9ecef;
+    --gray-dark: #6c757d;
+    --text-color: #212529;
+    --danger-color: #dc3545;
+    --success-color: #28a745;
+    --border-radius: 8px;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+    --transition: 0.2s ease-in-out;
+}
+
+/* ========================================
+   STYLES DE BASE (MOBILE FIRST)
+   ======================================== */
+body {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../images/homeBackground.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: var(--text-color);
+}
+
+.vehicule-form-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+.vehicule-form-card {
+    background: var(--light-color);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+}
+
+.vehicule-form-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    border-bottom: 1px solid var(--gray-medium);
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.vehicule-form-header h1 {
+    font-size: 1.75rem;
+    margin: 0;
+    color: var(--text-color);
+    font-weight: 700;
+}
+
+.vehicule-form-header .btn {
+    align-self: flex-start;
+}
+
+/* Styles du formulaire */
+.vehicule-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.vehicule-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--gray-dark);
+}
+
+.vehicule-form .form-control,
+.vehicule-form select,
+.vehicule-form textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--gray-medium);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: var(--transition);
+    background-color: var(--gray-light);
+    color: var(--text-color);
+}
+
+.vehicule-form .form-control:focus,
+.vehicule-form select:focus,
+.vehicule-form textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.2);
+    background-color: var(--light-color);
+}
+
+textarea.form-control {
+    min-height: 150px;
+    resize: vertical;
+}
+
+/* Collection d'images */
+.images-collection .image-item {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    border: 1px dashed var(--gray-medium);
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+    background-color: var(--gray-light);
+}
+
+.images-collection .image-item > div { /* Conteneur du champ de formulaire */
+    flex-grow: 1;
+}
+
+/* Boutons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--light-color);
+}
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+}
+
+.btn-secondary {
+    background-color: var(--gray-dark);
+    color: var(--light-color);
+}
+.btn-secondary:hover {
+    background-color: var(--secondary-color);
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: var(--light-color);
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--gray-medium);
+}
+
+/* ========================================
+   TABLETTE (min-width: 764px)
+   ======================================== */
+@media (min-width: 764px) {
+    .vehicule-form-container {
+        padding: 2rem;
+    }
+
+    .vehicule-form-card {
+        padding: 2.5rem;
+    }
+
+    .vehicule-form-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .vehicule-form .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+}
+
+/* ========================================
+   ORDINATEUR (min-width: 1024px)
+   ======================================== */
+@media (min-width: 1024px) {
+    .vehicule-form-card {
+        padding: 3rem;
+    }
+
+    .vehicule-form-header h1 {
+        font-size: 2rem;
+    }
+} 

@@ -10,14 +10,21 @@
 {% block body %}
 <div class="vehicules-container">
     <header class="vehicules-page-header">
-        <h1>Nos Véhicules d'Occasion</h1>
+        <div class="header-content">
+            <h1>Nos Véhicules d'Occasion</h1>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_vehicules_new') }}" class="btn-add-vehicule">
+                    <i class="fas fa-plus-circle"></i> Ajouter un véhicule
+                </a>
+            {% endif %}
+        </div>
         <p>Parcourez notre catalogue de voitures sélectionnées avec soin.</p>
     </header>
 
     <div class="vehicules-layout">
         <aside class="vehicules-filters">
             <div class="filter-block">
-                <h4><i class="fas fa-search"></i> Recherche</h4>
+                <h4 ><i class="fas fa-search"></i> Recherche</h4>
                 <form method="GET" action="{{ path('app_vehicules_index') }}" id="searchForm">
                     <div class="search-input-group">
                         <input type="text" 
