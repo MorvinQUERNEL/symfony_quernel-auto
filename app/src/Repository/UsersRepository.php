@@ -87,6 +87,18 @@ class UsersRepository extends ServiceEntityRepository implements PasswordUpgrade
             ->getResult();
     }
 
+    /**
+     * @return Users[]
+     */
+    public function findInactiveUsers(\DateTimeInterface $limitDate): array
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.lastLoginAt < :date OR (u.lastLoginAt IS NULL AND u.registrationAt < :date)')
+            ->setParameter('date', $limitDate)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Users[] Returns an array of Users objects
     //     */
