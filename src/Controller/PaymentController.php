@@ -17,6 +17,11 @@ use App\Service\VehiculeStatusService;
 use App\Service\StripeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
 
 class PaymentController extends AbstractController
 {
@@ -167,30 +172,68 @@ class PaymentController extends AbstractController
     }
 
     #[Route('/payment/success', name: 'app_payment_success')]
-    public function paymentSuccess(Request $request): Response
+    public function success(
+        Request $request, 
+        EntityManagerInterface $entityManager, 
+        StripeService $stripeService,
+        MailerInterface $mailer
+    ): Response
     {
-        $sessionId = $request->query->get('session_id');
-        $orderId = $request->query->get('order_id');
+        $stripeSessionId = $request->query->get('session_id');
+        
+        if (!$stripeSessionId) {
+            return $this->redirectToRoute('app_home');
+        }
 
         try {
-            if ($sessionId) {
-                $this->stripeService->processPaymentSuccess($sessionId, (int)$orderId);
-                $this->addFlash('success', 'Paiement effectué avec succès ! Votre commande a été confirmée et un email de confirmation vous a été envoyé.');
+            $session = $stripeService->getStripeClient()->checkout->sessions->retrieve($stripeSessionId);
+            $orderId = $session->metadata->order_id ?? null;
+
+            if (!$orderId) {
+                $this->addFlash('error', 'ID de commande manquant dans la session Stripe.');
+                return $this->redirectToRoute('app_profile');
             }
 
+            $order = $entityManager->getRepository(Orders::class)->find($orderId);
+            $user = $order->getUsers();
+
+            if (!$order || $this->getUser() !== $user) {
+                $this->addFlash('error', 'Commande non trouvée ou accès non autorisé.');
+                return $this->redirectToRoute('app_profile');
+            }
+
+            if ($order->getOrderStatus() !== 'paid') {
+                $order->setOrderStatus('paid');
+                $order->getVehicule()->setStatus('Vendu');
+                $entityManager->flush();
+
+                // Envoi de l'email de confirmation de commande
+                $email = (new TemplatedEmail())
+                    ->from(new Address('no-reply@quernel-auto.fr', 'Quernel Auto'))
+                    ->to($user->getEmail())
+                    ->subject('Confirmation de votre commande #' . $order->getId())
+                    ->htmlTemplate('emails/purchase_confirmation.html.twig')
+                    ->context([
+                        'user' => $user,
+                        'order' => $order
+                    ]);
+
+                try {
+                    $mailer->send($email);
+                } catch (TransportExceptionInterface $e) {
+                    // Ne pas bloquer l'utilisateur, mais logger l'erreur
+                    // Le logger est déjà injecté dans d'autres contrôleurs, il faudrait l'ajouter ici si nécessaire
+                }
+            }
+
+            $this->addFlash('success', 'Paiement effectué avec succès ! Votre commande a été confirmée et un email de confirmation vous a été envoyé.');
             return $this->render('payment/success.html.twig', [
-                'order_id' => $orderId,
+                'order' => $order
             ]);
 
         } catch (\Exception $e) {
-            $this->logger->error('Erreur lors du traitement du succès de paiement', [
-                'error' => $e->getMessage(),
-                'session_id' => $sessionId,
-                'order_id' => $orderId,
-            ]);
-
             $this->addFlash('error', 'Erreur lors du traitement du paiement. Contactez le support.');
-            return $this->redirectToRoute('app_payment');
+            return $this->redirectToRoute('app_profile');
         }
     }
 

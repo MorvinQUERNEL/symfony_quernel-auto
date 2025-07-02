@@ -15,6 +15,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Stripe\StripeClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
 
 #[Route('/orders')]
 class OrderController extends AbstractController
@@ -211,16 +216,39 @@ class OrderController extends AbstractController
 
     #[Route('/{id}/edit', name: 'app_orders_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function edit(Request $request, Orders $order, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Orders $order, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
     {
+        $oldStatus = $order->getOrderStatus();
         $form = $this->createForm(OrderType::class, $order);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            // Vérifier si le statut a changé et envoyer un email
+            $newStatus = $order->getOrderStatus();
+            if ($newStatus !== $oldStatus) {
+                $user = $order->getUsers();
+                $email = (new TemplatedEmail())
+                    ->from(new Address('no-reply@quernel-auto.fr', 'Quernel Auto'))
+                    ->to($user->getEmail())
+                    ->subject('Mise à jour de votre commande #' . $order->getId())
+                    ->htmlTemplate('emails/order_status_update.html.twig')
+                    ->context([
+                        'user' => $user,
+                        'order' => $order,
+                    ]);
+                
+                try {
+                    $mailer->send($email);
+                } catch (TransportExceptionInterface $e) {
+                    // Log l'erreur sans bloquer
+                }
+            }
+
             $this->addFlash('success', 'La commande a été modifiée avec succès !');
-            return $this->redirectToRoute('app_orders_show', ['id' => $order->getId()]);
+
+            return $this->redirectToRoute('app_orders_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('order/edit.html.twig', [

@@ -1,0 +1,25 @@
+{% extends 'emails/_base.html.twig' %}
+
+{% block title %}Mise à jour de votre commande{% endblock %}
+
+{% block content %}
+    <h2 style="font-size: 20px; color: #FF6B00; margin-top: 0;">Votre commande a été mise à jour</h2>
+    <p>Bonjour {{ user.firstname }},</p>
+    <p>Le statut de votre commande <strong>#{{ order.id }}</strong> a été mis à jour.</p>
+    
+    <p style="text-align: center; font-size: 18px; font-weight: bold; padding: 15px; background-color: #f4f4f7; border-radius: 5px; margin: 20px 0;">
+        Nouveau statut : {{ order.orderStatus|capitalize }}
+    </p>
+
+    {% if order.orderStatus == 'expédiée' %}
+        <p>Bonne nouvelle ! Votre véhicule est en route. Nous vous contacterons sous peu avec les détails de suivi et de livraison.</p>
+    {% endif %}
+    
+    <p>Vous pouvez consulter les détails de votre commande à tout moment depuis votre espace client.</p>
+    
+    <p style="text-align: center; margin-top: 30px;">
+        <a href="{{ url('app_orders_show', {'id': order.id}) }}" style="background-color: #FF6B00; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
+            Voir ma commande
+        </a>
+    </p>
+{% endblock %} 
