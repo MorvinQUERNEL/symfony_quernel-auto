@@ -8,21 +8,20 @@
 {% endblock %}
 
 {% block body %}
-    <div class="payment-container">
-        <div class="success-content">
+    <main class="payment-container">
+        <article class="success-content">
             <div class="success-card">
-                <div class="success-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                
-                <div class="success-header">
+                <header class="success-header">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
                     <h1>Paiement réussi !</h1>
                     <p>Votre commande a été confirmée et sera traitée dans les plus brefs délais.</p>
-                </div>
+                </header>
                 
                 {% if order_id %}
-                    <div class="order-info">
-                        <h3>Détails de la commande</h3>
+                    <section class="order-info" aria-labelledby="order-details-title">
+                        <h3 id="order-details-title">Détails de la commande</h3>
                         <div class="info-grid">
                             <div class="info-item">
                                 <span class="label">Numéro de commande :</span>
@@ -37,11 +36,11 @@
                                 <span class="value">{{ "now"|date('d/m/Y H:i') }}</span>
                             </div>
                         </div>
-                    </div>
+                    </section>
                 {% endif %}
                 
-                <div class="next-steps">
-                    <h3>Prochaines étapes</h3>
+                <section class="next-steps" aria-labelledby="next-steps-title">
+                    <h3 id="next-steps-title">Prochaines étapes</h3>
                     <div class="steps-list">
                         <div class="step">
                             <div class="step-icon">
@@ -71,9 +70,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </section>
                 
-                <div class="success-actions">
+                <footer class="success-actions">
                     <a href="{{ path('app_home') }}" class="btn btn-primary">
                         <i class="fas fa-home"></i> Retour à l'accueil
                     </a>
@@ -83,8 +82,8 @@
                     <a href="{{ path('app_payment') }}" class="btn btn-outline-secondary">
                         <i class="fas fa-credit-card"></i> Mes paiements
                     </a>
-                </div>
+                </footer>
             </div>
-        </div>
-    </div>
+        </article>
+    </main>
 {% endblock %} 

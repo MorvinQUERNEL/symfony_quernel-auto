@@ -9,10 +9,12 @@
 {% endblock %}
 
 {% block body %}
-<div class="vehicule-detail-page">
+<article class="vehicule-detail-page">
     <header class="detail-page-header">
         <div class="header-content">
-            <a href="{{ path('app_vehicules_index') }}" class="back-link"><i class="fas fa-arrow-left"></i> Retour au catalogue</a>
+            <nav class="breadcrumb">
+                <a href="{{ path('app_vehicules_index') }}" class="back-link"><i class="fas fa-arrow-left"></i> Retour au catalogue</a>
+            </nav>
             <h1>{{ vehicule.brand }} {{ vehicule.model }}</h1>
             <p class="header-year">{{ vehicule.year|date('Y') }}</p>
         </div>
@@ -20,7 +22,8 @@
 
     <div class="vehicule-detail-layout">
         <!-- Colonne de la galerie d'images -->
-        <div class="gallery-container">
+        <section class="gallery-container" aria-labelledby="gallery-title">
+            <h2 id="gallery-title" class="sr-only">Galerie photos</h2>
             <div class="main-image-wrapper">
                  {% if vehicule.pictures is not empty %}
                     <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures.first.name) }}" alt="Vue principale de {{ vehicule.brand }} {{ vehicule.model }}" id="main-image">
@@ -37,57 +40,57 @@
                     {% endfor %}
                 </div>
             {% endif %}
-        </div>
+        </section>
 
         <!-- Colonne des informations -->
-        <div class="info-container">
-            <div class="info-block price-block">
-                <span class="price-label">Prix</span>
-                <span class="price">{{ (vehicule.salePrice / 100)|number_format(0, ',', ' ') }} €</span>
+        <aside class="info-container">
+            <section class="info-block price-block" aria-labelledby="price-title">
+                <h3 id="price-title" class="price-label">Prix</h3>
+                <p class="price">{{ (vehicule.salePrice / 100)|number_format(0, ',', ' ') }} €</p>
                  {% if vehicule.status == 'Disponible' %}
                     <a href="{{ path('app_orders_new_with_vehicule', {'vehicule_id': vehicule.id}) }}" class="btn-buy"><i class="fas fa-shopping-cart"></i> Acheter ce véhicule</a>
                 {% else %}
-                    <div class="status-badge-detail {{ vehicule.status|lower|replace({' ': '-'}) }}">
+                    <p class="status-badge-detail {{ vehicule.status|lower|replace({' ': '-'}) }}">
                         {{ vehicule.status }}
-                    </div>
+                    </p>
                 {% endif %}
-            </div>
+            </section>
 
-            <div class="info-block specs-block">
-                <h4><i class="fas fa-list-ul"></i> Caractéristiques</h4>
-                <div class="specs-grid">
+            <section class="info-block specs-block" aria-labelledby="specs-title">
+                <h4 id="specs-title"><i class="fas fa-list-ul"></i> Caractéristiques</h4>
+                <dl class="specs-grid">
                     <div class="spec-item">
-                        <span class="spec-label">Kilométrage</span>
-                        <span class="spec-value">{{ vehicule.mileage|number_format(0, ',', ' ') }} km</span>
+                        <dt class="spec-label">Kilométrage</dt>
+                        <dd class="spec-value">{{ vehicule.mileage|number_format(0, ',', ' ') }} km</dd>
                     </div>
                     <div class="spec-item">
-                        <span class="spec-label">Carburant</span>
-                        <span class="spec-value">{{ vehicule.fuelType }}</span>
+                        <dt class="spec-label">Carburant</dt>
+                        <dd class="spec-value">{{ vehicule.fuelType }}</dd>
                     </div>
                     <div class="spec-item">
-                        <span class="spec-label">Transmission</span>
-                        <span class="spec-value">{{ vehicule.trasmission }}</span>
+                        <dt class="spec-label">Transmission</dt>
+                        <dd class="spec-value">{{ vehicule.trasmission }}</dd>
                     </div>
                     <div class="spec-item">
-                        <span class="spec-label">Couleur</span>
-                        <span class="spec-value">{{ vehicule.color }}</span>
+                        <dt class="spec-label">Couleur</dt>
+                        <dd class="spec-value">{{ vehicule.color }}</dd>
                     </div>
                     <div class="spec-item">
-                        <span class="spec-label">Portes</span>
-                        <span class="spec-value">{{ vehicule.doorCount }}</span>
+                        <dt class="spec-label">Portes</dt>
+                        <dd class="spec-value">{{ vehicule.doorCount }}</dd>
                     </div>
-                </div>
-            </div>
+                </dl>
+            </section>
 
             {% if vehicule.description %}
-            <div class="info-block description-block">
-                <h4><i class="fas fa-align-left"></i> Description</h4>
+            <section class="info-block description-block" aria-labelledby="desc-title">
+                <h4 id="desc-title"><i class="fas fa-align-left"></i> Description</h4>
                 <p>{{ vehicule.description|nl2br }}</p>
-            </div>
+            </section>
             {% endif %}
-        </div>
+        </aside>
     </div>
-</div>
+</article>
 {% endblock %}
 
 {% block javascripts %}

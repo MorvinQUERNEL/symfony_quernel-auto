@@ -62,7 +62,7 @@ class OrderController extends AbstractController
     {
         $order = new Orders();
         $order->setCreatedAt(new \DateTimeImmutable());
-        
+
         $form = $this->createForm(OrderType::class, $order);
         $form->handleRequest($request);
 
@@ -107,13 +107,13 @@ class OrderController extends AbstractController
         $order->setOrderStatus('pending');
         $order->setTotalPrice($vehicule->getSalePrice());
         $order->addVehicule($vehicule);
-        
+
         // Pré-remplir les informations de livraison avec les données de l'utilisateur
         $order->setDeliveryCity($user->getCity() ?? '');
         $order->setDeliveryPostalCode($user->getPostalCode() ?? 0);
         $order->setDeliveryCountry($user->getCountry() ?? 'France');
         $order->setDeliveryAdress($user->getAddress() ?? '');
-        
+
         $form = $this->createForm(\App\Form\PurchaseOrderType::class, $order);
         $form->handleRequest($request);
 
@@ -162,8 +162,8 @@ class OrderController extends AbstractController
             // Vérifier la limite de Stripe (999 999,99 € = 99 999 999 centimes)
             $priceInCents = $vehicule->getSalePrice();
             $priceInEuros = $priceInCents / 100;
-            
-            if ($priceInEuros > 999999.99) {
+
+            if ($priceInEuros > 9999999.99) {
                 return $this->render('payment/limit_exceeded.html.twig', [
                     'order' => $order,
                 ]);
@@ -178,7 +178,7 @@ class OrderController extends AbstractController
                         'product_data' => [
                             'name' => $vehicule->getBrand() . ' ' . $vehicule->getModel(),
                             'description' => $vehicule->getDescription() ?? 'Achat de véhicule',
-                            'images' => $vehicule->getPictures()->count() > 0 
+                            'images' => $vehicule->getPictures()->count() > 0
                                 ? [$this->generateUrl('app_home', [], \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL) . 'uploads/vehicules/' . $vehicule->getPictures()->first()->getName()]
                                 : [],
                         ],
@@ -238,7 +238,7 @@ class OrderController extends AbstractController
                         'user' => $user,
                         'order' => $order,
                     ]);
-                
+
                 try {
                     $mailer->send($email);
                 } catch (TransportExceptionInterface $e) {
@@ -261,57 +261,57 @@ class OrderController extends AbstractController
     public function delete(Request $request, Orders $order, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
-        
+
         // Vérifier que l'utilisateur est connecté
         if (!$user) {
             $this->addFlash('error', 'Vous devez être connecté pour effectuer cette action.');
             return $this->redirectToRoute('app_login');
         }
-        
+
         // Vérifier que l'utilisateur est propriétaire de la commande ou admin
         if ($order->getUsers() !== $user && !$this->isGranted('ROLE_ADMIN')) {
             $this->addFlash('error', 'Vous n\'êtes pas autorisé à supprimer cette commande.');
             return $this->redirectToRoute('app_orders_my_orders');
         }
-        
+
         // Vérifier que la commande peut être supprimée (seulement pending ou expired)
         if (!in_array($order->getOrderStatus(), ['pending', 'expired'])) {
             $this->addFlash('error', 'Cette commande ne peut pas être supprimée.');
             return $this->redirectToRoute('app_orders_my_orders');
         }
-        
+
         // Vérifier le token CSRF
         if ($this->isCsrfTokenValid('delete'.$order->getId(), $request->request->get('_token'))) {
             try {
                 // Récupérer tous les véhicules liés à cette commande
                 $vehicules = $order->getVehicules();
-                
+
                 // Dissocier les véhicules de la commande et les remettre en statut "Disponible"
                 foreach ($vehicules as $vehicule) {
                     $vehicule->setOrders(null); // Dissocier de la commande
                     $vehicule->setStatus('Disponible'); // Remettre en disponibilité
                     $entityManager->persist($vehicule);
                 }
-                
+
                 // Supprimer la commande
                 $entityManager->remove($order);
                 $entityManager->flush();
-                
+
                 $this->addFlash('success', 'La commande a été supprimée avec succès.');
-                
+
             } catch (\Exception $e) {
                 $this->logger->error('Erreur lors de la suppression de la commande', [
                     'error' => $e->getMessage(),
                     'order_id' => $order->getId(),
                     'user_id' => $user->getId(),
                 ]);
-                
+
                 $this->addFlash('error', 'Une erreur est survenue lors de la suppression de la commande.');
             }
         } else {
             $this->addFlash('error', 'Token de sécurité invalide.');
         }
-        
+
         return $this->redirectToRoute('app_orders_my_orders');
     }
 
@@ -350,7 +350,7 @@ class OrderController extends AbstractController
             $order->setOrderStatus('pending');
             $order->setTotalPrice($vehicule->getSalePrice());
             $order->addVehicule($vehicule);
-            
+
             // Pré-remplir les informations de livraison
             if ($deliveryAddress) {
                 $order->setDeliveryAdress($deliveryAddress['line1'] ?? '');
@@ -404,4 +404,4 @@ class OrderController extends AbstractController
             ], 400);
         }
     }
-} 
+}

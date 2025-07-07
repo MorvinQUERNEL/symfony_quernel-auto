@@ -9,13 +9,13 @@
 
 {% block body %}
 <div class="login-container">
-    <div class="login-card p-4 p-md-5">
-        <div class="login-header">
+    <section class="login-card p-4 p-md-5">
+        <header class="login-header">
             <h1>Connexion</h1>
-        </div>
+        </header>
 
         {% for message in app.flashes('error') %}
-            <div class="alert alert-danger">
+            <div class="alert alert-danger" role="alert">
                 <i class="fas fa-exclamation-circle me-2"></i>
                 {{ message }}
             </div>
@@ -42,9 +42,9 @@
             </div>
         </form>
 
-        <div class="text-center mt-4">
+        <footer class="text-center mt-4">
             <p class="mb-0">Pas encore de compte ? <a href="{{ path('app_register') }}" class="register-link">Inscrivez-vous</a></p>
-        </div>
-    </div>
+        </footer>
+    </section>
 </div>
 {% endblock %} 

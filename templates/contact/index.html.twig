@@ -9,17 +9,17 @@
 
 {% block body %}
 <div class="contact-container">
-    <div class="contact-header">
+    <header class="contact-header">
         <h1>Contactez-nous</h1>
         <p>Nous sommes là pour vous accompagner dans vos projets d'import-export de véhicules</p>
-    </div>
+    </header>
 
     <div class="contact-content">
         <!-- Informations de contact -->
-        <div class="contact-info-section">
-            <h2>Nos coordonnées</h2>
+        <section class="contact-info-section" aria-labelledby="contact-info-title">
+            <h2 id="contact-info-title">Nos coordonnées</h2>
             <div class="contact-info-grid">
-                <div class="contact-info-card">
+                <article class="contact-info-card">
                     <div class="contact-icon">
                         <i class="fas fa-phone"></i>
                     </div>
@@ -28,9 +28,9 @@
                         <p>+33 1 23 45 67 89</p>
                         <span class="contact-note">Lun-Ven : 9h-18h</span>
                     </div>
-                </div>
+                </article>
 
-                <div class="contact-info-card">
+                <article class="contact-info-card">
                     <div class="contact-icon">
                         <i class="fas fa-envelope"></i>
                     </div>
@@ -39,9 +39,9 @@
                         <p>contact@quernelauto.fr</p>
                         <span class="contact-note">Réponse sous 24h</span>
                     </div>
-                </div>
+                </article>
 
-                <div class="contact-info-card">
+                <article class="contact-info-card">
                     <div class="contact-icon">
                         <i class="fas fa-map-marker-alt"></i>
                     </div>
@@ -50,13 +50,13 @@
                         <p>123 Rue de la Paix<br>75001 Paris, France</p>
                         <span class="contact-note">Sur rendez-vous</span>
                     </div>
-                </div>
+                </article>
             </div>
-        </div>
+        </section>
 
         <!-- Formulaire de contact -->
-        <div class="contact-form-section">
-            <h2>Envoyez-nous un message</h2>
+        <section class="contact-form-section" aria-labelledby="contact-form-title">
+            <h2 id="contact-form-title">Envoyez-nous un message</h2>
             <div class="contact-form-card">
                 {{ form_start(form, {'attr': {'class': 'contact-form'}}) }}
                     <div class="form-group">
@@ -79,7 +79,7 @@
                     </div>
                 {{ form_end(form) }}
             </div>
-        </div>
+        </section>
     </div>
 </div>
 {% endblock %} 

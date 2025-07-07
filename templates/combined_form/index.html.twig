@@ -9,16 +9,16 @@
 
 {% block body %}
 <div class="combined-form-container">
-    <div class="form-card">
-        <div class="form-header">
+    <section class="form-card">
+        <header class="form-header">
             <h1>Inscription et Préférences</h1>
-        </div>
+        </header>
         
         {{ form_start(form) }}
         
         <!-- Section Inscription -->
-        <div class="form-section">
-            <h2><i class="fas fa-user"></i> Informations personnelles</h2>
+        <section class="form-section" aria-labelledby="personal-info-title">
+            <h2 id="personal-info-title"><i class="fas fa-user"></i> Informations personnelles</h2>
             
             <div class="form-row">
                 <div class="form-group">
@@ -97,11 +97,11 @@
                 </div>
                 <div class="form-errors">{{ form_errors(form.rgpdConsent) }}</div>
             </div>
-        </div>
+        </section>
         
         <!-- Section Préférences -->
-        <div class="form-section">
-            <h2><i class="fas fa-car"></i> Vos préférences véhicules</h2>
+        <section class="form-section" aria-labelledby="prefs-title">
+            <h2 id="prefs-title"><i class="fas fa-car"></i> Vos préférences véhicules</h2>
             <p class="help-text mb-3">Ces informations nous permettront de vous proposer des véhicules correspondant à vos critères. Tous les champs sont optionnels.</p>
             
             <div class="form-row">
@@ -135,7 +135,7 @@
                 {{ form_widget(form.preferenceFuelType, {'attr': {'class': 'form-select'}}) }}
                 <div class="form-errors">{{ form_errors(form.preferenceFuelType) }}</div>
             </div>
-        </div>
+        </section>
         
         <button type="submit" class="submit-button">
             <i class="fas fa-check-circle"></i> Valider mon inscription et mes préférences
@@ -143,10 +143,10 @@
         
         {{ form_end(form) }}
         
-        <div class="text-center mt-3">
+        <footer class="text-center mt-3">
             <p>Déjà inscrit ? <a href="{{ path('app_login') }}">Connectez-vous</a></p>
-        </div>
-    </div>
+        </footer>
+    </section>
 </div>
 {% endblock %}
 

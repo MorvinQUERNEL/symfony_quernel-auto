@@ -10,7 +10,7 @@
 
 {% block body %}
     <!-- Section Hero -->
-    <section class="hero">
+    <header class="hero">
         <div class="hero-content">
             <h1>QUERNEL AUTO</h1>
             <p>QUERNEL AUTO simplifie l'import-export de voitures, offrant des solutions fiables et transparentes pour l'achat et la vente de véhicules à l'international. Avec une expertise reconnue et un réseau mondial, nous vous accompagnons à chaque étape pour rendre vos transactions automobiles fluides et sécurisées.</p>
@@ -20,36 +20,36 @@
                 <a href="{{ path('app_combined_form') }}" class="cta-button">Remplir un formulaire</a>
             {% endif %}
         </div>
-    </section>
+    </header>
 
     <!-- Section Services -->
-    <section class="services">
-        <h2>Nos Services</h2>
+    <section class="services" aria-labelledby="services-title">
+        <h2 id="services-title">Nos Services</h2>
         <div class="services-grid">
-            <div class="service-card">
+            <article class="service-card">
                 <i class="fas fa-car"></i>
                 <h3>Import de Véhicules</h3>
                 <p>Solutions personnalisées pour l'importation de véhicules de qualité</p>
-            </div>
-            <div class="service-card">
+            </article>
+            <article class="service-card">
                 <i class="fas fa-globe"></i>
                 <h3>Export International</h3>
                 <p>Expertise mondiale dans l'exportation de véhicules</p>
-            </div>
-            <div class="service-card">
+            </article>
+            <article class="service-card">
                 <i class="fas fa-handshake"></i>
                 <h3>Accompagnement</h3>
                 <p>Support complet tout au long du processus</p>
-            </div>
+            </article>
         </div>
     </section>
 
     <!-- Section Processus -->
-    <section class="process">
-        <h2>Notre Processus d'Importation</h2>
+    <section class="process" aria-labelledby="process-title">
+        <h2 id="process-title">Notre Processus d'Importation</h2>
         <div class="process-steps">
             {% for i in 1..4 %}
-                <div class="step">
+                <article class="step">
                     <img src="{{ asset('images/etape' ~ i ~ '.jpg') }}" alt="Étape {{ i }}">
                     <h3>Étape {{ i }}</h3>
                     <p>{{ {
@@ -58,18 +58,18 @@
                         3: 'Transport sécurisé',
                         4: 'Livraison et formalités administratives'
                     }[i] }}</p>
-                </div>
+                </article>
             {% endfor %}
         </div>
     </section>
 
     <!-- Section Véhicules Récents -->
     {% if recentVehicules is not empty %}
-    <section class="recent-vehicles">
-        <div class="recent-vehicles__header">
-            <h2 class="recent-vehicles__title">Nos véhicules du moment</h2>
+    <section class="recent-vehicles" aria-labelledby="recent-vehicles-title">
+        <header class="recent-vehicles__header">
+            <h2 id="recent-vehicles-title" class="recent-vehicles__title">Nos véhicules du moment</h2>
             <p class="recent-vehicles__subtitle">Découvrez notre sélection de véhicules récents, prêts à être importés.</p>
-        </div>
+        </header>
         <div class="vehicles-carousel">
             <!-- Flèches de navigation -->
             <button class="carousel-nav carousel-nav-prev" aria-label="Véhicule précédent">
@@ -83,7 +83,7 @@
             <div class="carousel-wrapper">
                 <div class="vehicles-track">
                     {% for vehicule in recentVehicules %}
-                        <div class="vehicle-card">
+                        <article class="vehicle-card">
                             <div class="vehicle-image">
                                 {% if vehicule.pictures is not empty and vehicule.pictures|first.name %}
                                     <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures|first.name) }}" alt="{{ vehicule.brand }} {{ vehicule.model }}">
@@ -118,7 +118,7 @@
                                     {% endif %}
                                 </div>
                             </div>
-                        </div>
+                        </article>
                     {% endfor %}
                 </div>
             </div>
