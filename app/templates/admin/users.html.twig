@@ -10,13 +10,14 @@
 
 {% block body %}
 <div class="admin-container">
-    <div class="admin-header">
+    <header class="admin-header">
         <h1><i class="fas fa-users"></i> Gestion des Utilisateurs</h1>
         <p>Consultez la liste de tous les utilisateurs et leurs préférences de véhicules</p>
-    </div>
+    </header>
 
     <!-- Barre de recherche -->
-    <div class="search-section">
+    <section class="search-section" aria-labelledby="search-title">
+        <h2 id="search-title" class="sr-only">Rechercher un utilisateur</h2>
         <form method="GET" action="{{ path('app_admin_users') }}" class="search-form">
             <div class="search-input-group">
                 <input type="text" 
@@ -34,10 +35,10 @@
                 </a>
             {% endif %}
         </form>
-    </div>
+    </section>
 
     <!-- Statistiques -->
-    <div class="stats-section">
+    <section class="stats-section" aria-label="Statistiques des utilisateurs">
         <div class="stat-card">
             <i class="fas fa-users"></i>
             <div class="stat-content">
@@ -52,10 +53,11 @@
                 <span class="stat-label">Avec préférences</span>
             </div>
         </div>
-    </div>
+    </section>
 
     <!-- Liste des utilisateurs -->
-    <div class="users-section">
+    <section class="users-section" aria-labelledby="users-list-title">
+        <h2 id="users-list-title" class="sr-only">Liste des utilisateurs</h2>
         {% if users is empty %}
             <div class="no-users">
                 <i class="fas fa-user-slash"></i>
@@ -65,8 +67,8 @@
         {% else %}
             <div class="users-grid">
                 {% for user in users %}
-                    <div class="user-card">
-                        <div class="user-header">
+                    <article class="user-card">
+                        <header class="user-header">
                             <div class="user-avatar">
                                 <i class="fas fa-user"></i>
                             </div>
@@ -81,10 +83,10 @@
                                     {% endfor %}
                                 </div>
                             </div>
-                        </div>
+                        </header>
 
-                        <div class="user-preferences">
-                            <h4><i class="fas fa-car"></i> Préférences de véhicules</h4>
+                        <section class="user-preferences" aria-labelledby="user-prefs-title-{{ user.id }}">
+                            <h4 id="user-prefs-title-{{ user.id }}"><i class="fas fa-car"></i> Préférences de véhicules</h4>
                             {% if user.preferences is empty %}
                                 <p class="no-preferences">Aucune préférence définie</p>
                             {% else %}
@@ -110,18 +112,18 @@
                                     {% endfor %}
                                 </div>
                             {% endif %}
-                        </div>
+                        </section>
 
-                        <div class="user-actions">
+                        <footer class="user-actions">
                             <a href="{{ path('app_profile') }}" class="btn btn-secondary btn-sm">
                                 <i class="fas fa-eye"></i> Voir profil
                             </a>
-                        </div>
-                    </div>
+                        </footer>
+                    </article>
                 {% endfor %}
             </div>
         {% endif %}
-    </div>
+    </section>
 </div>
 
 <script src="{{ asset('js/app.js') }}" defer></script>

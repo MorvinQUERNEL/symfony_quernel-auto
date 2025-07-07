@@ -10,15 +10,15 @@
 
 {% block body %}
 <div class="login-container">
-    <div class="login-card p-4 p-md-5">
-        <div class="login-header text-center mb-4">
+    <section class="login-card p-4 p-md-5">
+        <header class="login-header text-center mb-4">
             <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="login-logo mb-4">
             <h1 class="h3 mb-3 font-weight-normal">Inscription</h1>
-        </div>
+        </header>
 
         {{ form_start(registrationForm, {'attr': {'class': 'registration-form'}}) }}
             {% if not registrationForm.vars.valid %}
-                <div class="alert alert-danger">
+                <div class="alert alert-danger" role="alert">
                     Veuillez corriger les erreurs ci-dessous
                 </div>
             {% endif %}
@@ -129,9 +129,9 @@
                 <button type="submit" class="btn btn-login">S'inscrire</button>
             </div>
         {{ form_end(registrationForm) }}
-        <div class="text-center mt-4">
+        <footer class="text-center mt-4">
             <a href="{{ path('app_login') }}" class="register-link">Déjà inscrit ? Connectez-vous</a>
-        </div>
-    </div>
+        </footer>
+    </section>
 </div>
 {% endblock %} 

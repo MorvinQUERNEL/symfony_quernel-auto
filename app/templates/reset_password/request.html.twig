@@ -9,11 +9,11 @@
 
 {% block body %}
 <div class="reset-container">
-    <div class="reset-card">
-        <div class="reset-header">
+    <section class="reset-card">
+        <header class="reset-header">
             <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="reset-logo">
             <h1>Réinitialisation du mot de passe</h1>
-        </div>
+        </header>
 
         {% for flash_error in app.flashes('reset_password_error') %}
             <div class="alert alert-danger">
@@ -45,9 +45,9 @@
             </div>
         {{ form_end(requestForm) }}
 
-        <div class="text-center mt-4">
+        <footer class="text-center mt-4">
             <a href="{{ path('app_login') }}" class="text-decoration-none">Retour à la connexion</a>
-        </div>
-    </div>
+        </footer>
+    </section>
 </div>
 {% endblock %} 

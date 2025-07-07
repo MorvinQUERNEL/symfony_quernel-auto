@@ -9,12 +9,12 @@
 
 {% block body %}
 <div class="messages-container">
-    <div class="messages-header">
+    <header class="messages-header">
         <h1>Mes Messages</h1>
         <a href="{{ path('app_messages_new') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Nouveau message
         </a>
-    </div>
+    </header>
 
     {% for message in app.flashes('success') %}
         <div class="alert alert-success">
@@ -23,8 +23,8 @@
     {% endfor %}
 
     <!-- Messages reçus -->
-    <div class="messages-section">
-        <h2><i class="fas fa-inbox"></i> Messages reçus ({{ received_messages|length }})</h2>
+    <section class="messages-section" aria-labelledby="received-messages-title">
+        <h2 id="received-messages-title"><i class="fas fa-inbox"></i> Messages reçus ({{ received_messages|length }})</h2>
         
         {% if received_messages is empty %}
             <div class="no-messages">
@@ -34,15 +34,13 @@
         {% else %}
             <div class="messages-grid">
                 {% for message in received_messages %}
-                    <div class="message-card received">
-                        <div class="message-header">
+                    <article class="message-card received">
+                        <header class="message-header">
                             <div class="message-subject">
                                 <h3>{{ message.subject }}</h3>
                             </div>
-                            <div class="message-date">
-                                {{ message.sendAt|date('d/m/Y H:i') }}
-                            </div>
-                        </div>
+                            <time class="message-date" datetime="{{ message.sendAt|date('c') }}">{{ message.sendAt|date('d/m/Y H:i') }}</time>
+                        </header>
                         
                         <div class="message-content">
                             <div class="message-participants">
@@ -52,25 +50,25 @@
                                 </div>
                             </div>
                             
-                            <div class="message-preview">
+                            <p class="message-preview">
                                 {{ message.content|length > 100 ? message.content|slice(0, 100) ~ '...' : message.content }}
-                            </div>
+                            </p>
                         </div>
                         
-                        <div class="message-actions">
+                        <footer class="message-actions">
                             <a href="{{ path('app_messages_show', {'id': message.id}) }}" class="btn btn-secondary">
                                 <i class="fas fa-eye"></i> Lire
                             </a>
-                        </div>
-                    </div>
+                        </footer>
+                    </article>
                 {% endfor %}
             </div>
         {% endif %}
-    </div>
+    </section>
 
     <!-- Messages envoyés -->
-    <div class="messages-section">
-        <h2><i class="fas fa-paper-plane"></i> Messages envoyés ({{ sent_messages|length }})</h2>
+    <section class="messages-section" aria-labelledby="sent-messages-title">
+        <h2 id="sent-messages-title"><i class="fas fa-paper-plane"></i> Messages envoyés ({{ sent_messages|length }})</h2>
         
         {% if sent_messages is empty %}
             <div class="no-messages">
@@ -80,15 +78,13 @@
         {% else %}
             <div class="messages-grid">
                 {% for message in sent_messages %}
-                    <div class="message-card sent">
-                        <div class="message-header">
+                    <article class="message-card sent">
+                        <header class="message-header">
                             <div class="message-subject">
                                 <h3>{{ message.subject }}</h3>
                             </div>
-                            <div class="message-date">
-                                {{ message.sendAt|date('d/m/Y H:i') }}
-                            </div>
-                        </div>
+                            <time class="message-date" datetime="{{ message.sendAt|date('c') }}">{{ message.sendAt|date('d/m/Y H:i') }}</time>
+                        </header>
                         
                         <div class="message-content">
                             <div class="message-participants">
@@ -98,12 +94,12 @@
                                 </div>
                             </div>
                             
-                            <div class="message-preview">
+                            <p class="message-preview">
                                 {{ message.content|length > 100 ? message.content|slice(0, 100) ~ '...' : message.content }}
-                            </div>
+                            </p>
                         </div>
                         
-                        <div class="message-actions">
+                        <footer class="message-actions">
                             <a href="{{ path('app_messages_show', {'id': message.id}) }}" class="btn btn-secondary">
                                 <i class="fas fa-eye"></i> Voir
                             </a>
@@ -118,11 +114,11 @@
                                     <i class="fas fa-trash"></i> Supprimer
                                 </button>
                             </form>
-                        </div>
-                    </div>
+                        </footer>
+                    </article>
                 {% endfor %}
             </div>
         {% endif %}
-    </div>
+    </section>
 </div>
 {% endblock %} 

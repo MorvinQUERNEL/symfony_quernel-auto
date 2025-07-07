@@ -9,40 +9,36 @@
 
 {% block body %}
 <div class="my-orders-container">
-    <div class="my-orders-header">
+    <header class="my-orders-header">
         <h1>Mes Commandes</h1>
         <a href="{{ path('app_profile') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Retour au profil
         </a>
-    </div>
+    </header>
 
     {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ message }}
-        </div>
+        <div class="alert alert-success" role="alert">{{ message }}</div>
     {% endfor %}
 
     {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">
-            {{ message }}
-        </div>
+        <div class="alert alert-danger" role="alert">{{ message }}</div>
     {% endfor %}
 
     {% if orders is empty %}
-        <div class="no-orders">
+        <section class="no-orders" aria-labelledby="no-orders-title">
             <i class="fas fa-shopping-cart"></i>
-            <h2>Vous n'avez pas encore de commandes</h2>
+            <h2 id="no-orders-title">Vous n'avez pas encore de commandes</h2>
             <p>Commencez par parcourir nos véhicules disponibles et faites votre première commande !</p>
             <a href="{{ path('app_vehicules_index') }}" class="btn btn-primary">
                 <i class="fas fa-car"></i> Voir nos véhicules
             </a>
-        </div>
+        </section>
     {% else %}
         <div class="orders-grid">
             {% for order in orders %}
-                <div class="order-card">
-                    <div class="order-header">
-                        <h3>Commande #{{ order.id }}</h3>
+                <article class="order-card" aria-labelledby="order-title-{{ order.id }}">
+                    <header class="order-header">
+                        <h3 id="order-title-{{ order.id }}">Commande #{{ order.id }}</h3>
                         <span class="order-status status-{{ order.orderStatus }}">
                             {% if order.orderStatus == 'pending' %}
                                 En attente de paiement
@@ -62,9 +58,9 @@
                                 {{ order.orderStatus }}
                             {% endif %}
                         </span>
-                    </div>
+                    </header>
                     
-                    <div class="order-details">
+                    <section class="order-details" aria-label="Détails de la commande">
                         <div class="order-info">
                             <p><strong>Date de commande :</strong> {{ order.createdAt|date('d/m/Y H:i') }}</p>
                             <p><strong>Prix total :</strong> {{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</p>
@@ -77,10 +73,10 @@
                             <p>{{ order.deliveryPostalCode }} {{ order.deliveryCity }}</p>
                             <p>{{ order.deliveryCountry }}</p>
                         </div>
-                    </div>
+                    </section>
 
                     {% if order.vehicules is not empty %}
-                        <div class="order-vehicules">
+                        <section class="order-vehicules" aria-label="Véhicules de la commande">
                             <h4>Véhicules commandés :</h4>
                             <div class="vehicules-list">
                                 {% for vehicule in order.vehicules %}
@@ -103,10 +99,10 @@
                                     </div>
                                 {% endfor %}
                             </div>
-                        </div>
+                        </section>
                     {% endif %}
                     
-                    <div class="order-actions">
+                    <footer class="order-actions">
                         <div class="action-buttons">
                             {% if order.orderStatus == 'pending' %}
                                 <a href="{{ path('app_payment_order', {'id': order.id}) }}" class="btn btn-success">
@@ -130,8 +126,8 @@
                                 </form>
                             {% endif %}
                         </div>
-                    </div>
-                </div>
+                    </footer>
+                </article>
             {% endfor %}
         </div>
     {% endif %}
