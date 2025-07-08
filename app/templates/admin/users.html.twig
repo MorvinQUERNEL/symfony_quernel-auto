@@ -1,24 +1,32 @@
+{# Template d'administration des utilisateurs de Quernel Auto #}
+{# Cette page permet aux administrateurs de gérer et consulter les utilisateurs #}
+{# Elle inclut : recherche, statistiques, liste utilisateurs, préférences véhicules #}
 {% extends 'base.html.twig' %}
 
+{# Titre de la page pour le SEO #}
 {% block title %}Gestion des Utilisateurs - Quernel Auto{% endblock %}
 
+{# Feuilles de style spécifiques à l'administration #}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 {% endblock %}
 
+{# Contenu principal de la page d'administration #}
 {% block body %}
 <div class="admin-container">
+    {# En-tête de la page d'administration #}
     <header class="admin-header">
         <h1><i class="fas fa-users"></i> Gestion des Utilisateurs</h1>
         <p>Consultez la liste de tous les utilisateurs et leurs préférences de véhicules</p>
     </header>
 
-    <!-- Barre de recherche -->
+    {# Section de recherche d'utilisateurs #}
     <section class="search-section" aria-labelledby="search-title">
         <h2 id="search-title" class="sr-only">Rechercher un utilisateur</h2>
         <form method="GET" action="{{ path('app_admin_users') }}" class="search-form">
+            {# Groupe de saisie de recherche #}
             <div class="search-input-group">
                 <input type="text" 
                        name="search" 
@@ -29,6 +37,7 @@
                     <i class="fas fa-search"></i>
                 </button>
             </div>
+            {# Lien pour effacer la recherche si active #}
             {% if search %}
                 <a href="{{ path('app_admin_users') }}" class="clear-search">
                     <i class="fas fa-times"></i> Effacer la recherche
@@ -37,8 +46,9 @@
         </form>
     </section>
 
-    <!-- Statistiques -->
+    {# Section des statistiques utilisateurs #}
     <section class="stats-section" aria-label="Statistiques des utilisateurs">
+        {# Carte statistique : nombre total d'utilisateurs #}
         <div class="stat-card">
             <i class="fas fa-users"></i>
             <div class="stat-content">
@@ -46,6 +56,7 @@
                 <span class="stat-label">Utilisateurs</span>
             </div>
         </div>
+        {# Carte statistique : utilisateurs avec préférences #}
         <div class="stat-card">
             <i class="fas fa-car"></i>
             <div class="stat-content">
@@ -55,26 +66,34 @@
         </div>
     </section>
 
-    <!-- Liste des utilisateurs -->
+    {# Section de liste des utilisateurs #}
     <section class="users-section" aria-labelledby="users-list-title">
         <h2 id="users-list-title" class="sr-only">Liste des utilisateurs</h2>
+        {# Affichage conditionnel selon la présence d'utilisateurs #}
         {% if users is empty %}
+            {# Message si aucun utilisateur trouvé #}
             <div class="no-users">
                 <i class="fas fa-user-slash"></i>
                 <h2>Aucun utilisateur trouvé</h2>
                 <p>{% if search %}Aucun utilisateur ne correspond à votre recherche "{{ search }}".{% else %}Il n'y a actuellement aucun utilisateur enregistré.{% endif %}</p>
             </div>
         {% else %}
+            {# Grille des utilisateurs #}
             <div class="users-grid">
+                {# Boucle sur tous les utilisateurs #}
                 {% for user in users %}
                     <article class="user-card">
+                        {# En-tête de la carte utilisateur #}
                         <header class="user-header">
+                            {# Avatar de l'utilisateur #}
                             <div class="user-avatar">
                                 <i class="fas fa-user"></i>
                             </div>
+                            {# Informations de base de l'utilisateur #}
                             <div class="user-info">
                                 <h3>{{ user.firstname }} {{ user.lastname }}</h3>
                                 <p class="user-email">{{ user.email }}</p>
+                                {# Badges des rôles utilisateur #}
                                 <div class="user-roles">
                                     {% for role in user.roles %}
                                         <span class="role-badge role-{{ role|lower|replace({'role_': ''}) }}">
@@ -85,25 +104,33 @@
                             </div>
                         </header>
 
+                        {# Section des préférences véhicules de l'utilisateur #}
                         <section class="user-preferences" aria-labelledby="user-prefs-title-{{ user.id }}">
                             <h4 id="user-prefs-title-{{ user.id }}"><i class="fas fa-car"></i> Préférences de véhicules</h4>
                             {% if user.preferences is empty %}
+                                {# Message si aucune préférence #}
                                 <p class="no-preferences">Aucune préférence définie</p>
                             {% else %}
+                                {# Liste des préférences véhicules #}
                                 <div class="preferences-list">
                                     {% for preference in user.preferences %}
                                         <div class="preference-item">
+                                            {# En-tête de la préférence avec marque et modèle #}
                                             <div class="preference-header">
                                                 <span class="preference-brand">{{ preference.prefereneceBrand }}</span>
                                                 <span class="preference-model">{{ preference.preferenceModel }}</span>
                                             </div>
+                                            {# Détails de la préférence #}
                                             <div class="preference-details">
+                                                {# Année minimum si définie #}
                                                 {% if preference.minYear %}
                                                     <span class="detail"><i class="fas fa-calendar"></i> {{ preference.minYear|date('Y') }}</span>
                                                 {% endif %}
+                                                {# Prix maximum si défini #}
                                                 {% if preference.maxPrice %}
                                                     <span class="detail"><i class="fas fa-euro-sign"></i> {{ preference.maxPrice|number_format(0, ',', ' ') }} €</span>
                                                 {% endif %}
+                                                {# Type de carburant si défini #}
                                                 {% if preference.preferenceFuelType %}
                                                     <span class="detail"><i class="fas fa-gas-pump"></i> {{ preference.preferenceFuelType }}</span>
                                                 {% endif %}
@@ -114,6 +141,7 @@
                             {% endif %}
                         </section>
 
+                        {# Pied de page avec actions sur l'utilisateur #}
                         <footer class="user-actions">
                             <a href="{{ path('app_profile') }}" class="btn btn-secondary btn-sm">
                                 <i class="fas fa-eye"></i> Voir profil
@@ -126,5 +154,6 @@
     </section>
 </div>
 
+{# Script JavaScript pour les fonctionnalités d'administration #}
 <script src="{{ asset('js/app.js') }}" defer></script>
 {% endblock %} 

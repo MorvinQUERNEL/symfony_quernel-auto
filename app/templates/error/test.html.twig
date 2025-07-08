@@ -1,15 +1,22 @@
+{# Template de test des pages d'erreur de Quernel Auto #}
+{# Cette page permet de tester et prévisualiser toutes les pages d'erreur #}
+{# Elle inclut : liens de prévisualisation, tests d'erreurs, instructions #}
 {% extends 'base.html.twig' %}
 
+{# Titre de la page pour le SEO #}
 {% block title %}Test des pages d'erreur - Quernel Auto{% endblock %}
 
+{# Feuilles de style spécifiques aux pages d'erreur #}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/error.css') }}">
 {% endblock %}
 
+{# Contenu principal de la page de test #}
 {% block body %}
     <div class="error-page-container">
         <article class="error-content">
+            {# En-tête avec animation et icône #}
             <header class="error-animation">
                 <div class="error-icon">
                     <i class="fas fa-tools"></i>
@@ -17,6 +24,7 @@
                 <div class="error-code">TEST</div>
             </header>
             
+            {# Section message principal #}
             <section class="error-message" aria-labelledby="error-title-main">
                 <h1 id="error-title-main" class="error-title">Test des pages d'erreur</h1>
                 <p class="error-description">
@@ -25,9 +33,11 @@
                 </p>
             </section>
             
+            {# Section prévisualisations stylées #}
             <section class="error-suggestions" aria-labelledby="preview-title">
                 <h3 id="preview-title">🎨 Prévisualisations stylées (recommandé) :</h3>
                 <ul>
+                    {# Liens vers les prévisualisations des pages d'erreur #}
                     <li><i class="fas fa-eye"></i> <a href="{{ path('app_preview_error_404') }}" style="color: var(--primary-color);">Voir la page d'erreur 404 stylée</a></li>
                     <li><i class="fas fa-eye"></i> <a href="{{ path('app_preview_error_403') }}" style="color: var(--primary-color);">Voir la page d'erreur 403 stylée</a></li>
                     <li><i class="fas fa-eye"></i> <a href="{{ path('app_preview_error_500') }}" style="color: var(--primary-color);">Voir la page d'erreur 500 stylée</a></li>
@@ -35,6 +45,7 @@
                 </ul>
             </section>
             
+            {# Navigation avec boutons de prévisualisation (première ligne) #}
             <nav class="error-actions" aria-label="Actions de prévisualisation">
                 <a href="{{ path('app_preview_error_404') }}" class="btn btn-primary">
                     <i class="fas fa-search"></i>
@@ -46,6 +57,7 @@
                 </a>
             </nav>
             
+            {# Navigation avec boutons de prévisualisation (deuxième ligne) #}
             <nav class="error-actions" aria-label="Actions de prévisualisation">
                 <a href="{{ path('app_preview_error_500') }}" class="btn btn-primary">
                     <i class="fas fa-server"></i>
@@ -57,9 +69,11 @@
                 </a>
             </nav>
             
+            {# Section tests avec vraies erreurs pour développeurs #}
             <section class="error-suggestions" aria-labelledby="debug-title">
                 <h3 id="debug-title">⚠️ Tests avec vraies erreurs (pour développeurs) :</h3>
                 <ul>
+                    {# Liens pour déclencher de vraies erreurs #}
                     <li><i class="fas fa-bug"></i> <a href="{{ path('app_test_error_404') }}" style="color: var(--text-light);">Déclencher vraie erreur 404</a></li>
                     <li><i class="fas fa-bug"></i> <a href="{{ path('app_test_error_403') }}" style="color: var(--text-light);">Déclencher vraie erreur 403</a></li>
                     <li><i class="fas fa-bug"></i> <a href="{{ path('app_test_error_500') }}" style="color: var(--text-light);">Déclencher vraie erreur 500</a></li>
@@ -67,9 +81,11 @@
                 </ul>
             </section>
             
+            {# Section instructions de test #}
             <section class="error-suggestions" aria-labelledby="instructions-title">
                 <h3 id="instructions-title">Instructions de test :</h3>
                 <ul>
+                    {# Liste des instructions pour les tests #}
                     <li><i class="fas fa-info-circle"></i> Cette page n'est disponible qu'en mode développement</li>
                     <li><i class="fas fa-palette"></i> Les "prévisualisations stylées" montrent le design complet</li>
                     <li><i class="fas fa-mobile-alt"></i> Testez sur différentes tailles d'écran</li>
@@ -78,6 +94,7 @@
                 </ul>
             </section>
             
+            {# Pied de page avec bouton de retour #}
             <footer class="error-actions">
                 <a href="{{ path('app_home') }}" class="btn btn-primary">
                     <i class="fas fa-home"></i>

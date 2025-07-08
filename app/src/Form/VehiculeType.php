@@ -21,11 +21,36 @@ use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\All;
 
+/**
+ * Formulaire de gestion des véhicules (ajout/modification)
+ * 
+ * Ce formulaire gère :
+ * - Les informations de base du véhicule (marque, modèle, année)
+ * - Les caractéristiques techniques (kilométrage, carburant, transmission)
+ * - Les informations de vente (prix, statut)
+ * - L'upload et gestion des images du véhicule
+ * - La validation complète des données avec contraintes Symfony
+ * - L'interface utilisateur avec placeholders et classes CSS
+ */
 class VehiculeType extends AbstractType
 {
+    /**
+     * Construction du formulaire de véhicule
+     * 
+     * Cette méthode définit tous les champs du formulaire avec :
+     * - Les types de champs appropriés pour chaque donnée
+     * - Les contraintes de validation (obligatoire, longueur, valeurs positives)
+     * - Les choix prédéfinis pour les listes déroulantes
+     * - Les attributs HTML pour l'interface utilisateur
+     * - La gestion des images avec CollectionType
+     * 
+     * @param FormBuilderInterface $builder Constructeur de formulaire Symfony
+     * @param array $options Options du formulaire
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            // Champ marque - Texte avec validation de longueur
             ->add('brand', TextType::class, [
                 'label' => 'Marque',
                 'attr' => [
@@ -42,6 +67,8 @@ class VehiculeType extends AbstractType
                     ])
                 ]
             ])
+            
+            // Champ modèle - Texte avec validation de longueur
             ->add('model', TextType::class, [
                 'label' => 'Modèle',
                 'attr' => [
@@ -58,9 +85,11 @@ class VehiculeType extends AbstractType
                     ])
                 ]
             ])
+            
+            // Champ année - Sélecteur de date (widget single_text pour HTML5)
             ->add('year', DateType::class, [
                 'label' => 'Année',
-                'widget' => 'single_text',
+                'widget' => 'single_text', // Utilise l'input date HTML5
                 'attr' => [
                     'class' => 'form-control'
                 ],
@@ -70,12 +99,14 @@ class VehiculeType extends AbstractType
                     ])
                 ]
             ])
+            
+            // Champ kilométrage - Nombre entier positif
             ->add('mileage', IntegerType::class, [
                 'label' => 'Kilométrage',
                 'attr' => [
                     'placeholder' => 'Ex: 50000',
                     'class' => 'form-control',
-                    'min' => 0
+                    'min' => 0 // Attribut HTML pour validation côté client
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -86,6 +117,8 @@ class VehiculeType extends AbstractType
                     ])
                 ]
             ])
+            
+            // Champ type de carburant - Liste déroulante avec choix prédéfinis
             ->add('fuelType', ChoiceType::class, [
                 'label' => 'Type de carburant',
                 'choices' => [
@@ -105,6 +138,8 @@ class VehiculeType extends AbstractType
                     ])
                 ]
             ])
+            
+            // Champ transmission - Liste déroulante avec choix prédéfinis
             ->add('trasmission', ChoiceType::class, [
                 'label' => 'Transmission',
                 'choices' => [
@@ -121,6 +156,8 @@ class VehiculeType extends AbstractType
                     ])
                 ]
             ])
+            
+            // Champ couleur - Texte avec validation de longueur
             ->add('color', TextType::class, [
                 'label' => 'Couleur',
                 'attr' => [
@@ -137,6 +174,8 @@ class VehiculeType extends AbstractType
                     ])
                 ]
             ])
+            
+            // Champ nombre de portes - Liste déroulante avec validation de plage
             ->add('doorCount', ChoiceType::class, [
                 'label' => 'Nombre de portes',
                 'choices' => [
@@ -159,13 +198,15 @@ class VehiculeType extends AbstractType
                     ])
                 ]
             ])
+            
+            // Champ description - Zone de texte optionnelle
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
-                'required' => false,
+                'required' => false, // Champ optionnel
                 'attr' => [
                     'placeholder' => 'Description détaillée du véhicule...',
                     'class' => 'form-control',
-                    'rows' => 4
+                    'rows' => 4 // Hauteur de la zone de texte
                 ],
                 'constraints' => [
                     new Length([
@@ -174,9 +215,11 @@ class VehiculeType extends AbstractType
                     ])
                 ]
             ])
+            
+            // Champ statut - Liste déroulante optionnelle
             ->add('status', ChoiceType::class, [
                 'label' => 'Statut',
-                'required' => false,
+                'required' => false, // Champ optionnel
                 'choices' => [
                     'Disponible' => 'Disponible',
                     'Vendu' => 'Vendu',
@@ -188,9 +231,11 @@ class VehiculeType extends AbstractType
                     'class' => 'form-control'
                 ]
             ])
+            
+            // Champ prix de vente - Montant en euros avec validation positive
             ->add('salePrice', MoneyType::class, [
                 'label' => 'Prix de vente',
-                'currency' => 'EUR',
+                'currency' => 'EUR', // Devise en euros
                 'attr' => [
                     'placeholder' => 'Ex: 25000',
                     'class' => 'form-control'
@@ -204,25 +249,36 @@ class VehiculeType extends AbstractType
                     ])
                 ]
             ])
+            
+            // Champ images - Collection de formulaires PictureType
             ->add('pictures', CollectionType::class, [
                 'label' => 'Images',
-                'entry_type' => PictureType::class,
+                'entry_type' => PictureType::class, // Type de formulaire pour chaque image
                 'entry_options' => [
-                    'label' => false
+                    'label' => false // Pas de label pour chaque entrée
                 ],
-                'allow_add' => true,
-                'allow_delete' => true,
-                'prototype' => true,
-                'by_reference' => false,
-                'required' => false
+                'allow_add' => true, // Permet d'ajouter de nouvelles images
+                'allow_delete' => true, // Permet de supprimer des images
+                'prototype' => true, // Génère un prototype pour JavaScript
+                'by_reference' => false, // Force l'utilisation des setters
+                'required' => false // Collection optionnelle
             ])
         ;
     }
 
+    /**
+     * Configuration des options du formulaire
+     * 
+     * Cette méthode définit :
+     * - La classe d'entité associée au formulaire
+     * - Les options par défaut pour la validation
+     * 
+     * @param OptionsResolver $resolver Résolveur d'options Symfony
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Vehicules::class,
+            'data_class' => Vehicules::class, // Entité associée au formulaire
         ]);
     }
 } 

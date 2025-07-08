@@ -23,6 +23,17 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 
+/**
+ * Contrôleur gérant les paiements et l'intégration Stripe
+ * 
+ * Ce contrôleur gère :
+ * - L'affichage des commandes en attente de paiement
+ * - La création de sessions de paiement Stripe
+ * - Le traitement des paiements réussis et annulés
+ * - Les webhooks Stripe pour les événements de paiement
+ * - L'envoi d'emails de confirmation
+ * - La mise à jour des statuts de commande et véhicule
+ */
 class PaymentController extends AbstractController
 {
     private StripeClient $stripeClient;
@@ -34,6 +45,18 @@ class PaymentController extends AbstractController
     private VehiculeStatusService $vehiculeStatusService;
     private StripeService $stripeService;
 
+    /**
+     * Constructeur avec injection des dépendances
+     * 
+     * @param StripeClient $stripeClient Client Stripe pour les paiements
+     * @param string $stripePublicKey Clé publique Stripe
+     * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine
+     * @param LoggerInterface $logger Service de logging
+     * @param StripeWebhookService $webhookService Service de traitement des webhooks
+     * @param EmailService $emailService Service d'envoi d'emails
+     * @param VehiculeStatusService $vehiculeStatusService Service de gestion des statuts véhicule
+     * @param StripeService $stripeService Service principal Stripe
+     */
     public function __construct(
         StripeClient $stripeClient, 
         string $stripePublicKey,
@@ -54,16 +77,27 @@ class PaymentController extends AbstractController
         $this->stripeService = $stripeService;
     }
 
+    /**
+     * Page principale des paiements
+     * 
+     * Cette méthode gère :
+     * - La vérification de l'authentification de l'utilisateur
+     * - L'affichage des commandes en attente de paiement
+     * - Le rendu de la page de paiement avec la clé publique Stripe
+     * 
+     * @return Response Page de paiement ou redirection vers la connexion
+     */
     #[Route('/payment', name: 'app_payment')]
     public function index(): Response
     {
-        // Récupérer les commandes en attente de paiement de l'utilisateur
+        // Vérification de l'authentification
         $user = $this->getUser();
         if (!$user) {
             $this->addFlash('error', 'Vous devez être connecté pour effectuer un paiement.');
             return $this->redirectToRoute('app_login');
         }
 
+        // Récupération des commandes en attente de paiement de l'utilisateur
         $pendingOrders = $this->entityManager->getRepository(Orders::class)
             ->findBy(['users' => $user, 'orderStatus' => 'pending']);
 
@@ -73,21 +107,40 @@ class PaymentController extends AbstractController
         ]);
     }
 
+    /**
+     * Redirection vers la page de paiement
+     * 
+     * @return Response Redirection vers la page de paiement
+     */
     #[Route('/pay', name: 'app_pay')]
     public function pay(): Response
     {
         return $this->redirectToRoute('app_payment');
     }
 
+    /**
+     * Paiement d'une commande spécifique
+     * 
+     * Cette méthode gère :
+     * - La vérification des autorisations (propriétaire de la commande)
+     * - La vérification du statut de la commande
+     * - L'affichage de la page de paiement pour une commande spécifique
+     * 
+     * @param Orders $order Commande à payer
+     * @return Response Page de paiement de la commande ou redirection
+     */
     #[Route('/payment/order/{id}', name: 'app_payment_order')]
     public function payOrder(Orders $order): Response
     {
         $user = $this->getUser();
+        
+        // Vérification des autorisations
         if (!$user || $order->getUsers() !== $user) {
             $this->addFlash('error', 'Accès non autorisé.');
             return $this->redirectToRoute('app_payment');
         }
 
+        // Vérification du statut de la commande
         if ($order->getOrderStatus() !== 'pending') {
             $this->addFlash('error', 'Cette commande ne peut plus être payée.');
             return $this->redirectToRoute('app_payment');
@@ -99,6 +152,18 @@ class PaymentController extends AbstractController
         ]);
     }
 
+    /**
+     * Création d'une session de paiement Stripe Checkout
+     * 
+     * Cette méthode gère :
+     * - La validation de la commande et des autorisations
+     * - La création d'une session de paiement via le service Stripe
+     * - Le retour des données de session au frontend
+     * - La gestion des erreurs avec logging
+     * 
+     * @param Request $request Requête HTTP contenant l'ID de commande
+     * @return JsonResponse Données de session Stripe ou erreur
+     */
     #[Route('/create-checkout-session', name: 'app_create_checkout_session', methods: ['POST'])]
     public function createCheckoutSession(Request $request): Response
     {
@@ -106,24 +171,30 @@ class PaymentController extends AbstractController
             $orderId = $request->request->get('order_id');
             $order = $this->entityManager->getRepository(Orders::class)->find($orderId);
 
+            // Validation de la commande
             if (!$order) {
                 throw new \Exception('Commande non trouvée.');
             }
 
             $user = $this->getUser();
+            
+            // Validation des autorisations
             if (!$user || $order->getUsers() !== $user) {
                 throw new \Exception('Accès non autorisé.');
             }
 
+            // Validation du statut de la commande
             if ($order->getOrderStatus() !== 'pending') {
                 throw new \Exception('Cette commande ne peut plus être payée.');
             }
 
+            // Création de la session de paiement via le service
             $checkoutData = $this->stripeService->createCheckoutSession($order, $request->getSchemeAndHttpHost());
 
             return new JsonResponse($checkoutData);
 
         } catch (\Exception $e) {
+            // Logging de l'erreur pour le debugging
             $this->logger->error('Erreur lors de la création de la session de paiement', [
                 'error' => $e->getMessage(),
                 'order_id' => $orderId ?? null,
@@ -135,6 +206,18 @@ class PaymentController extends AbstractController
         }
     }
 
+    /**
+     * Création d'un PaymentIntent Stripe
+     * 
+     * Cette méthode gère :
+     * - La validation de la commande et des autorisations
+     * - La création d'un PaymentIntent via le service Stripe
+     * - Le retour des données de paiement au frontend
+     * - La gestion des erreurs avec logging
+     * 
+     * @param Request $request Requête HTTP contenant l'ID de commande
+     * @return JsonResponse Données de PaymentIntent ou erreur
+     */
     #[Route('/create-payment-intent', name: 'app_create_payment_intent', methods: ['POST'])]
     public function createPaymentIntent(Request $request): Response
     {
@@ -142,24 +225,30 @@ class PaymentController extends AbstractController
             $orderId = $request->request->get('order_id');
             $order = $this->entityManager->getRepository(Orders::class)->find($orderId);
 
+            // Validation de la commande
             if (!$order) {
                 throw new \Exception('Commande non trouvée.');
             }
 
             $user = $this->getUser();
+            
+            // Validation des autorisations
             if (!$user || $order->getUsers() !== $user) {
                 throw new \Exception('Accès non autorisé.');
             }
 
+            // Validation du statut de la commande
             if ($order->getOrderStatus() !== 'pending') {
                 throw new \Exception('Cette commande ne peut plus être payée.');
             }
 
+            // Création du PaymentIntent via le service
             $paymentIntentData = $this->stripeService->createPaymentIntent($order);
 
             return new JsonResponse($paymentIntentData);
 
         } catch (\Exception $e) {
+            // Logging de l'erreur pour le debugging
             $this->logger->error('Erreur lors de la création du PaymentIntent', [
                 'error' => $e->getMessage(),
                 'order_id' => $orderId ?? null,
@@ -171,6 +260,22 @@ class PaymentController extends AbstractController
         }
     }
 
+    /**
+     * Traitement du succès d'un paiement
+     * 
+     * Cette méthode gère :
+     * - La récupération des informations de session Stripe
+     * - La validation de la commande et des autorisations
+     * - La mise à jour du statut de la commande et du véhicule
+     * - L'envoi d'email de confirmation
+     * - L'affichage de la page de succès
+     * 
+     * @param Request $request Requête HTTP contenant l'ID de session Stripe
+     * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine
+     * @param StripeService $stripeService Service Stripe
+     * @param MailerInterface $mailer Service d'envoi d'emails
+     * @return Response Page de succès ou redirection
+     */
     #[Route('/payment/success', name: 'app_payment_success')]
     public function success(
         Request $request, 
@@ -181,19 +286,23 @@ class PaymentController extends AbstractController
     {
         $stripeSessionId = $request->query->get('session_id');
         
+        // Vérification de la présence de l'ID de session
         if (!$stripeSessionId) {
             return $this->redirectToRoute('app_home');
         }
 
         try {
+            // Récupération des détails de la session Stripe
             $session = $stripeService->getStripeClient()->checkout->sessions->retrieve($stripeSessionId);
             $orderId = $session->metadata->order_id ?? null;
 
+            // Validation de l'ID de commande
             if (!$orderId) {
                 $this->addFlash('error', 'ID de commande manquant dans la session Stripe.');
                 return $this->redirectToRoute('app_profile');
             }
 
+            // Récupération et validation de la commande
             $order = $entityManager->getRepository(Orders::class)->find($orderId);
             $user = $order->getUsers();
 
@@ -202,6 +311,7 @@ class PaymentController extends AbstractController
                 return $this->redirectToRoute('app_profile');
             }
 
+            // Mise à jour du statut si le paiement n'est pas déjà traité
             if ($order->getOrderStatus() !== 'paid') {
                 $order->setOrderStatus('paid');
                 $order->getVehicule()->setStatus('Vendu');
@@ -237,6 +347,16 @@ class PaymentController extends AbstractController
         }
     }
 
+    /**
+     * Traitement de l'annulation d'un paiement
+     * 
+     * Cette méthode gère :
+     * - L'affichage d'un message d'annulation
+     * - Le rendu de la page d'annulation avec l'ID de commande
+     * 
+     * @param Request $request Requête HTTP contenant l'ID de commande
+     * @return Response Page d'annulation de paiement
+     */
     #[Route('/payment/cancel', name: 'app_payment_cancel')]
     public function paymentCancel(Request $request): Response
     {
@@ -249,16 +369,30 @@ class PaymentController extends AbstractController
         ]);
     }
 
+    /**
+     * Webhook Stripe pour les événements de paiement
+     * 
+     * Cette méthode gère :
+     * - La validation de la signature du webhook Stripe
+     * - Le traitement des événements de paiement (succès, échec, etc.)
+     * - La mise à jour automatique des statuts de commande
+     * - L'envoi d'emails de notification
+     * - La gestion des erreurs avec logging
+     * 
+     * @param Request $request Requête HTTP contenant le payload du webhook
+     * @return Response Statut de traitement du webhook
+     */
     #[Route('/webhook/stripe', name: 'app_webhook_stripe', methods: ['POST'])]
     public function webhook(Request $request): Response
     {
         $payload = $request->getContent();
         $sigHeader = $request->headers->get('Stripe-Signature');
         
-        // Utiliser le paramètre configuré au lieu de $_ENV
+        // Récupération du secret webhook depuis la configuration
         $endpointSecret = $this->getParameter('stripe_webhook_secret');
 
         try {
+            // Construction et validation de l'événement Stripe
             $event = \Stripe\Webhook::constructEvent($payload, $sigHeader, $endpointSecret);
         } catch (\UnexpectedValueException $e) {
             $this->logger->error('Webhook Stripe - Payload invalide', ['error' => $e->getMessage()]);
@@ -268,15 +402,17 @@ class PaymentController extends AbstractController
             return new Response('Signature invalide', 400);
         }
 
+        // Logging de la réception du webhook
         $this->logger->info('Webhook Stripe reçu', [
             'event_type' => $event->type,
             'event_id' => $event->id,
         ]);
 
         try {
-            // Utiliser le service webhook pour traiter l'événement
+            // Traitement de l'événement via le service webhook
             $this->webhookService->processWebhookEvent($event->type, $event->data->object);
         } catch (\Exception $e) {
+            // Logging de l'erreur de traitement
             $this->logger->error('Erreur lors du traitement du webhook Stripe', [
                 'error' => $e->getMessage(),
                 'event_type' => $event->type,
@@ -288,6 +424,16 @@ class PaymentController extends AbstractController
         return new Response('Webhook traité avec succès', 200);
     }
 
+    /**
+     * Page de statut des webhooks Stripe
+     * 
+     * Cette méthode gère :
+     * - L'affichage des événements webhook supportés
+     * - L'affichage de l'URL du webhook pour configuration
+     * - Le rendu de la page de statut
+     * 
+     * @return Response Page de statut des webhooks
+     */
     #[Route('/webhook/stripe/status', name: 'app_webhook_status', methods: ['GET'])]
     public function webhookStatus(): Response
     {

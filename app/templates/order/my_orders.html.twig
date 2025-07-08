@@ -1,14 +1,21 @@
+{# Template de liste des commandes utilisateur de Quernel Auto #}
+{# Cette page affiche toutes les commandes de l'utilisateur connecté #}
+{# Elle inclut : commandes avec statuts, véhicules, actions de paiement et suppression #}
 {% extends 'base.html.twig' %}
 
+{# Titre de la page pour le SEO #}
 {% block title %}Mes Commandes - Quernel Auto{% endblock %}
 
+{# Feuilles de style spécifiques aux commandes #}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/orders.css') }}">
 {% endblock %}
 
+{# Contenu principal de la page des commandes #}
 {% block body %}
 <div class="my-orders-container">
+    {# En-tête avec titre et navigation #}
     <header class="my-orders-header">
         <h1>Mes Commandes</h1>
         <a href="{{ path('app_profile') }}" class="btn btn-secondary">
@@ -16,15 +23,19 @@
         </a>
     </header>
 
+    {# Affichage des messages flash de succès #}
     {% for message in app.flashes('success') %}
         <div class="alert alert-success" role="alert">{{ message }}</div>
     {% endfor %}
 
+    {# Affichage des messages flash d'erreur #}
     {% for message in app.flashes('error') %}
         <div class="alert alert-danger" role="alert">{{ message }}</div>
     {% endfor %}
 
+    {# Affichage conditionnel selon la présence de commandes #}
     {% if orders is empty %}
+        {# Section si aucune commande #}
         <section class="no-orders" aria-labelledby="no-orders-title">
             <i class="fas fa-shopping-cart"></i>
             <h2 id="no-orders-title">Vous n'avez pas encore de commandes</h2>
@@ -34,11 +45,15 @@
             </a>
         </section>
     {% else %}
+        {# Grille des commandes #}
         <div class="orders-grid">
+            {# Boucle sur toutes les commandes de l'utilisateur #}
             {% for order in orders %}
                 <article class="order-card" aria-labelledby="order-title-{{ order.id }}">
+                    {# En-tête de la commande avec numéro et statut #}
                     <header class="order-header">
                         <h3 id="order-title-{{ order.id }}">Commande #{{ order.id }}</h3>
+                        {# Badge de statut avec traduction française #}
                         <span class="order-status status-{{ order.orderStatus }}">
                             {% if order.orderStatus == 'pending' %}
                                 En attente de paiement
@@ -60,13 +75,16 @@
                         </span>
                     </header>
                     
+                    {# Section des détails de la commande #}
                     <section class="order-details" aria-label="Détails de la commande">
+                        {# Informations générales de la commande #}
                         <div class="order-info">
                             <p><strong>Date de commande :</strong> {{ order.createdAt|date('d/m/Y H:i') }}</p>
                             <p><strong>Prix total :</strong> {{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</p>
                             <p><strong>Véhicules :</strong> {{ order.vehicules|length }}</p>
                         </div>
                         
+                        {# Adresse de livraison #}
                         <div class="order-address">
                             <p><strong>Adresse de livraison :</strong></p>
                             <p>{{ order.deliveryAdress }}</p>
@@ -75,22 +93,27 @@
                         </div>
                     </section>
 
+                    {# Section des véhicules de la commande #}
                     {% if order.vehicules is not empty %}
                         <section class="order-vehicules" aria-label="Véhicules de la commande">
                             <h4>Véhicules commandés :</h4>
                             <div class="vehicules-list">
+                                {# Boucle sur les véhicules de la commande #}
                                 {% for vehicule in order.vehicules %}
                                     <div class="vehicule-item">
+                                        {# Image du véhicule #}
                                         <div class="vehicule-image">
                                             {% if vehicule.pictures is not empty %}
                                                 <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures.first.name) }}" 
                                                      alt="{{ vehicule.brand }} {{ vehicule.model }}">
                                             {% else %}
+                                                {# Placeholder si aucune image #}
                                                 <div class="no-image">
                                                     <i class="fas fa-car"></i>
                                                 </div>
                                             {% endif %}
                                         </div>
+                                        {# Informations du véhicule #}
                                         <div class="vehicule-info">
                                             <h5>{{ vehicule.brand }} {{ vehicule.model }}</h5>
                                             <p class="vehicule-year">{{ vehicule.year|date('Y') }}</p>
@@ -102,19 +125,25 @@
                         </section>
                     {% endif %}
                     
+                    {# Pied de page avec actions disponibles #}
                     <footer class="order-actions">
+                        {# Boutons d'action principaux #}
                         <div class="action-buttons">
+                            {# Bouton de paiement pour les commandes en attente #}
                             {% if order.orderStatus == 'pending' %}
                                 <a href="{{ path('app_payment_order', {'id': order.id}) }}" class="btn btn-success">
                                     <i class="fas fa-credit-card"></i> Payer maintenant
                                 </a>
                             {% endif %}
+                            {# Lien vers les détails de la commande #}
                             <a href="{{ path('app_orders_show', {'id': order.id}) }}" class="btn btn-info">
                                 <i class="fas fa-eye"></i> Voir les détails
                             </a>
                         </div>
                         
+                        {# Actions de suppression #}
                         <div class="delete-action">
+                            {# Suppression possible uniquement pour les commandes en attente ou expirées #}
                             {% if order.orderStatus == 'pending' or order.orderStatus == 'expired' %}
                                 <form method="post" action="{{ path('app_orders_delete', {'id': order.id}) }}" 
                                       onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette commande ?')" 

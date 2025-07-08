@@ -1,19 +1,27 @@
+{# Template de connexion de Quernel Auto #}
+{# Cette page permet aux utilisateurs de se connecter à leur compte #}
+{# Elle inclut : formulaire de connexion, gestion des erreurs, liens de récupération #}
 {% extends 'base.html.twig' %}
 
+{# Titre de la page pour le SEO #}
 {% block title %}Connexion - Quernel Auto{% endblock %}
 
+{# Feuilles de style spécifiques à la page de connexion #}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 {% endblock %}
 
+{# Contenu principal de la page de connexion #}
 {% block body %}
 <div class="login-container">
     <section class="login-card p-4 p-md-5">
+        {# En-tête du formulaire de connexion #}
         <header class="login-header">
             <h1>Connexion</h1>
         </header>
 
+        {# Affichage des messages d'erreur de connexion #}
         {% for message in app.flashes('error') %}
             <div class="alert alert-danger" role="alert">
                 <i class="fas fa-exclamation-circle me-2"></i>
@@ -21,27 +29,49 @@
             </div>
         {% endfor %}
 
+        {# Formulaire de connexion Symfony Security #}
         <form method="post">
+            {# Champ email avec autocomplétion et focus automatique #}
             <div class="form-group">
                 <label for="inputEmail" class="form-label">Email</label>
-                <input type="email" value="{{ last_username }}" name="_username" id="inputEmail" class="form-control" autocomplete="email" required autofocus placeholder="Votre adresse email">
+                <input type="email" 
+                       value="{{ last_username }}" 
+                       name="_username" 
+                       id="inputEmail" 
+                       class="form-control" 
+                       autocomplete="email" 
+                       required 
+                       autofocus 
+                       placeholder="Votre adresse email">
             </div>
+            
+            {# Champ mot de passe avec autocomplétion #}
             <div class="form-group">
                 <label for="inputPassword" class="form-label">Mot de passe</label>
-                <input type="password" name="_password" id="inputPassword" class="form-control" autocomplete="current-password" required placeholder="Votre mot de passe">
+                <input type="password" 
+                       name="_password" 
+                       id="inputPassword" 
+                       class="form-control" 
+                       autocomplete="current-password" 
+                       required 
+                       placeholder="Votre mot de passe">
             </div>
 
+            {# Token CSRF pour la sécurité #}
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
+            {# Bouton de soumission du formulaire #}
             <button class="btn btn-primary btn-login" type="submit">
                 <i class="fas fa-sign-in-alt me-2"></i>Se connecter
             </button>
 
+            {# Lien vers la récupération de mot de passe #}
             <div class="text-center mt-3">
                 <a href="{{ path('app_forgot_password_request') }}" class="text-decoration-none">Mot de passe oublié ?</a>
             </div>
         </form>
 
+        {# Pied de page avec lien d'inscription #}
         <footer class="text-center mt-4">
             <p class="mb-0">Pas encore de compte ? <a href="{{ path('app_register') }}" class="register-link">Inscrivez-vous</a></p>
         </footer>

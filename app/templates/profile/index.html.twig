@@ -1,29 +1,40 @@
+{# Template de profil utilisateur de Quernel Auto #}
+{# Cette page affiche les informations personnelles, commandes et préférences de l'utilisateur #}
+{# Elle inclut : infos personnelles, commandes récentes, préférences véhicules, actions #}
 {% extends 'base.html.twig' %}
 
+{# Titre de la page pour le SEO #}
 {% block title %}Mon Profil{% endblock %}
 
+{# Feuilles de style spécifiques au profil utilisateur #}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}
 
+{# Contenu principal de la page de profil #}
 {% block body %}
 <div class="profile-container">
     <article class="profile-card">
+        {# En-tête du profil avec logo et titre #}
         <header class="profile-header">
             <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="profile-logo">
             <h2>Mon Profil</h2>
         </header>
+        
         <div class="profile-body">
+            {# Affichage des messages de succès #}
             {% for message in app.flashes('success') %}
                 <div class="alert alert-success">
                     {{ message }}
                 </div>
             {% endfor %}
 
+            {# Section des informations personnelles #}
             <section class="profile-info" aria-labelledby="profile-info-title">
                 <h3 id="profile-info-title">Informations personnelles</h3>
+                {# Affichage des données personnelles de l'utilisateur #}
                 <p><strong>Prénom :</strong> {{ user.firstName }}</p>
                 <p><strong>Nom :</strong> {{ user.lastName }}</p>
                 <p><strong>Email :</strong> {{ user.email }}</p>
@@ -34,14 +45,18 @@
                 <p><strong>Téléphone :</strong> {{ user.phoneNumber }}</p>
             </section>
 
+            {# Section des commandes récentes #}
             <section class="profile-orders" aria-labelledby="profile-orders-title">
                 <h3 id="profile-orders-title">Mes dernières commandes</h3>
                 {% if orders is not empty %}
+                    {# Aperçu des 3 dernières commandes #}
                     <div class="orders-preview">
                         {% for order in orders|slice(0, 3) %}
                             <article class="order-preview-item">
+                                {# En-tête de la commande avec numéro et statut #}
                                 <header class="order-preview-header">
                                     <span class="order-number">Commande #{{ order.id }}</span>
+                                    {# Badge de statut avec traduction #}
                                     <span class="order-status status-{{ order.orderStatus }}">
                                         {% if order.orderStatus == 'pending' %}
                                             En attente
@@ -62,6 +77,7 @@
                                         {% endif %}
                                     </span>
                                 </header>
+                                {# Détails de la commande #}
                                 <div class="order-preview-details">
                                     <p><strong>Date :</strong> {{ order.createdAt|date('d/m/Y') }}</p>
                                     <p><strong>Prix :</strong> {{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</p>
@@ -70,12 +86,14 @@
                             </article>
                         {% endfor %}
                     </div>
+                    {# Lien vers toutes les commandes #}
                     <div class="orders-link">
                         <a href="{{ path('app_orders_my_orders') }}" class="btn btn-outline-primary">
                             <i class="fas fa-list"></i> Voir toutes mes commandes
                         </a>
                     </div>
                 {% else %}
+                    {# Message si aucune commande et lien vers le catalogue #}
                     <p>Aucune commande pour le moment.</p>
                     <div class="orders-link">
                         <a href="{{ path('app_vehicules_index') }}" class="btn btn-primary">
@@ -85,17 +103,21 @@
                 {% endif %}
             </section>
 
+            {# Section des préférences véhicules #}
             <section class="profile-preferences" aria-labelledby="profile-prefs-title">
                 <h3 id="profile-prefs-title">Préférences véhicule</h3>
                 {% if preferences is not empty %}
+                    {# Liste des préférences avec possibilité de suppression #}
                     <ul class="preferences-list">
                         {% for preference in preferences %}
                             <li class="preference-item">
+                                {# Affichage des critères de préférence #}
                                 <span><strong>Marque :</strong> {{ preference.prefereneceBrand ?: '-' }}</span> |
                                 <span><strong>Modèle :</strong> {{ preference.preferenceModel ?: '-' }}</span> |
                                 <span><strong>Année min :</strong> {{ preference.minYear ? preference.minYear|date('Y') : '-' }}</span> |
                                 <span><strong>Prix max :</strong> {{ preference.maxPrice ?: '-' }} €</span> |
                                 <span><strong>Carburant :</strong> {{ preference.preferenceFuelType ?: '-' }}</span>
+                                {# Formulaire de suppression avec confirmation #}
                                 <form method="post" action="{{ path('app_profile_preference_delete', {id: preference.id}) }}" style="display:inline" onsubmit="return confirm('Supprimer cette préférence ?');">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete_preference_' ~ preference.id) }}">
                                     <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Supprimer</button>
@@ -104,10 +126,12 @@
                         {% endfor %}
                     </ul>
                 {% else %}
+                    {# Message si aucune préférence #}
                     <p>Aucune préférence enregistrée.</p>
                 {% endif %}
             </section>
 
+            {# Section des actions disponibles sur le profil #}
             <section class="profile-actions" aria-label="Actions du profil">
                 <a href="{{ path('app_profile_edit') }}" class="btn btn-primary">Modifier mes informations</a>
                 <a href="{{ path('app_profile_change_password') }}" class="btn btn-secondary">Changer mon mot de passe</a>

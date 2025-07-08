@@ -1,29 +1,38 @@
+{# Template de paiement de commande de Quernel Auto #}
+{# Cette page permet aux utilisateurs de payer leur commande via Stripe #}
+{# Elle inclut : résumé commande, Apple Pay, Stripe, sécurité, gestion des erreurs #}
 {% extends 'base.html.twig' %}
 
+{# Titre dynamique avec numéro de commande pour le SEO #}
 {% block title %}Paiement - Commande #{{ order.id }} - Quernel Auto{% endblock %}
 
+{# Feuilles de style spécifiques au paiement #}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/payment.css') }}">
 {% endblock %}
 
+{# Métadonnées spécifiques pour Apple Pay #}
 {% block head %}
-    <!-- Métadonnées pour Apple Pay -->
+    {# Métadonnées pour Apple Pay #}
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Quernel Auto">
     
-    <!-- Apple Pay Domain Association -->
+    {# Icône Apple Pay #}
     <link rel="apple-touch-icon" href="{{ asset('images/logo_quernel_auto.png') }}">
 {% endblock %}
 
+{# Contenu principal de la page de paiement #}
 {% block body %}
     <div class="payment-container">
+        {# En-tête de la page de paiement #}
         <div class="payment-header">
             <h1>Paiement de la commande</h1>
             <p>Finalisez votre achat en toute sécurité avec Stripe</p>
         </div>
 
+        {# Affichage des messages flash (erreurs, succès, avertissements) #}
         {% for label, messages in app.flashes %}
             {% for message in messages %}
                 <div class="alert alert-{{ label == 'error' ? 'danger' : label == 'warning' ? 'warning' : 'success' }} alert-dismissible fade show" role="alert">
@@ -33,18 +42,24 @@
             {% endfor %}
         {% endfor %}
 
+        {# Contenu principal du paiement #}
         <div class="payment-content">
+            {# Résumé de la commande #}
             <div class="order-summary">
                 <div class="order-card">
+                    {# En-tête de la commande avec statut #}
                     <div class="order-header">
                         <h3>Commande #{{ order.id }}</h3>
                         <span class="order-status status-pending">En attente de paiement</span>
                     </div>
                     
+                    {# Détails de la commande #}
                     <div class="order-details">
+                        {# Informations générales de la commande #}
                         <div class="order-info">
                             <p><strong>Date de commande :</strong> {{ order.createdAt|date('d/m/Y H:i') }}</p>
                             <p><strong>Description :</strong> {{ order.description ?? 'Commande de véhicule' }}</p>
+                            {# Informations du véhicule principal #}
                             {% set vehicule = order.vehicules|first %}
                             {% if vehicule %}
                                 <p><strong>Véhicule :</strong> {{ vehicule.brand }} {{ vehicule.model }}</p>
@@ -53,6 +68,7 @@
                             {% endif %}
                         </div>
                         
+                        {# Montant total de la commande #}
                         <div class="order-amount">
                             <span class="amount">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</span>
                         </div>
@@ -60,8 +76,10 @@
                 </div>
             </div>
 
+            {# Section de paiement #}
             <div class="payment-section">
                 <div class="payment-card">
+                    {# En-tête avec méthodes de paiement acceptées #}
                     <div class="payment-header">
                         <h3>Informations de paiement</h3>
                         <div class="payment-methods">
@@ -73,7 +91,9 @@
                         </div>
                     </div>
                     
+                    {# Formulaire de paiement #}
                     <div class="payment-form">
+                        {# Résumé des coûts #}
                         <div class="payment-summary">
                             <div class="summary-row">
                                 <span>Sous-total :</span>
@@ -89,24 +109,27 @@
                             </div>
                         </div>
                         
+                        {# Boutons d'action de paiement #}
                         <div class="payment-actions">
-                            <!-- Bouton Apple Pay -->
+                            {# Bouton Apple Pay (affiché conditionnellement) #}
                             <div id="apple-pay-button" class="apple-pay-button" style="display: none;">
                                 <button type="button" class="btn btn-apple-pay">
                                     <i class="fab fa-apple"></i> Payer avec Apple Pay
                                 </button>
                             </div>
                             
-                            <!-- Bouton Stripe classique -->
+                            {# Bouton Stripe classique #}
                             <button type="button" class="btn btn-primary btn-pay-stripe" onclick="initiatePayment()">
                                 <i class="fas fa-credit-card"></i> Payer avec Stripe
                             </button>
                             
+                            {# Bouton de retour #}
                             <a href="{{ path('app_payment') }}" class="btn btn-outline-secondary">
                                 <i class="fas fa-arrow-left"></i> Retour aux commandes
                             </a>
                         </div>
                         
+                        {# Informations de sécurité #}
                         <div class="payment-security">
                             <div class="security-info">
                                 <i class="fas fa-shield-alt"></i>
@@ -122,7 +145,7 @@
         </div>
     </div>
 
-    <!-- Loading overlay -->
+    {# Overlay de chargement pendant la redirection #}
     <div id="loadingOverlay" class="loading-overlay" style="display: none;">
         <div class="loading-content">
             <div class="spinner-border text-primary" role="status">
@@ -133,36 +156,38 @@
     </div>
 {% endblock %}
 
+{# Scripts JavaScript pour Stripe et Apple Pay #}
 {% block javascripts %}
     {{ parent() }}
+    {# SDK Stripe #}
     <script src="https://js.stripe.com/v3/"></script>
     <script>
-        // Initialiser Stripe
+        {# Initialisation de Stripe avec la clé publique #}
         const stripe = Stripe('{{ stripe_public_key }}');
         let paymentRequest = null;
         let elements = null;
         let prElement = null;
 
-        // Vérifier si Apple Pay est disponible
+        {# Vérification de la disponibilité d'Apple Pay #}
         function checkApplePayAvailability() {
             if (window.ApplePaySession && ApplePaySession.canMakePayments()) {
-                // Apple Pay est disponible
+                {# Apple Pay est disponible, afficher le bouton #}
                 document.getElementById('apple-pay-button').style.display = 'block';
                 initializeApplePay();
             } else {
-                // Apple Pay n'est pas disponible, masquer le bouton
+                {# Apple Pay n'est pas disponible, masquer le bouton #}
                 document.getElementById('apple-pay-button').style.display = 'none';
             }
         }
 
-        // Initialiser Apple Pay
+        {# Initialisation d'Apple Pay #}
         function initializeApplePay() {
             const paymentRequest = stripe.paymentRequest({
                 country: 'FR',
                 currency: 'eur',
                 total: {
                     label: 'Quernel Auto - Commande #{{ order.id }}',
-                    amount: {{ order.totalPrice * 100 }}, // en centimes
+                    amount: {{ order.totalPrice * 100 }}, {# Montant en centimes #}
                 },
                 requestPayerName: true,
                 requestPayerEmail: true,
@@ -170,23 +195,23 @@
                 requestShipping: false,
             });
 
-            // Créer l'élément de bouton Apple Pay
+            {# Création de l'élément de bouton Apple Pay #}
             elements = stripe.elements();
             prElement = elements.create('paymentRequestButton', {
                 paymentRequest,
                 style: {
                     paymentRequestButton: {
-                        type: 'buy', // 'default' | 'donate' | 'buy'
-                        theme: 'dark', // 'dark' | 'light' | 'light-outline'
+                        type: 'buy', {# Type de bouton #}
+                        theme: 'dark', {# Thème du bouton #}
                         height: '48px',
                     },
                 },
             });
 
-            // Gérer la confirmation du paiement
+            {# Gestion de la confirmation du paiement Apple Pay #}
             paymentRequest.on('paymentmethod', async (event) => {
                 try {
-                    // Créer le PaymentIntent
+                    {# Création du PaymentIntent côté serveur #}
                     const response = await fetch('{{ path('app_create_payment_intent') }}', {
                         method: 'POST',
                         headers: {
@@ -196,108 +221,4 @@
                         body: 'order_id={{ order.id }}'
                     });
 
-                    const data = await response.json();
-                    
-                    if (data.error) {
-                        throw new Error(data.error);
-                    }
-
-                    // Confirmer le paiement
-                    const {error: confirmError} = await stripe.confirmCardPayment(
-                        data.client_secret,
-                        {
-                            payment_method: event.paymentMethod.id,
-                        },
-                        {
-                            handleActions: false,
-                        }
-                    );
-
-                    if (confirmError) {
-                        throw new Error(confirmError.message);
-                    }
-
-                    // Paiement réussi
-                    window.location.href = '{{ path('app_payment_success', {'order_id': order.id}) }}';
-
-                } catch (error) {
-                    console.error('Erreur Apple Pay:', error);
-                    showError('Erreur lors du paiement Apple Pay: ' + error.message);
-                }
-            });
-
-            // Gérer les erreurs
-            paymentRequest.on('cancel', () => {
-                console.log('Paiement Apple Pay annulé');
-            });
-
-            // Vérifier si le navigateur supporte Apple Pay
-            paymentRequest.canMakePayment().then((result) => {
-                if (result && result.applePay) {
-                    document.getElementById('apple-pay-button').style.display = 'block';
-                } else {
-                    document.getElementById('apple-pay-button').style.display = 'none';
-                }
-            });
-        }
-
-        // Fonction pour initier le paiement Stripe classique
-        function initiatePayment() {
-            // Afficher le loading
-            document.getElementById('loadingOverlay').style.display = 'flex';
-            
-            // Désactiver le bouton
-            const payButton = document.querySelector('.btn-pay-stripe');
-            payButton.disabled = true;
-            payButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Traitement...';
-            
-            // Créer la session de paiement
-            fetch('{{ path('app_create_checkout_session') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: 'order_id={{ order.id }}'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.url) {
-                    // Rediriger vers Stripe
-                    window.location.href = data.url;
-                } else {
-                    throw new Error(data.error || 'Erreur lors de la création de la session de paiement');
-                }
-            })
-            .catch(error => {
-                console.error('Erreur:', error);
-                showError(error.message);
-                
-                // Masquer le loading
-                document.getElementById('loadingOverlay').style.display = 'none';
-                
-                // Réactiver le bouton
-                payButton.disabled = false;
-                payButton.innerHTML = '<i class="fas fa-credit-card"></i> Payer avec Stripe';
-            });
-        }
-
-        // Fonction pour afficher les erreurs
-        function showError(message) {
-            const alertDiv = document.createElement('div');
-            alertDiv.className = 'alert alert-danger alert-dismissible fade show';
-            alertDiv.innerHTML = `
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            `;
-            
-            const container = document.querySelector('.payment-container');
-            container.insertBefore(alertDiv, container.firstChild);
-        }
-
-        // Initialiser au chargement de la page
-        document.addEventListener('DOMContentLoaded', function() {
-            checkApplePayAvailability();
-        });
-    </script>
-{% endblock %} 
+                    const data = await response.json(); 

@@ -1,25 +1,34 @@
+{# Template de formulaire combiné inscription et préférences de Quernel Auto #}
+{# Ce formulaire permet aux utilisateurs de s'inscrire et définir leurs préférences en une seule étape #}
+{# Il inclut : informations personnelles, préférences véhicules, validation RGPD #}
 {% extends 'base.html.twig' %}
 
+{# Titre de la page pour le SEO #}
 {% block title %}Inscription et Préférences - Quernel Auto{% endblock %}
 
+{# Feuilles de style spécifiques au formulaire combiné #}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/combined_form.css') }}">
 {% endblock %}
 
+{# Contenu principal du formulaire combiné #}
 {% block body %}
 <div class="combined-form-container">
     <section class="form-card">
+        {# En-tête du formulaire #}
         <header class="form-header">
             <h1>Inscription et Préférences</h1>
         </header>
         
+        {# Début du formulaire Symfony #}
         {{ form_start(form) }}
         
-        <!-- Section Inscription -->
+        {# Section Informations personnelles #}
         <section class="form-section" aria-labelledby="personal-info-title">
             <h2 id="personal-info-title"><i class="fas fa-user"></i> Informations personnelles</h2>
             
+            {# Ligne 1 : Prénom et nom #}
             <div class="form-row">
                 <div class="form-group">
                     {{ form_label(form.firstname) }}
@@ -35,6 +44,7 @@
                 </div>
             </div>
             
+            {# Ligne 2 : Email et mot de passe #}
             <div class="form-row">
                 <div class="form-group">
                     {{ form_label(form.email) }}
@@ -51,6 +61,7 @@
                 </div>
             </div>
             
+            {# Adresse complète #}
             <div class="form-group">
                 {{ form_label(form.address) }}
                 <span class="required-field">*</span>
@@ -58,6 +69,7 @@
                 <div class="form-errors">{{ form_errors(form.address) }}</div>
             </div>
             
+            {# Ligne 3 : Ville et code postal #}
             <div class="form-row">
                 <div class="form-group">
                     {{ form_label(form.city) }}
@@ -73,6 +85,7 @@
                 </div>
             </div>
             
+            {# Ligne 4 : Pays et téléphone #}
             <div class="form-row">
                 <div class="form-group">
                     {{ form_label(form.country) }}
@@ -88,7 +101,7 @@
                 </div>
             </div>
             
-            <!-- Case à cocher RGPD -->
+            {# Consentement RGPD obligatoire #}
             <div class="form-group">
                 <div class="checkbox-simple">
                     {{ form_widget(form.rgpdConsent) }}
@@ -99,11 +112,12 @@
             </div>
         </section>
         
-        <!-- Section Préférences -->
+        {# Section Préférences véhicules #}
         <section class="form-section" aria-labelledby="prefs-title">
             <h2 id="prefs-title"><i class="fas fa-car"></i> Vos préférences véhicules</h2>
             <p class="help-text mb-3">Ces informations nous permettront de vous proposer des véhicules correspondant à vos critères. Tous les champs sont optionnels.</p>
             
+            {# Ligne 1 : Marque et modèle préférés #}
             <div class="form-row">
                 <div class="form-group">
                     {{ form_label(form.prefereneceBrand) }}
@@ -117,6 +131,7 @@
                 </div>
             </div>
             
+            {# Ligne 2 : Année minimum et prix maximum #}
             <div class="form-row">
                 <div class="form-group">
                     {{ form_label(form.minYear) }}
@@ -130,6 +145,7 @@
                 </div>
             </div>
             
+            {# Type de carburant préféré #}
             <div class="form-group">
                 {{ form_label(form.preferenceFuelType) }}
                 {{ form_widget(form.preferenceFuelType, {'attr': {'class': 'form-select'}}) }}
@@ -137,12 +153,15 @@
             </div>
         </section>
         
+        {# Bouton de soumission du formulaire #}
         <button type="submit" class="submit-button">
             <i class="fas fa-check-circle"></i> Valider mon inscription et mes préférences
         </button>
         
+        {# Fin du formulaire Symfony #}
         {{ form_end(form) }}
         
+        {# Pied de page avec lien de connexion #}
         <footer class="text-center mt-3">
             <p>Déjà inscrit ? <a href="{{ path('app_login') }}">Connectez-vous</a></p>
         </footer>
@@ -150,6 +169,7 @@
 </div>
 {% endblock %}
 
+{# Scripts JavaScript pour la validation côté client #}
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('js/combined_form.js') }}" defer></script>

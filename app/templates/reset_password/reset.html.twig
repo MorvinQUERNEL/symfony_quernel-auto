@@ -1,38 +1,51 @@
+{# Template de réinitialisation de mot de passe de Quernel Auto #}
+{# Cette page permet aux utilisateurs de définir un nouveau mot de passe #}
+{# Elle inclut : formulaire de nouveau mot de passe, confirmation, validation #}
 {% extends 'base.html.twig' %}
 
+{# Titre de la page pour le SEO #}
 {% block title %}Réinitialisation du mot de passe{% endblock %}
 
+{# Feuilles de style spécifiques à la réinitialisation de mot de passe #}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/reset_password.css') }}">
 {% endblock %}
 
+{# Contenu principal de la page de réinitialisation #}
 {% block body %}
 <div class="reset-container">
     <div class="reset-card">
+        {# En-tête avec logo et titre #}
         <div class="reset-header">
             <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="reset-logo">
             <h1>Réinitialisation du mot de passe</h1>
         </div>
 
+        {# Formulaire de réinitialisation du mot de passe #}
         {{ form_start(resetForm) }}
+            {# Champ nouveau mot de passe #}
             <div class="form-group">
                 {{ form_label(resetForm.plainPassword.first) }}
                 {{ form_widget(resetForm.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
                 {{ form_errors(resetForm.plainPassword.first) }}
             </div>
 
+            {# Champ confirmation du nouveau mot de passe #}
             <div class="form-group">
                 {{ form_label(resetForm.plainPassword.second) }}
                 {{ form_widget(resetForm.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
                 {{ form_errors(resetForm.plainPassword.second) }}
             </div>
 
+            {# Bouton de soumission du formulaire #}
             <div class="form-group">
                 <button type="submit" class="btn-reset">Réinitialiser le mot de passe</button>
             </div>
+        {# Fin du formulaire Symfony #}
         {{ form_end(resetForm) }}
 
+        {# Lien de retour à la page de connexion #}
         <div class="text-center mt-4">
             <a href="{{ path('app_login') }}" class="text-decoration-none">Retour à la connexion</a>
         </div>

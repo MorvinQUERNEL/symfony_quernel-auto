@@ -1,29 +1,39 @@
+{# Template de confirmation d'envoi d'email de réinitialisation de Quernel Auto #}
+{# Cette page confirme l'envoi du lien de réinitialisation par email #}
+{# Elle inclut : message de confirmation, instructions, liens de navigation #}
 {% extends 'base.html.twig' %}
 
+{# Titre de la page pour le SEO #}
 {% block title %}Vérification de l'email{% endblock %}
 
+{# Feuilles de style spécifiques à la réinitialisation de mot de passe #}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/reset_password.css') }}">
 {% endblock %}
 
+{# Contenu principal de la page de confirmation #}
 {% block body %}
 <div class="reset-container">
     <div class="reset-card">
+        {# En-tête avec logo et titre #}
         <div class="reset-header">
             <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="reset-logo">
             <h1>Vérification de l'email</h1>
         </div>
 
+        {# Message principal de confirmation d'envoi #}
         <p class="text-center">
             Si un compte correspondant à votre adresse email existe, un email contenant un lien pour réinitialiser votre mot de passe vient d'être envoyé.
             Ce lien expirera dans 1 heure.
         </p>
 
+        {# Instructions supplémentaires et lien de retry #}
         <p class="text-center">
             Si vous ne recevez pas d'email, vérifiez votre dossier spam ou <a href="{{ path('app_forgot_password_request') }}" class="text-decoration-none">réessayez</a>.
         </p>
 
+        {# Lien de retour à la page de connexion #}
         <div class="text-center mt-4">
             <a href="{{ path('app_login') }}" class="text-decoration-none">Retour à la connexion</a>
         </div>

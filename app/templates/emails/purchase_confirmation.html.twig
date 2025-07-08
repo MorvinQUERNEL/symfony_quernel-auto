@@ -1,21 +1,36 @@
+{# Template d'email de confirmation d'achat de Quernel Auto #}
+{# Cet email est envoyé aux utilisateurs après un achat réussi #}
+{# Il inclut : confirmation, détails véhicule, récapitulatif prix, lien vers compte #}
 {% extends 'emails/_base.html.twig' %}
 
+{# Titre de l'email pour l'objet du message #}
 {% block title %}Confirmation de votre achat{% endblock %}
 
+{# Contenu principal de l'email de confirmation #}
 {% block content %}
+    {# Titre principal avec couleur de marque #}
     <h2 style="font-size: 20px; color: #FF6B00; margin-top: 0;">Merci pour votre achat !</h2>
+    
+    {# Salutation personnalisée #}
     <p>Bonjour {{ user.firstname }},</p>
+    
+    {# Message de confirmation principal #}
     <p>Nous sommes ravis de vous confirmer que votre commande a été validée avec succès. Vous êtes l'heureux propriétaire d'un nouveau véhicule !</p>
     
+    {# Titre de section pour le récapitulatif #}
     <h3 style="border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 30px;">Récapitulatif de votre commande #{{ order.id }}</h3>
     
+    {# Tableau avec image et informations du véhicule #}
     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin: 20px 0;">
         <tr>
+            {# Colonne image du véhicule #}
             <td width="150" style="padding-right: 20px;">
                 {% if order.vehicule.pictures is not empty %}
+                    {# Image du véhicule avec styles inline #}
                     <img src="{{ email.image('@public/uploads/vehicules/' ~ order.vehicule.pictures.first.name) }}" alt="{{ order.vehicule.brand }}" style="width: 150px; height: auto; border-radius: 5px;">
                 {% endif %}
             </td>
+            {# Colonne informations du véhicule #}
             <td>
                 <p style="margin: 0; font-size: 18px; font-weight: bold;">{{ order.vehicule.brand }} {{ order.vehicule.model }}</p>
                 <p style="margin: 5px 0 0 0; color: #555;">{{ order.vehicule.year|date('Y') }} - {{ order.vehicule.mileage|number_format(0, ',', ' ') }} km</p>
@@ -23,23 +38,29 @@
         </tr>
     </table>
 
+    {# Tableau récapitulatif des prix #}
     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin: 20px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee;">
+        {# Ligne prix du véhicule #}
         <tr>
             <td style="padding: 15px 0;">Prix du véhicule</td>
             <td align="right" style="padding: 15px 0;">{{ (order.vehicule.salePrice / 100)|number_format(2, ',', ' ') }} €</td>
         </tr>
+        {# Ligne frais de service #}
         <tr>
             <td style="padding: 15px 0;">Frais de service</td>
             <td align="right" style="padding: 15px 0;">{{ (order.serviceFees / 100)|number_format(2, ',', ' ') }} €</td>
         </tr>
+        {# Ligne total payé en gras #}
         <tr style="font-weight: bold;">
             <td style="padding: 15px 0;">Total payé</td>
             <td align="right" style="padding: 15px 0;">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</td>
         </tr>
     </table>
     
+    {# Message d'accompagnement et prochaines étapes #}
     <p>Nous allons préparer votre véhicule et vous contacterons très prochainement pour organiser la livraison. Vous pouvez suivre l'état de votre commande depuis votre espace client.</p>
     
+    {# Bouton d'action vers l'espace client #}
     <p style="text-align: center; margin-top: 30px;">
         <a href="{{ url('app_profile') }}" style="background-color: #FF6B00; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
             Accéder à mon compte

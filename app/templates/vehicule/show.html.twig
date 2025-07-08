@@ -1,38 +1,56 @@
+{# Template de détail d'un véhicule de Quernel Auto #}
+{# Cette page affiche les informations complètes d'un véhicule spécifique #}
+{# Elle inclut : galerie photos, caractéristiques, prix, bouton d'achat #}
 {% extends 'base.html.twig' %}
 
+{# Titre dynamique avec marque et modèle du véhicule #}
 {% block title %}{{ vehicule.brand }} {{ vehicule.model }} - Quernel Auto{% endblock %}
 
+{# Feuilles de style spécifiques au détail des véhicules #}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/vehicules.css') }}">
     <link rel="stylesheet" href="{{ asset('css/vehicule-detail.css') }}">
 {% endblock %}
 
+{# Contenu principal de la page de détail du véhicule #}
 {% block body %}
 <article class="vehicule-detail-page">
+    {# En-tête de la page avec navigation et titre #}
     <header class="detail-page-header">
         <div class="header-content">
+            {# Navigation breadcrumb pour retour au catalogue #}
             <nav class="breadcrumb">
                 <a href="{{ path('app_vehicules_index') }}" class="back-link"><i class="fas fa-arrow-left"></i> Retour au catalogue</a>
             </nav>
+            {# Titre principal avec marque et modèle #}
             <h1>{{ vehicule.brand }} {{ vehicule.model }}</h1>
+            {# Année du véhicule #}
             <p class="header-year">{{ vehicule.year|date('Y') }}</p>
         </div>
     </header>
 
+    {# Layout principal avec galerie et informations #}
     <div class="vehicule-detail-layout">
-        <!-- Colonne de la galerie d'images -->
+        {# Colonne de la galerie d'images #}
         <section class="gallery-container" aria-labelledby="gallery-title">
             <h2 id="gallery-title" class="sr-only">Galerie photos</h2>
+            
+            {# Image principale du véhicule #}
             <div class="main-image-wrapper">
                  {% if vehicule.pictures is not empty %}
+                    {# Image principale avec alt text descriptif #}
                     <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures.first.name) }}" alt="Vue principale de {{ vehicule.brand }} {{ vehicule.model }}" id="main-image">
                 {% else %}
+                    {# Placeholder si aucune image n'est disponible #}
                     <div class="no-image-placeholder-detail"><i class="fas fa-car-side"></i></div>
                 {% endif %}
             </div>
+            
+            {# Galerie de miniatures si plusieurs images disponibles #}
             {% if vehicule.pictures|length > 1 %}
                 <div class="thumbnail-gallery" id="thumbnail-gallery">
+                    {# Boucle sur toutes les images du véhicule #}
                     {% for picture in vehicule.pictures %}
                         <div class="thumbnail-item {{ loop.first ? 'active' : '' }}" data-image-url="{{ asset('uploads/vehicules/' ~ picture.name) }}">
                             <img src="{{ asset('uploads/vehicules/' ~ picture.name) }}" alt="Miniature {{ loop.index }}">
@@ -42,39 +60,52 @@
             {% endif %}
         </section>
 
-        <!-- Colonne des informations -->
+        {# Colonne des informations du véhicule #}
         <aside class="info-container">
+            {# Section prix et achat #}
             <section class="info-block price-block" aria-labelledby="price-title">
                 <h3 id="price-title" class="price-label">Prix</h3>
+                {# Prix formaté en euros #}
                 <p class="price">{{ (vehicule.salePrice / 100)|number_format(0, ',', ' ') }} €</p>
-                 {% if vehicule.status == 'Disponible' %}
+                
+                {# Bouton d'achat ou badge de statut selon la disponibilité #}
+                {% if vehicule.status == 'Disponible' %}
+                    {# Lien vers la création de commande pour ce véhicule #}
                     <a href="{{ path('app_orders_new_with_vehicule', {'vehicule_id': vehicule.id}) }}" class="btn-buy"><i class="fas fa-shopping-cart"></i> Acheter ce véhicule</a>
                 {% else %}
+                    {# Badge de statut si le véhicule n'est pas disponible #}
                     <p class="status-badge-detail {{ vehicule.status|lower|replace({' ': '-'}) }}">
                         {{ vehicule.status }}
                     </p>
                 {% endif %}
             </section>
 
+            {# Section caractéristiques techniques #}
             <section class="info-block specs-block" aria-labelledby="specs-title">
                 <h4 id="specs-title"><i class="fas fa-list-ul"></i> Caractéristiques</h4>
+                {# Liste de définition des caractéristiques #}
                 <dl class="specs-grid">
+                    {# Kilométrage #}
                     <div class="spec-item">
                         <dt class="spec-label">Kilométrage</dt>
                         <dd class="spec-value">{{ vehicule.mileage|number_format(0, ',', ' ') }} km</dd>
                     </div>
+                    {# Type de carburant #}
                     <div class="spec-item">
                         <dt class="spec-label">Carburant</dt>
                         <dd class="spec-value">{{ vehicule.fuelType }}</dd>
                     </div>
+                    {# Type de transmission #}
                     <div class="spec-item">
                         <dt class="spec-label">Transmission</dt>
                         <dd class="spec-value">{{ vehicule.trasmission }}</dd>
                     </div>
+                    {# Couleur du véhicule #}
                     <div class="spec-item">
                         <dt class="spec-label">Couleur</dt>
                         <dd class="spec-value">{{ vehicule.color }}</dd>
                     </div>
+                    {# Nombre de portes #}
                     <div class="spec-item">
                         <dt class="spec-label">Portes</dt>
                         <dd class="spec-value">{{ vehicule.doorCount }}</dd>
@@ -82,9 +113,11 @@
                 </dl>
             </section>
 
+            {# Section description si disponible #}
             {% if vehicule.description %}
             <section class="info-block description-block" aria-labelledby="desc-title">
                 <h4 id="desc-title"><i class="fas fa-align-left"></i> Description</h4>
+                {# Description avec conversion des retours à la ligne #}
                 <p>{{ vehicule.description|nl2br }}</p>
             </section>
             {% endif %}
@@ -93,6 +126,7 @@
 </article>
 {% endblock %}
 
+{# Scripts JavaScript pour la galerie d'images #}
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('js/vehicule_detail.js') }}" defer></script>

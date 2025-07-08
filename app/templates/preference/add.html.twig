@@ -1,41 +1,58 @@
+{# Template d'ajout de préférence véhicule de Quernel Auto #}
+{# Cette page permet aux utilisateurs d'ajouter des critères de préférence pour leurs recherches #}
+{# Elle inclut : formulaire de préférence, validation, navigation vers profil #}
 {% extends 'base.html.twig' %}
 
+{# Titre de la page pour le SEO #}
 {% block title %}Ajouter une préférence véhicule{% endblock %}
 
+{# Feuilles de style spécifiques au formulaire de préférence #}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 {% endblock %}
 
+{# Contenu principal de la page d'ajout de préférence #}
 {% block body %}
 <main class="login-container">
     <article class="login-card p-4 p-md-5">
+        {# En-tête avec logo et titre #}
         <header class="login-header text-center mb-4">
             <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="login-logo mb-4">
             <h1 class="h3 mb-3 font-weight-normal">Préférence véhicule</h1>
         </header>
         
+        {# Affichage des messages flash (succès, erreurs, avertissements) #}
         {% for label, messages in app.flashes %}
             {% for message in messages %}
                 <div class="flash-message flash-{{ label }}" role="alert" aria-live="polite">{{ message }}</div>
             {% endfor %}
         {% endfor %}
         
+        {# Section du formulaire de préférence #}
         <section class="preference-form-section">
+            {# Début du formulaire Symfony avec classe CSS #}
             {{ form_start(form, {'attr': {'class': 'preference-form'}}) }}
+                {# Boucle sur tous les champs du formulaire #}
                 {% for field in form %}
                     <div class="form-group">
+                        {# Label du champ #}
                         {{ form_label(field) }}
+                        {# Widget du champ avec classe Bootstrap #}
                         {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
+                        {# Affichage des erreurs de validation #}
                         {{ form_errors(field) }}
                     </div>
                 {% endfor %}
+                {# Bouton de soumission du formulaire #}
                 <div class="form-group text-center">
                     <button type="submit" class="btn btn-login">Enregistrer</button>
                 </div>
+            {# Fin du formulaire Symfony #}
             {{ form_end(form) }}
         </section>
         
+        {# Pied de page avec lien de retour au profil #}
         <footer class="text-center mt-4">
             <a href="{{ path('app_profile') }}" class="register-link">Retour à mon profil</a>
         </footer>

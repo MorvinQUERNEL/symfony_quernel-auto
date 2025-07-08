@@ -1,49 +1,63 @@
+{# Template des Conditions Générales de Vente de Quernel Auto #}
+{# Cette page présente les CGV légales de l'entreprise #}
+{# Elle inclut : sections légales, informations contractuelles, garanties #}
 {% extends 'base.html.twig' %}
 
+{# Titre de la page pour le SEO et conformité légale #}
 {% block title %}Conditions Générales de Vente - Quernel Auto{% endblock %}
 
+{# Feuilles de style spécifiques aux pages légales #}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/legal.css') }}">
 {% endblock %}
 
+{# Contenu principal de la page des CGV #}
 {% block body %}
 <div class="legal-container">
     <article class="legal-content">
+        {# Titre principal des CGV #}
         <h1>Conditions Générales de Vente</h1>
         
+        {# Section 1 : Objet des CGV #}
         <section>
             <h2>1. Objet</h2>
             <p>Les présentes conditions générales de vente (CGV) constituent le socle de la négociation commerciale et sont systématiquement adressées ou remises à chaque acheteur pour lui permettre de passer commande.</p>
         </section>
 
+        {# Section 2 : Prix et tarification #}
         <section>
             <h2>2. Prix</h2>
             <p>Les prix de nos produits sont indiqués en euros toutes taxes comprises (TTC).<br>
             Quernel Auto se réserve le droit de modifier ses prix à tout moment, étant toutefois entendu que le prix figurant au catalogue le jour de la commande sera le seul applicable à l'acheteur.</p>
         </section>
 
+        {# Section 3 : Modalités de commande #}
         <section>
             <h2>3. Commandes</h2>
             <p>Les commandes sont passées sur notre site internet ou directement en agence.<br>
             Les informations contractuelles sont présentées en langue française et feront l'objet d'une confirmation au plus tard au moment de la validation de la commande.</p>
         </section>
 
+        {# Section 4 : Validation et acceptation des conditions #}
         <section>
             <h2>4. Validation de votre commande</h2>
             <p>Toute commande figurant sur le site internet suppose l'adhésion aux présentes conditions. Toute confirmation de commande entraîne votre adhésion pleine et entière aux présentes conditions générales de vente.</p>
         </section>
 
+        {# Section 5 : Modalités de paiement #}
         <section>
             <h2>5. Paiement</h2>
             <p>Le fait de valider votre commande implique pour vous l'obligation de payer le prix indiqué. Le règlement de vos achats s'effectue par carte bancaire grâce au système sécurisé.</p>
         </section>
 
+        {# Section 6 : Droit de rétractation #}
         <section>
             <h2>6. Rétractation</h2>
             <p>Conformément aux dispositions de l'article L.121-21 du Code de la Consommation, vous disposez d'un délai de rétraction de 14 jours à compter de la réception de vos produits pour exercer votre droit de retour sans avoir à justifier de motifs ni à payer de pénalité.</p>
         </section>
 
+        {# Section 7 : Garanties légales #}
         <section>
             <h2>7. Garanties</h2>
             <p>Conformément à la loi, la vente des produits listés dans nos catalogues s'effectue avec les garanties suivantes :</p>
