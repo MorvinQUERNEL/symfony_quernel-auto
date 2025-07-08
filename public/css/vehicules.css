@@ -246,10 +246,18 @@ body {
 .vehicules-list {
     display: grid;
     gap: var(--spacing-lg);
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
 }
 
 /* Carte véhicule */
-a.vehicule-card {
+.vehicule-card-link {
+    text-decoration: none;
+    color: var(--text-color);
+    display: block;
+    animation: fadeInUp 0.5s ease-out backwards;
+}
+
+.vehicule-card {
     background: rgba(255,255,255,0.95);
     backdrop-filter: blur(20px);
     border-radius: var(--border-radius-lg);
@@ -258,16 +266,15 @@ a.vehicule-card {
     box-shadow: 0 8px 30px rgba(0,0,0,0.15);
     transition: all var(--transition-normal);
     border: 1px solid rgba(255,255,255,0.2);
-    color: var(--text-color);
-    text-decoration: none;
-    animation: fadeInUp 0.5s ease-out backwards;
+    position: relative;
 }
+
 @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-a.vehicule-card:hover {
+.vehicule-card-link:hover .vehicule-card {
     transform: translateY(-8px) scale(1.01);
     box-shadow: 0 16px 40px rgba(0,0,0,0.2);
     border-color: var(--primary-color);
@@ -287,7 +294,7 @@ a.vehicule-card:hover {
     object-fit: cover;
     transition: transform var(--transition-slow);
 }
-a.vehicule-card:hover .vehicule-card-image img {
+.vehicule-card-link:hover .vehicule-card-image img {
     transform: scale(1.05);
 }
 .no-image-placeholder {
@@ -383,7 +390,7 @@ a.vehicule-card:hover .vehicule-card-image img {
     opacity: 0;
     transition: var(--transition-normal);
 }
-a.vehicule-card:hover .admin-actions {
+.vehicule-card-link:hover .admin-actions {
     opacity: 1;
 }
 .btn-admin {
@@ -418,6 +425,9 @@ a.vehicule-card:hover .admin-actions {
 }
 
 @media (max-width: 767px) {
+    .vehicules-list {
+        grid-template-columns: 1fr;
+    }
     .vehicule-card {
         flex-direction: column;
     }

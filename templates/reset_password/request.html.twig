@@ -1,50 +1,65 @@
+{# Template de demande de réinitialisation de mot de passe de Quernel Auto #}
+{# Cette page permet aux utilisateurs de demander un lien de réinitialisation #}
+{# Elle inclut : formulaire email, gestion des messages flash, navigation #}
 {% extends 'base.html.twig' %}
 
+{# Titre de la page pour le SEO #}
 {% block title %}Réinitialisation du mot de passe{% endblock %}
 
+{# Feuilles de style spécifiques à la réinitialisation de mot de passe #}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/reset_password.css') }}">
 {% endblock %}
 
+{# Contenu principal de la page de demande de réinitialisation #}
 {% block body %}
 <div class="reset-container">
     <section class="reset-card">
+        {# En-tête avec logo et titre #}
         <header class="reset-header">
             <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="reset-logo">
             <h1>Réinitialisation du mot de passe</h1>
         </header>
 
+        {# Affichage des messages d'erreur de réinitialisation #}
         {% for flash_error in app.flashes('reset_password_error') %}
             <div class="alert alert-danger">
                 {{ flash_error }}
             </div>
         {% endfor %}
 
+        {# Affichage des messages d'erreur généraux #}
         {% for flash_error in app.flashes('error') %}
             <div class="alert alert-danger">
                 {{ flash_error }}
             </div>
         {% endfor %}
 
+        {# Affichage des messages de succès #}
         {% for flash_success in app.flashes('success') %}
             <div class="alert alert-success">
                 {{ flash_success }}
             </div>
         {% endfor %}
 
+        {# Formulaire de demande de réinitialisation #}
         {{ form_start(requestForm) }}
+            {# Champ email pour recevoir le lien de réinitialisation #}
             <div class="form-group">
                 {{ form_label(requestForm.email) }}
                 {{ form_widget(requestForm.email, {'attr': {'class': 'form-control'}}) }}
                 {{ form_errors(requestForm.email) }}
             </div>
 
+            {# Bouton de soumission du formulaire #}
             <div class="form-group">
                 <button type="submit" class="btn-reset">Envoyer le lien de réinitialisation</button>
             </div>
+        {# Fin du formulaire Symfony #}
         {{ form_end(requestForm) }}
 
+        {# Pied de page avec lien de retour à la connexion #}
         <footer class="text-center mt-4">
             <a href="{{ path('app_login') }}" class="text-decoration-none">Retour à la connexion</a>
         </footer>

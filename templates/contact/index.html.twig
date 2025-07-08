@@ -1,24 +1,33 @@
+{# Template de la page de contact de Quernel Auto #}
+{# Cette page permet aux utilisateurs de contacter l'entreprise #}
+{# Elle inclut : informations de contact, formulaire de message #}
 {% extends 'base.html.twig' %}
 
+{# Titre de la page pour le SEO #}
 {% block title %}Contact - Quernel Auto{% endblock %}
 
+{# Feuilles de style spécifiques à la page de contact #}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/contact.css') }}">
 {% endblock %}
 
+{# Contenu principal de la page de contact #}
 {% block body %}
 <div class="contact-container">
+    {# En-tête de la page avec titre et description #}
     <header class="contact-header">
         <h1>Contactez-nous</h1>
         <p>Nous sommes là pour vous accompagner dans vos projets d'import-export de véhicules</p>
     </header>
 
+    {# Contenu principal avec informations et formulaire #}
     <div class="contact-content">
-        <!-- Informations de contact -->
+        {# Section des informations de contact #}
         <section class="contact-info-section" aria-labelledby="contact-info-title">
             <h2 id="contact-info-title">Nos coordonnées</h2>
             <div class="contact-info-grid">
+                {# Carte téléphone #}
                 <article class="contact-info-card">
                     <div class="contact-icon">
                         <i class="fas fa-phone"></i>
@@ -30,6 +39,7 @@
                     </div>
                 </article>
 
+                {# Carte email #}
                 <article class="contact-info-card">
                     <div class="contact-icon">
                         <i class="fas fa-envelope"></i>
@@ -41,6 +51,7 @@
                     </div>
                 </article>
 
+                {# Carte adresse #}
                 <article class="contact-info-card">
                     <div class="contact-icon">
                         <i class="fas fa-map-marker-alt"></i>
@@ -54,29 +65,35 @@
             </div>
         </section>
 
-        <!-- Formulaire de contact -->
+        {# Section du formulaire de contact #}
         <section class="contact-form-section" aria-labelledby="contact-form-title">
             <h2 id="contact-form-title">Envoyez-nous un message</h2>
             <div class="contact-form-card">
+                {# Début du formulaire Symfony #}
                 {{ form_start(form, {'attr': {'class': 'contact-form'}}) }}
+                    {# Champ email #}
                     <div class="form-group">
                         {{ form_label(form.email) }}
                         {{ form_widget(form.email) }}
                         {{ form_errors(form.email) }}
                     </div>
 
+                    {# Champ message avec aide #}
                     <div class="form-group">
                         {{ form_label(form.message) }}
                         {{ form_widget(form.message) }}
                         {{ form_errors(form.message) }}
+                        {# Texte d'aide pour la longueur du message #}
                         <div class="form-help">
                             <small>Votre message doit contenir entre 10 et 2000 caractères.</small>
                         </div>
                     </div>
 
+                    {# Bouton de soumission #}
                     <div class="form-actions">
                         {{ form_widget(form.submit) }}
                     </div>
+                {# Fin du formulaire Symfony #}
                 {{ form_end(form) }}
             </div>
         </section>

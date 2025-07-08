@@ -1,33 +1,42 @@
+{# Template de base pour tous les emails de Quernel Auto #}
+{# Ce template définit la structure HTML commune à tous les emails #}
+{# Il inclut : en-tête, contenu, pied de page, styles inline pour compatibilité email #}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    {# Métadonnées de base pour les emails #}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Quernel Auto{% endblock %}</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f4f4f7;">
+    {# Table principale pour la structure de l'email #}
     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f4f4f7;">
         <tr>
             <td align="center">
+                {# Table de contenu principal avec largeur maximale #}
                 <table width="600" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                    <!-- Header -->
+                    {# En-tête de l'email avec logo/nom de l'entreprise #}
                     <tr>
                         <td align="center" style="padding: 20px; border-bottom: 1px solid #eeeeee;">
                             <h1 style="margin: 0; font-size: 24px; color: #1a1a1a; font-weight: 700;">Quernel Auto</h1>
                         </td>
                     </tr>
                     
-                    <!-- Content -->
+                    {# Zone de contenu principal de l'email #}
                     <tr>
                         <td style="padding: 30px 40px; font-size: 16px; line-height: 1.6; color: #333333;">
+                            {# Bloc pour le contenu spécifique de chaque email #}
                             {% block content %}{% endblock %}
                         </td>
                     </tr>
                     
-                    <!-- Footer -->
+                    {# Pied de page de l'email avec informations légales #}
                     <tr>
                         <td align="center" style="padding: 20px; font-size: 12px; color: #888888; border-top: 1px solid #eeeeee;">
+                            {# Copyright avec année dynamique #}
                             <p style="margin: 0;">&copy; {{ "now"|date("Y") }} Quernel Auto. Tous droits réservés.</p>
+                            {# Adresse de l'entreprise #}
                             <p style="margin: 5px 0 0 0;">123 Rue de la Paix, 75001 Paris</p>
                         </td>
                     </tr>

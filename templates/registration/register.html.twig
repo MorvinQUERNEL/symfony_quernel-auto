@@ -1,27 +1,38 @@
+{# Template d'inscription de Quernel Auto #}
+{# Cette page permet aux nouveaux utilisateurs de créer un compte #}
+{# Elle inclut : formulaire d'inscription complet, validation, consentement RGPD #}
 {% extends 'base.html.twig' %}
 
+{# Titre de la page pour le SEO #}
 {% block title %}Inscription{% endblock %}
 
+{# Feuilles de style spécifiques à l'inscription #}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
     <link rel="stylesheet" href="{{ asset('css/registration.css') }}">
 {% endblock %}
 
+{# Contenu principal de la page d'inscription #}
 {% block body %}
 <div class="login-container">
     <section class="login-card p-4 p-md-5">
+        {# En-tête avec logo et titre #}
         <header class="login-header text-center mb-4">
             <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="login-logo mb-4">
             <h1 class="h3 mb-3 font-weight-normal">Inscription</h1>
         </header>
 
+        {# Début du formulaire d'inscription Symfony #}
         {{ form_start(registrationForm, {'attr': {'class': 'registration-form'}}) }}
+            {# Message d'erreur général si le formulaire n'est pas valide #}
             {% if not registrationForm.vars.valid %}
                 <div class="alert alert-danger" role="alert">
                     Veuillez corriger les erreurs ci-dessous
                 </div>
             {% endif %}
+            
+            {# Ligne 1 : Prénom et nom #}
             <div class="form-row">
                 <div class="form-group">
                     {{ form_label(registrationForm.firstname) }}
@@ -44,6 +55,8 @@
                     {{ form_errors(registrationForm.lastname) }}
                 </div>
             </div>
+            
+            {# Champ email #}
             <div class="form-group">
                 {{ form_label(registrationForm.email) }}
                 {{ form_widget(registrationForm.email, {
@@ -54,6 +67,8 @@
                 }) }}
                 {{ form_errors(registrationForm.email) }}
             </div>
+            
+            {# Champ mot de passe #}
             <div class="form-group">
                 {{ form_label(registrationForm.plainPassword) }}
                 {{ form_widget(registrationForm.plainPassword, {
@@ -64,6 +79,8 @@
                 }) }}
                 {{ form_errors(registrationForm.plainPassword) }}
             </div>
+            
+            {# Champ adresse complète #}
             <div class="form-group">
                 {{ form_label(registrationForm.address) }}
                 {{ form_widget(registrationForm.address, {
@@ -74,6 +91,8 @@
                 }) }}
                 {{ form_errors(registrationForm.address) }}
             </div>
+            
+            {# Ligne 2 : Ville et code postal #}
             <div class="form-row">
                 <div class="form-group">
                     {{ form_label(registrationForm.city) }}
@@ -96,6 +115,8 @@
                     {{ form_errors(registrationForm.postalCode) }}
                 </div>
             </div>
+            
+            {# Ligne 3 : Pays et téléphone #}
             <div class="form-row">
                 <div class="form-group">
                     {{ form_label(registrationForm.country) }}
@@ -118,6 +139,8 @@
                     {{ form_errors(registrationForm.phoneNumber) }}
                 </div>
             </div>
+            
+            {# Consentement RGPD obligatoire #}
             <div class="form-group">
                 <div class="checkbox-simple">
                     {{ form_widget(registrationForm.rgpdConsent) }}
@@ -125,10 +148,15 @@
                 </div>
                 {{ form_errors(registrationForm.rgpdConsent) }}
             </div>
+            
+            {# Bouton de soumission du formulaire #}
             <div class="form-group text-center">
                 <button type="submit" class="btn btn-login">S'inscrire</button>
             </div>
+        {# Fin du formulaire Symfony #}
         {{ form_end(registrationForm) }}
+        
+        {# Pied de page avec lien de connexion #}
         <footer class="text-center mt-4">
             <a href="{{ path('app_login') }}" class="register-link">Déjà inscrit ? Connectez-vous</a>
         </footer>

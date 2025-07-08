@@ -1,17 +1,25 @@
+{# Template de la liste des véhicules de Quernel Auto #}
+{# Cette page affiche tous les véhicules disponibles avec filtres et recherche #}
+{# Elle inclut : en-tête, filtres, grille de véhicules, actions admin #}
 {% extends 'base.html.twig' %}
 
+{# Titre de la page pour le SEO #}
 {% block title %}Nos Véhicules - Quernel Auto{% endblock %}
 
+{# Feuilles de style spécifiques à la liste des véhicules #}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/vehicules.css') }}">
 {% endblock %}
 
+{# Contenu principal de la page de liste des véhicules #}
 {% block body %}
 <div class="vehicules-container">
+    {# En-tête de la page avec titre et bouton d'ajout pour admin #}
     <header class="vehicules-page-header">
         <div class="header-content">
             <h1>Nos Véhicules d'Occasion</h1>
+            {# Bouton d'ajout de véhicule (utilisateurs admin uniquement) #}
             {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('app_vehicules_new') }}" class="btn-add-vehicule">
                     <i class="fas fa-plus-circle"></i> Ajouter un véhicule
@@ -21,21 +29,27 @@
         <p>Parcourez notre catalogue de voitures sélectionnées avec soin.</p>
     </header>
 
+    {# Layout principal avec filtres et contenu #}
     <div class="vehicules-layout">
+        {# Barre latérale des filtres #}
         <aside class="vehicules-filters">
+            {# Section de recherche par texte #}
             <section class="filter-block" aria-labelledby="search-title">
                 <h4 id="search-title"><i class="fas fa-search"></i> Recherche</h4>
                 <form method="GET" action="{{ path('app_vehicules_index') }}" id="searchForm">
                     <div class="search-input-group">
+                        {# Champ de recherche avec valeur actuelle #}
                         <input type="text" 
                                name="search" 
                                value="{{ app.request.query.get('search') }}" 
                                placeholder="Marque, modèle..."
                                class="search-input">
+                        {# Bouton de soumission de recherche #}
                         <button type="submit" class="search-btn" aria-label="Rechercher">
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
+                    {# Lien pour effacer la recherche si active #}
                     {% if app.request.query.get('search') %}
                         <a href="{{ path('app_vehicules_index') }}" class="clear-search-btn">
                             <i class="fas fa-times"></i> Effacer
@@ -43,49 +57,72 @@
                     {% endif %}
                 </form>
             </section>
-            {# D'autres filtres pourraient être ajoutés ici (prix, km, etc.) #}
+            {# Espace pour d'autres filtres (prix, km, etc.) #}
         </aside>
 
+        {# Contenu principal avec la liste des véhicules #}
         <main class="vehicules-main-content">
+            {# En-tête de la liste avec compteur #}
             <header class="list-header">
                 <p>{{ vehicules|length }} véhicule(s) trouvé(s).</p>
-                {# Un tri pourrait être ajouté ici #}
+                {# Espace pour options de tri #}
             </header>
 
+            {# Affichage conditionnel selon la présence de véhicules #}
             {% if vehicules is not empty %}
+                {# Grille des véhicules #}
                 <div class="vehicules-list">
+                    {# Boucle sur tous les véhicules #}
                     {% for vehicule in vehicules %}
+                        {# Lien vers la page de détail du véhicule #}
                         <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="vehicule-card-link">
                             <article class="vehicule-card">
+                                {# Section image du véhicule #}
                                 <div class="vehicule-card-image">
                                     {% if vehicule.pictures is not empty %}
+                                        {# Image principale du véhicule #}
                                         <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures.first.name) }}" alt="{{ vehicule.brand }} {{ vehicule.model }}">
                                     {% else %}
+                                        {# Placeholder si aucune image n'est disponible #}
                                         <div class="no-image-placeholder"><i class="fas fa-car-side"></i></div>
                                     {% endif %}
+                                    {# Badge de statut du véhicule #}
                                     <div class="vehicule-card-status {{ vehicule.status|lower|replace({' ': '-'}) }}">
                                         {{ vehicule.status|default('Disponible') }}
                                     </div>
                                 </div>
+                                
+                                {# Section informations du véhicule #}
                                 <div class="vehicule-card-info">
+                                    {# En-tête avec titre et prix #}
                                     <header class="info-header">
                                         <div>
                                             <h3>{{ vehicule.brand }} {{ vehicule.model }}</h3>
                                             <p class="year">{{ vehicule.year|date('Y') }}</p>
                                         </div>
+                                        {# Prix formaté en euros #}
                                         <p class="price">{{ (vehicule.salePrice / 100)|number_format(0, ',', ' ') }} €</p>
                                     </header>
+                                    
+                                    {# Liste des détails techniques #}
                                     <ul class="info-details">
+                                        {# Kilométrage #}
                                         <li class="detail-item"><i class="fas fa-road"></i> {{ vehicule.mileage|number_format(0, ',', ' ') }} km</li>
+                                        {# Type de carburant #}
                                         <li class="detail-item"><i class="fas fa-gas-pump"></i> {{ vehicule.fuelType }}</li>
+                                        {# Type de transmission #}
                                         <li class="detail-item"><i class="fas fa-cog"></i> {{ vehicule.trasmission }}</li>
                                     </ul>
                                 </div>
-                                 {% if is_granted('ROLE_ADMIN') %}
+                                
+                                {# Actions d'administration (utilisateurs admin uniquement) #}
+                                {% if is_granted('ROLE_ADMIN') %}
                                     <div class="admin-actions" onclick="event.stopPropagation();">
+                                        {# Bouton d'édition #}
                                         <a href="{{ path('app_vehicules_edit', {'id': vehicule.id}) }}" class="btn-admin edit" onclick="event.preventDefault(); window.location.href=this.href;">
                                             <i class="fas fa-edit"></i>
                                         </a>
+                                        {# Formulaire de suppression avec confirmation #}
                                         <form method="post" action="{{ path('app_vehicules_delete', {'id': vehicule.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce véhicule ?');">
                                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vehicule.id) }}">
                                             <button type="submit" class="btn-admin delete">
@@ -99,9 +136,11 @@
                     {% endfor %}
                 </div>
             {% else %}
+                {# Message si aucun véhicule n'est trouvé #}
                 <section class="no-vehicules-found" aria-labelledby="no-results-title">
                     <h3 id="no-results-title">Aucun véhicule trouvé</h3>
                     <p>Il n'y a aucun véhicule correspondant à vos critères de recherche.</p>
+                    {# Lien pour réinitialiser la recherche #}
                     <a href="{{ path('app_vehicules_index') }}" class="btn-primary">Voir tous nos véhicules</a>
                 </section>
             {% endif %}
@@ -110,7 +149,9 @@
 </div>
 {% endblock %}
 
+{# Scripts JavaScript spécifiques à la page #}
 {% block javascripts %}
     {{ parent() }}
+    {# Script pour les fonctionnalités avancées (commenté pour l'instant) #}
     {# <script src="{{ asset('js/vehicules.js') }}" defer></script> #}
 {% endblock %} 

@@ -1,25 +1,33 @@
+{# Template de navigation principal de l'application Quernel Auto #}
+{# Ce template gère la navigation responsive avec menu burger pour mobile #}
+{# Il inclut : logo, menu principal, menu utilisateur, notifications admin #}
 <nav class="navbar">
     <div class="navbar-container">
-        <!-- Logo et marque -->
+        {# Logo et marque de l'entreprise #}
         <a href="{{ path('app_home') }}" class="navbar-brand">
             <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="navbar-logo">
             <span>Quernel Auto</span>
         </a>
         
-        <!-- Menu principal -->
+        {# Menu principal de navigation #}
         <ul class="navbar-nav">
+            {# Lien vers la page d'accueil avec indication de page active #}
             <li class="nav-item">
                 <a href="{{ path('app_home') }}" class="nav-link" aria-current="{{ app.request.get('_route') == 'app_home' ? 'page' : 'false' }}">
                     <i class="fas fa-home"></i>
                     <span>Accueil</span>
                 </a>
             </li>
+            
+            {# Lien vers la liste des véhicules #}
             <li class="nav-item">
                 <a href="{{ path('app_vehicules_index') }}" class="nav-link" aria-current="{{ app.request.get('_route') starts with 'app_vehicules' ? 'page' : 'false' }}">
                     <i class="fas fa-car"></i>
                     <span>Véhicules</span>
                 </a>
             </li>
+            
+            {# Menu déroulant Services (desktop uniquement) #}
             <li class="nav-item dropdown desktop-only">
                 <a href="#" class="nav-link dropdown-toggle">
                     <i class="fas fa-cogs"></i>
@@ -27,14 +35,19 @@
                     <i class="fas fa-chevron-down"></i>
                 </a>
                 <div class="dropdown-menu">
+                    {# Chat support (utilisateurs connectés uniquement) #}
                     {% if app.user %}
                         <a href="{{ path('app_chat_index') }}" class="dropdown-item">
                             <i class="fas fa-comments"></i> Chat support
                         </a>
                     {% endif %}
+                    
+                    {# Lien de contact #}
                     <a href="{{ path('app_contact') }}" class="dropdown-item">
                         <i class="fas fa-envelope"></i> Contact
                     </a>
+                    
+                    {# Ajout de préférences (utilisateurs connectés uniquement) #}
                     {% if app.user %}
                         <a href="{{ path('app_preference_add') }}" class="dropdown-item">
                             <i class="fas fa-heart"></i> Ajouter préférence
@@ -42,7 +55,8 @@
                     {% endif %}
                 </div>
             </li>
-            <!-- Liens Services pour mobile uniquement -->
+            
+            {# Liens Services pour mobile uniquement (évite le menu déroulant) #}
             {% if app.user %}
                 <li class="nav-item mobile-only">
                     <a href="{{ path('app_chat_index') }}" class="nav-link">
@@ -65,12 +79,16 @@
                     </a>
                 </li>
             {% endif %}
+            
+            {# Lien vers la page processus d'achat #}
             <li class="nav-item">
                 <a href="{{ path('app_processus') }}" class="nav-link" aria-current="{{ app.request.get('_route') == 'app_processus' ? 'page' : 'false' }}">
                     <i class="fas fa-route"></i>
                     <span>Processus</span>
                 </a>
             </li>
+            
+            {# Lien contact pour desktop (évite la duplication dans le menu déroulant) #}
             <li class="nav-item desktop-only">
                 <a href="{{ path('app_contact') }}" class="nav-link" aria-current="{{ app.request.get('_route') == 'app_contact' ? 'page' : 'false' }}">
                     <i class="fas fa-envelope"></i>
@@ -78,14 +96,17 @@
                 </a>
             </li>
             
-            <!-- Liens du profil utilisateur pour mobile -->
+            {# Section liens du profil utilisateur pour mobile #}
             {% if app.user %}
+                {# Profil utilisateur #}
                 <li class="nav-item mobile-only">
                     <a href="{{ path('app_profile') }}" class="nav-link">
                         <i class="fas fa-user"></i>
                         <span>Mon profil</span>
                     </a>
                 </li>
+                
+                {# Commandes de l'utilisateur #}
                 <li class="nav-item mobile-only">
                     <a href="{{ path('app_orders_my_orders') }}" class="nav-link">
                         <i class="fas fa-shopping-bag"></i>
@@ -93,6 +114,7 @@
                     </a>
                 </li>
                 
+                {# Liens d'administration (utilisateurs admin uniquement) #}
                 {% if is_granted('ROLE_ADMIN') %}
                     <li class="nav-item mobile-only">
                         <a href="{{ path('app_vehicules_index') }}" class="nav-link">
@@ -114,6 +136,7 @@
                     </li>
                 {% endif %}
                 
+                {# Déconnexion #}
                 <li class="nav-item mobile-only">
                     <a href="{{ path('app_logout') }}" class="nav-link">
                         <i class="fas fa-sign-out-alt"></i>
@@ -121,7 +144,7 @@
                     </a>
                 </li>
             {% else %}
-                <!-- Liens connexion/inscription pour mobile -->
+                {# Liens connexion/inscription pour utilisateurs non connectés (mobile) #}
                 <li class="nav-item mobile-only">
                     <a href="{{ path('app_login') }}" class="nav-link">
                         <i class="fas fa-sign-in-alt"></i>
@@ -137,24 +160,29 @@
             {% endif %}
         </ul>
         
-        <!-- Actions utilisateur (desktop uniquement) -->
+        {# Actions utilisateur côté droit (desktop uniquement) #}
         <div class="navbar-actions desktop-only">
             {% if app.user %}
-                <!-- Menu utilisateur connecté -->
+                {# Menu utilisateur connecté avec avatar et dropdown #}
                 <div class="dropdown">
                     <a href="#" class="user-menu dropdown-toggle">
+                        {# Avatar avec initiale du prénom #}
                         <div class="user-avatar">
                             {{ app.user.firstname|first|upper }}
                         </div>
                         <span>
                             {{ app.user.firstname }}
+                            {# Badge de notification pour les messages non lus (admin) #}
                             {% if is_granted('ROLE_ADMIN') and unreadMessagesCount > 0 %}
                                 <span class="notification-badge">{{ unreadMessagesCount }}</span>
                             {% endif %}
                         </span>
                         <i class="fas fa-chevron-down"></i>
                     </a>
+                    
+                    {# Menu déroulant utilisateur #}
                     <div class="dropdown-menu">
+                        {# Liens de profil et commandes #}
                         <a href="{{ path('app_profile') }}" class="dropdown-item">
                             <i class="fas fa-user"></i> Mon profil
                         </a>
@@ -165,6 +193,7 @@
                             <i class="fas fa-heart"></i> Ajouter préférence
                         </a>
                         
+                        {# Section administration (utilisateurs admin uniquement) #}
                         {% if is_granted('ROLE_ADMIN') %}
                             <div class="dropdown-divider"></div>
                             <a href="{{ path('app_vehicules_index') }}" class="dropdown-item">
@@ -175,12 +204,14 @@
                             </a>
                             <a href="{{ path('app_chat_admin') }}" class="dropdown-item">
                                 <i class="fas fa-comments"></i> Chat Admin
+                                {# Badge de notification pour les messages non lus #}
                                 {% if unreadMessagesCount > 0 %}
                                     <span class="notification-badge">{{ unreadMessagesCount }}</span>
                                 {% endif %}
                             </a>
                         {% endif %}
                         
+                        {# Séparateur et déconnexion #}
                         <div class="dropdown-divider"></div>
                         <a href="{{ path('app_logout') }}" class="dropdown-item">
                             <i class="fas fa-sign-out-alt"></i> Déconnexion
@@ -188,7 +219,7 @@
                     </div>
                 </div>
             {% else %}
-                <!-- Boutons de connexion/inscription -->
+                {# Boutons de connexion/inscription pour utilisateurs non connectés #}
                 <a href="{{ path('app_login') }}" class="btn-login">
                     <i class="fas fa-sign-in-alt"></i>
                     <span>Connexion</span>
@@ -200,7 +231,7 @@
             {% endif %}
         </div>
         
-        <!-- Bouton burger pour mobile -->
+        {# Bouton burger pour afficher/masquer le menu mobile #}
         <button class="navbar-toggler" aria-label="Menu principal" aria-expanded="false">
             <span class="navbar-toggler-line"></span>
             <span class="navbar-toggler-line"></span>

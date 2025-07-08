@@ -1,41 +1,58 @@
+{# Template de la page d'accueil de Quernel Auto #}
+{# Cette page présente l'entreprise, ses services et les véhicules récents #}
+{# Elle inclut : hero section, services, processus, carrousel de véhicules #}
 {% extends 'base.html.twig' %}
 
+{# Titre de la page pour le SEO #}
 {% block title %}Quernel Auto - Import/Export de véhicules{% endblock %}
 
+{# Feuilles de style spécifiques à la page d'accueil #}
 {% block stylesheets %}
     {{ parent() }}
+    {# Font Awesome pour les icônes #}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    {# CSS spécifique à la page d'accueil #}
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 {% endblock %}
 
+{# Contenu principal de la page d'accueil #}
 {% block body %}
-    <!-- Section Hero -->
+    {# Section Hero - Présentation principale de l'entreprise #}
     <header class="hero">
         <div class="hero-content">
             <h1>QUERNEL AUTO</h1>
             <p>QUERNEL AUTO simplifie l'import-export de voitures, offrant des solutions fiables et transparentes pour l'achat et la vente de véhicules à l'international. Avec une expertise reconnue et un réseau mondial, nous vous accompagnons à chaque étape pour rendre vos transactions automobiles fluides et sécurisées.</p>
+            
+            {# Bouton d'action principal selon le statut de connexion #}
             {% if app.user %}
+                {# Utilisateurs connectés : ajout de préférences #}
                 <a href="{{ path('app_preference_add') }}" class="cta-button">Ajouter une préférence</a>
             {% else %}
+                {# Utilisateurs non connectés : formulaire combiné #}
                 <a href="{{ path('app_combined_form') }}" class="cta-button">Remplir un formulaire</a>
             {% endif %}
         </div>
     </header>
 
-    <!-- Section Services -->
+    {# Section Services - Présentation des services principaux #}
     <section class="services" aria-labelledby="services-title">
         <h2 id="services-title">Nos Services</h2>
         <div class="services-grid">
+            {# Carte service : Import de véhicules #}
             <article class="service-card">
                 <i class="fas fa-car"></i>
                 <h3>Import de Véhicules</h3>
                 <p>Solutions personnalisées pour l'importation de véhicules de qualité</p>
             </article>
+            
+            {# Carte service : Export international #}
             <article class="service-card">
                 <i class="fas fa-globe"></i>
                 <h3>Export International</h3>
                 <p>Expertise mondiale dans l'exportation de véhicules</p>
             </article>
+            
+            {# Carte service : Accompagnement #}
             <article class="service-card">
                 <i class="fas fa-handshake"></i>
                 <h3>Accompagnement</h3>
@@ -44,14 +61,17 @@
         </div>
     </section>
 
-    <!-- Section Processus -->
+    {# Section Processus - Étapes du processus d'importation #}
     <section class="process" aria-labelledby="process-title">
         <h2 id="process-title">Notre Processus d'Importation</h2>
         <div class="process-steps">
+            {# Boucle pour afficher les 4 étapes du processus #}
             {% for i in 1..4 %}
                 <article class="step">
+                    {# Image de l'étape #}
                     <img src="{{ asset('images/etape' ~ i ~ '.jpg') }}" alt="Étape {{ i }}">
                     <h3>Étape {{ i }}</h3>
+                    {# Description de l'étape selon le numéro #}
                     <p>{{ {
                         1: 'Sélection du véhicule selon vos critères',
                         2: 'Vérification et inspection complète',
@@ -63,15 +83,18 @@
         </div>
     </section>
 
-    <!-- Section Véhicules Récents -->
+    {# Section Véhicules Récents - Carrousel des véhicules disponibles #}
     {% if recentVehicules is not empty %}
     <section class="recent-vehicles" aria-labelledby="recent-vehicles-title">
+        {# En-tête de la section #}
         <header class="recent-vehicles__header">
             <h2 id="recent-vehicles-title" class="recent-vehicles__title">Nos véhicules du moment</h2>
             <p class="recent-vehicles__subtitle">Découvrez notre sélection de véhicules récents, prêts à être importés.</p>
         </header>
+        
+        {# Carrousel de véhicules avec navigation #}
         <div class="vehicles-carousel">
-            <!-- Flèches de navigation -->
+            {# Boutons de navigation du carrousel #}
             <button class="carousel-nav carousel-nav-prev" aria-label="Véhicule précédent">
                 <i class="fas fa-chevron-left"></i>
             </button>
@@ -79,37 +102,57 @@
                 <i class="fas fa-chevron-right"></i>
             </button>
             
-            <!-- Wrapper pour le swipe -->
+            {# Wrapper pour le swipe tactile #}
             <div class="carousel-wrapper">
                 <div class="vehicles-track">
+                    {# Boucle sur les véhicules récents #}
                     {% for vehicule in recentVehicules %}
                         <article class="vehicle-card">
+                            {# Image du véhicule #}
                             <div class="vehicle-image">
                                 {% if vehicule.pictures is not empty and vehicule.pictures|first.name %}
+                                    {# Image principale du véhicule #}
                                     <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures|first.name) }}" alt="{{ vehicule.brand }} {{ vehicule.model }}">
                                 {% else %}
+                                    {# Image par défaut si aucune photo n'est disponible #}
                                     <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Aucune image disponible pour {{ vehicule.brand }} {{ vehicule.model }}">
                                 {% endif %}
                                 <div class="vehicle-image__overlay"></div>
                             </div>
+                            
+                            {# Contenu informatif du véhicule #}
                             <div class="vehicle-content">
+                                {# Titre du véhicule #}
                                 <h3 class="vehicle-title">{{ vehicule.brand }} {{ vehicule.model }}</h3>
+                                
+                                {# Description tronquée si trop longue #}
                                 <p class="vehicle-description">{{ vehicule.description|length > 100 ? vehicule.description|slice(0, 100) ~ '...' : vehicule.description }}</p>
+                                
+                                {# Détails techniques du véhicule #}
                                 <div class="vehicle-details">
+                                    {# Année du véhicule #}
                                     <div class="vehicle-detail-item">
                                         <i class="fas fa-calendar"></i>
                                         <span>{{ vehicule.year ? vehicule.year|date('Y') : 'N/A' }}</span>
                                     </div>
+                                    {# Type de carburant #}
                                     <div class="vehicle-detail-item">
                                         <i class="fas fa-gas-pump"></i>
                                         <span>{{ vehicule.fuelType }}</span>
                                     </div>
                                 </div>
+                                
+                                {# Prix de vente formaté #}
                                 <div class="vehicle-price">{{ (vehicule.salePrice / 100)|number_format(0, ',', ' ') }} €</div>
+                                
+                                {# Actions disponibles sur le véhicule #}
                                 <div class="vehicle-actions">
+                                    {# Lien vers les détails du véhicule #}
                                     <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="btn-vehicle btn-view">
                                         Voir les détails
                                     </a>
+                                    
+                                    {# Bouton d'achat si le véhicule est disponible #}
                                     {% if vehicule.status == 'Disponible' %}
                                         <a href="{{ path('app_vehicules_buy', {'id': vehicule.id}) }}" class="btn-vehicle btn-buy">
                                             <i class="fas fa-credit-card"></i>
@@ -123,9 +166,9 @@
                 </div>
             </div>
             
-            <!-- Indicateurs de pagination -->
+            {# Indicateurs de pagination du carrousel #}
             <div class="carousel-indicators">
-                {# The number of dots is handled by the JS, this is just for server-side rendering #}
+                {# Calcul du nombre de pages pour les indicateurs #}
                 {% set itemsPerPage = 1 %} 
                 {% set totalPages = (recentVehicules|length / itemsPerPage)|round(0, 'ceil') %}
                 {% for i in 0..(totalPages - 1) %}
@@ -133,7 +176,7 @@
                 {% endfor %}
             </div>
 
-            <!-- Barre de progression -->
+            {# Barre de progression du carrousel #}
             <div class="carousel-progress">
                 <div class="carousel-progress-bar"></div>
             </div>
@@ -142,6 +185,7 @@
     {% endif %}
 {% endblock %}
 
+{# Scripts JavaScript spécifiques à la page #}
 {% block page_javascripts %}
     {# Le carrousel s'initialise automatiquement via carousel.js qui est chargé dans base.html.twig #}
 {% endblock %}

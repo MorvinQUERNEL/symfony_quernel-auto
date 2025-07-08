@@ -1,18 +1,25 @@
+{# Template de la page processus d'import-export de Quernel Auto #}
+{# Cette page présente les 4 étapes du processus d'import-export de véhicules #}
+{# Elle inclut : en-tête, étapes détaillées, call-to-action #}
 {% extends 'base.html.twig' %}
 
+{# Titre de la page pour le SEO #}
 {% block title %}Notre Processus - Quernel Auto{% endblock %}
 
+{# Feuilles de style spécifiques à la page processus #}
 {% block page_stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/processus.css') }}">
 {% endblock %}
 
+{# Scripts JavaScript pour les animations et interactions #}
 {% block page_javascripts %}
     <script src="{{ asset('js/processus.js') }}" defer></script>
 {% endblock %}
 
+{# Contenu principal de la page processus #}
 {% block body %}
 <div class="processus-container">
-    <!-- En-tête de la page -->
+    {# En-tête de la page avec titre et description #}
     <section class="processus-header">
         <div class="container">
             <div class="header-content">
@@ -25,16 +32,18 @@
         </div>
     </section>
 
-    <!-- Étapes du processus -->
+    {# Section des étapes du processus #}
     <section class="processus-steps">
         <div class="container">
-            <!-- Étape 1 -->
+            {# Étape 1 : Sélection et sourcing #}
             <article class="step-item" data-step="1">
                 <div class="step-content">
+                    {# Image de l'étape avec numéro #}
                     <div class="step-image">
                         <img src="{{ asset('images/etape1.jpg') }}" alt="Étape 1 - Sélection et sourcing" class="step-img">
                         <div class="step-number">1</div>
                     </div>
+                    {# Contenu textuel de l'étape #}
                     <div class="step-text">
                         <h2 class="step-title">Sélection et Sourcing</h2>
                         <p class="step-description">
@@ -44,6 +53,7 @@
                             de confiance en Europe, en Amérique du Nord et en Asie pour dénicher 
                             les perles rares qui feront la différence.
                         </p>
+                        {# Liste des points clés de l'étape #}
                         <ul class="step-features">
                             <li><i class="fas fa-check-circle"></i> Audit qualité approfondi</li>
                             <li><i class="fas fa-check-circle"></i> Vérification de l'historique</li>
@@ -53,13 +63,15 @@
                 </div>
             </article>
 
-            <!-- Étape 2 -->
+            {# Étape 2 : Négociation et acquisition #}
             <article class="step-item" data-step="2">
                 <div class="step-content">
+                    {# Image de l'étape avec numéro #}
                     <div class="step-image">
                         <img src="{{ asset('images/etape2.jpg') }}" alt="Étape 2 - Négociation et acquisition" class="step-img">
                         <div class="step-number">2</div>
                     </div>
+                    {# Contenu textuel de l'étape #}
                     <div class="step-text">
                         <h2 class="step-title">Négociation et Acquisition</h2>
                         <p class="step-description">
@@ -69,6 +81,7 @@
                             des prix compétitifs tout en garantissant la qualité et l'authenticité 
                             de chaque véhicule.
                         </p>
+                        {# Liste des points clés de l'étape #}
                         <ul class="step-features">
                             <li><i class="fas fa-check-circle"></i> Négociation experte</li>
                             <li><i class="fas fa-check-circle"></i> Vérification légale</li>
@@ -78,13 +91,15 @@
                 </div>
             </article>
 
-            <!-- Étape 3 -->
+            {# Étape 3 : Préparation et transport #}
             <article class="step-item" data-step="3">
                 <div class="step-content">
+                    {# Image de l'étape avec numéro #}
                     <div class="step-image">
                         <img src="{{ asset('images/etape3.jpg') }}" alt="Étape 3 - Préparation et transport" class="step-img">
                         <div class="step-number">3</div>
                     </div>
+                    {# Contenu textuel de l'étape #}
                     <div class="step-text">
                         <h2 class="step-title">Préparation et Transport</h2>
                         <p class="step-description">
@@ -93,6 +108,7 @@
                             les aspects : documentation douanière, emballage sécurisé, choix 
                             du mode de transport optimal et suivi en temps réel jusqu'à destination.
                         </p>
+                        {# Liste des points clés de l'étape #}
                         <ul class="step-features">
                             <li><i class="fas fa-check-circle"></i> Préparation minutieuse</li>
                             <li><i class="fas fa-check-circle"></i> Transport sécurisé</li>
@@ -102,13 +118,15 @@
                 </div>
             </article>
 
-            <!-- Étape 4 -->
+            {# Étape 4 : Livraison et service client #}
             <article class="step-item" data-step="4">
                 <div class="step-content">
+                    {# Image de l'étape avec numéro #}
                     <div class="step-image">
                         <img src="{{ asset('images/etape4.jpg') }}" alt="Étape 4 - Livraison et service client" class="step-img">
                         <div class="step-number">4</div>
                     </div>
+                    {# Contenu textuel de l'étape #}
                     <div class="step-text">
                         <h2 class="step-title">Livraison et Service Client</h2>
                         <p class="step-description">
@@ -117,6 +135,7 @@
                             préférences et restons à vos côtés pour toute question ou besoin 
                             d'assistance. Notre engagement ne s'arrête pas à la vente.
                         </p>
+                        {# Liste des points clés de l'étape #}
                         <ul class="step-features">
                             <li><i class="fas fa-check-circle"></i> Livraison personnalisée</li>
                             <li><i class="fas fa-check-circle"></i> Accompagnement post-vente</li>
@@ -128,7 +147,7 @@
         </div>
     </section>
 
-    <!-- Section CTA -->
+    {# Section call-to-action finale #}
     <section class="processus-cta">
         <div class="container">
             <div class="cta-content">
@@ -137,11 +156,14 @@
                     Notre processus garantit qualité, transparence et satisfaction client. 
                     Découvrez notre sélection de véhicules et faites confiance à notre expertise.
                 </p>
+                {# Boutons d'action #}
                 <div class="cta-actions">
+                    {# Lien vers le catalogue de véhicules #}
                     <a href="{{ path('app_vehicules_index') }}" class="btn btn-primary">
                         <i class="fas fa-car"></i>
                         Voir nos véhicules
                     </a>
+                    {# Lien vers la page de contact #}
                     <a href="{{ path('app_contact') }}" class="btn btn-secondary">
                         <i class="fas fa-envelope"></i>
                         Nous contacter
