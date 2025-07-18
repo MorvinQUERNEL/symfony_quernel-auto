@@ -4,7 +4,8 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/vehicules.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/vehicule-form.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}
 
 {% block body %}
@@ -92,15 +93,27 @@
             <div class="form-group">
                 {{ form_label(form.pictures) }}
                 <div class="images-collection" data-prototype="{{ form_widget(form.pictures.vars.prototype)|e('html_attr') }}">
+                    {% if form.pictures|length > 0 %}
+                        <div class="miniatures-row" style="display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                            {% for picture in form.pictures %}
+                                {% if picture.vars.value and picture.vars.value.name %}
+                                    <div class="miniature-wrapper" style="display: flex; flex-direction: column; align-items: center; position: relative;">
+                                        <img src="{{ asset('uploads/vehicules/' ~ picture.vars.value.name) }}" alt="Image existante" class="thumbnail" style="width: 80px; height: 60px; object-fit: cover; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 0.3rem;">
+                                        <span class="image-name" style="font-size: 0.8em; color: #888; word-break: break-all;">{{ picture.vars.value.name }}</span>
+                                        <form method="post" action="{{ path('app_vehicules_delete_picture', {vehicule_id: vehicule.id, picture_id: picture.vars.value.id}) }}" style="position: absolute; top: 0; right: 0;" onsubmit="return confirm('Supprimer cette image ?');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete_picture_' ~ picture.vars.value.id) }}">
+                                            <button type="submit" class="btn btn-danger btn-sm" title="Supprimer l'image" style="padding: 0.3em 0.5em; border-radius: 50%; font-size: 1.1em; margin: 2px;">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                     {% for picture in form.pictures %}
                         <div class="image-item">
-                            {% if picture.vars.value and picture.vars.value.name %}
-                                <div class="existing-image">
-                                    <img src="{{ asset('uploads/vehicules/' ~ picture.vars.value.name) }}" 
-                                         alt="Image existante" class="thumbnail">
-                                    <p class="image-name">{{ picture.vars.value.name }}</p>
-                                </div>
-                            {% endif %}
+                            <div class="image-preview"></div>
                             {{ form_widget(picture) }}
                             <button type="button" class="btn btn-danger btn-sm remove-image">
                                 <i class="fas fa-trash"></i> Supprimer
@@ -138,16 +151,43 @@ document.addEventListener('DOMContentLoaded', function() {
     const prototype = imagesCollection.dataset.prototype;
     let index = imagesCollection.children.length;
 
+    // Fonction d'aperçu de la miniature
+    function handlePreview(input) {
+        if (!input) return;
+        input.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            let preview = e.target.closest('.image-item').querySelector('.image-preview');
+            if (!preview) {
+                preview = document.createElement('div');
+                preview.className = 'image-preview';
+                e.target.closest('.image-item').insertBefore(preview, e.target);
+            }
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    preview.innerHTML = '<img src="' + evt.target.result + '" alt="Miniature" style="max-width:80px;max-height:60px;border-radius:6px;margin-bottom:4px;">';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.innerHTML = '';
+            }
+        });
+    }
+
+    // Initialiser l'aperçu sur les inputs existants
+    imagesCollection.querySelectorAll('input[type="file"]').forEach(handlePreview);
+
     // Ajouter une nouvelle image
     addImageBtn.addEventListener('click', function() {
         const newImage = prototype.replace(/__name__/g, index);
         const imageItem = document.createElement('div');
         imageItem.className = 'image-item';
-        imageItem.innerHTML = newImage + 
+        imageItem.innerHTML = '<div class="image-preview"></div>' + newImage +
             '<button type="button" class="btn btn-danger btn-sm remove-image">' +
             '<i class="fas fa-trash"></i> Supprimer</button>';
-        
         imagesCollection.appendChild(imageItem);
+        // Ajouter l'aperçu sur le nouvel input
+        handlePreview(imageItem.querySelector('input[type="file"]'));
         index++;
     });
 

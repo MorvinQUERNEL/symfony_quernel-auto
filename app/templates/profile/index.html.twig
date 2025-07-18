@@ -19,7 +19,6 @@
     <article class="profile-card">
         {# En-tête du profil avec logo et titre #}
         <header class="profile-header">
-            <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="profile-logo">
             <h2>Mon Profil</h2>
         </header>
         
@@ -80,7 +79,7 @@
                                 {# Détails de la commande #}
                                 <div class="order-preview-details">
                                     <p><strong>Date :</strong> {{ order.createdAt|date('d/m/Y') }}</p>
-                                    <p><strong>Prix :</strong> {{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</p>
+                                    <p><strong>Prix :</strong> {{ order.totalPrice|number_format(2, ',', ' ')|replace({',00':''}) }} €</p>
                                     <p><strong>Véhicules :</strong> {{ order.vehicules|length }}</p>
                                 </div>
                             </article>
@@ -112,16 +111,17 @@
                         {% for preference in preferences %}
                             <li class="preference-item">
                                 {# Affichage des critères de préférence #}
-                                <span><strong>Marque :</strong> {{ preference.prefereneceBrand ?: '-' }}</span> |
-                                <span><strong>Modèle :</strong> {{ preference.preferenceModel ?: '-' }}</span> |
-                                <span><strong>Année min :</strong> {{ preference.minYear ? preference.minYear|date('Y') : '-' }}</span> |
-                                <span><strong>Prix max :</strong> {{ preference.maxPrice ?: '-' }} €</span> |
+                                <span><strong>Marque :</strong> {{ preference.prefereneceBrand ?: '-' }}</span>
+                                <span><strong>Modèle :</strong> {{ preference.preferenceModel ?: '-' }}</span>
+                                <span><strong>Année min :</strong> {{ preference.minYear ? preference.minYear|date('Y') : '-' }}</span>
+                                <span><strong>Prix max :</strong> {{ preference.maxPrice ?: '-' }} €</span>
                                 <span><strong>Carburant :</strong> {{ preference.preferenceFuelType ?: '-' }}</span>
-                                {# Formulaire de suppression avec confirmation #}
-                                <form method="post" action="{{ path('app_profile_preference_delete', {id: preference.id}) }}" style="display:inline" onsubmit="return confirm('Supprimer cette préférence ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete_preference_' ~ preference.id) }}">
-                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Supprimer</button>
-                                </form>
+                                <div class="preference-delete-btn-wrapper">
+                                    <form method="post" action="{{ path('app_profile_preference_delete', {id: preference.id}) }}" onsubmit="return confirm('Supprimer cette préférence ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete_preference_' ~ preference.id) }}">
+                                        <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Supprimer</button>
+                                    </form>
+                                </div>
                             </li>
                         {% endfor %}
                     </ul>

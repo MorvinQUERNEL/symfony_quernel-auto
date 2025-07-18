@@ -5,154 +5,72 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/orders.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}
 
 {% block body %}
-<div class="order-detail-container">
-    <div class="order-detail-header">
-        <h1>Commande #{{ order.id }}</h1>
-        <div class="order-actions">
-            <a href="{{ path('app_orders_edit', {'id': order.id}) }}" class="btn btn-warning">
-                <i class="fas fa-edit"></i> Modifier
-            </a>
-            <a href="{{ path('app_orders_index') }}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Retour à la liste
-            </a>
+<div class="order-show-container" style="max-width: 700px; margin: 2.5rem auto;">
+    <div class="order-card" style="box-shadow: 0 8px 32px rgba(0,0,0,0.12); border-radius: 20px; background: #fff; padding: 2.5rem 2rem;">
+        <div class="order-header" style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start; margin-bottom: 1.5rem;">
+            <h2 style="font-size: 2rem; color: var(--primary-color); font-weight: 800; margin: 0;">Commande #{{ order.id }}</h2>
+            <span class="order-status status-{{ order.orderStatus }}" style="font-size: 1.1rem; font-weight: 700; padding: 0.4em 1.2em; border-radius: 999px; margin-top: 0.2em;">
+                {% if order.orderStatus == 'pending' %}En attente
+                {% elseif order.orderStatus == 'paid' %}Payée
+                {% elseif order.orderStatus == 'expired' %}Expirée
+                {% elseif order.orderStatus == 'cancelled' %}Annulée
+                {% elseif order.orderStatus == 'processing' %}En cours
+                {% elseif order.orderStatus == 'shipped' %}Expédiée
+                {% elseif order.orderStatus == 'delivered' %}Livrée
+                {% else %}{{ order.orderStatus }}{% endif %}
+            </span>
         </div>
-    </div>
-
-    <div class="order-detail-content">
-        <div class="order-info-section">
-            <div class="info-card">
-                <h3>Informations générales</h3>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="info-label">Statut :</span>
-                        <span class="info-value status-{{ order.orderStatus }}">
-                            {% if order.orderStatus == 'pending' %}
-                                En attente
-                            {% elseif order.orderStatus == 'paid' %}
-                                Payée
-                            {% elseif order.orderStatus == 'expired' %}
-                                Expirée
-                            {% elseif order.orderStatus == 'cancelled' %}
-                                Annulée
-                            {% elseif order.orderStatus == 'processing' %}
-                                En cours
-                            {% elseif order.orderStatus == 'shipped' %}
-                                Expédiée
-                            {% elseif order.orderStatus == 'delivered' %}
-                                Livrée
-                            {% else %}
-                                {{ order.orderStatus }}
-                            {% endif %}
-                        </span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Date de création :</span>
-                        <span class="info-value">{{ order.createdAt|date('d/m/Y H:i') }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Prix total :</span>
-                        <span class="info-value price">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</span>
-                    </div>
-                </div>
+        <div class="order-details" style="display: flex; flex-direction: column; gap: 1.2rem;">
+            <div class="order-info">
+                <p><strong>Client :</strong> {{ order.users.firstName }} {{ order.users.lastName }}</p>
+                <p><strong>Date :</strong> {{ order.createdAt|date('d/m/Y H:i') }}</p>
+                <p><strong>Prix total :</strong> {{ order.totalPrice|number_format(2, ',', ' ')|replace({',00':''}) }} €</p>
+                <p><strong>Véhicules :</strong> {{ order.vehicules|length }}</p>
             </div>
-
-            <div class="info-card">
-                <h3>Client</h3>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="info-label">Nom :</span>
-                        <span class="info-value">{{ order.users.firstName }} {{ order.users.lastName }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Email :</span>
-                        <span class="info-value">{{ order.users.email }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Téléphone :</span>
-                        <span class="info-value">{{ order.users.phone ?? 'Non renseigné' }}</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="info-card">
-                <h3>Adresse de livraison</h3>
-                <div class="address-info">
-                    <p><strong>{{ order.deliveryAdress }}</strong></p>
-                    <p>{{ order.deliveryPostalCode }} {{ order.deliveryCity }}</p>
-                    <p>{{ order.deliveryCountry }}</p>
-                </div>
+            <div class="order-address">
+                <p><strong>Livraison :</strong></p>
+                <p>{{ order.deliveryAdress }}</p>
+                <p>{{ order.deliveryPostalCode }} {{ order.deliveryCity }}</p>
+                <p>{{ order.deliveryCountry }}</p>
             </div>
         </div>
-
-        <div class="vehicules-section">
-            <div class="info-card">
-                <h3>Véhicules de la commande</h3>
-                {% if order.vehicules is empty %}
-                    <p class="no-vehicules">Aucun véhicule associé à cette commande.</p>
-                {% else %}
-                    <div class="vehicules-grid">
-                        {% for vehicule in order.vehicules %}
-                            <div class="vehicule-item">
-                                <div class="vehicule-image">
-                                    {% if vehicule.pictures is not empty %}
-                                        <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures.first.name) }}" 
-                                             alt="{{ vehicule.brand }} {{ vehicule.model }}">
-                                    {% else %}
-                                        <div class="no-image">
-                                            <i class="fas fa-car"></i>
-                                        </div>
-                                    {% endif %}
-                                </div>
-                                <div class="vehicule-info">
-                                    <h4>{{ vehicule.brand }} {{ vehicule.model }}</h4>
-                                    <p class="vehicule-year">{{ vehicule.year|date('Y') }}</p>
-                                    <p class="vehicule-price">{{ (vehicule.salePrice / 100)|number_format(2, ',', ' ') }} €</p>
-                                    <div class="vehicule-details">
-                                        <span class="detail">{{ vehicule.mileage|number_format(0, ',', ' ') }} km</span>
-                                        <span class="detail">{{ vehicule.fuelType }}</span>
-                                        <span class="detail">{{ vehicule.color }}</span>
-                                    </div>
-                                </div>
+        <div class="order-vehicules" style="margin-top: 1.5rem;">
+            <h3 style="font-size: 1.2rem; color: var(--primary-color); margin-bottom: 0.7rem;">Véhicules de la commande</h3>
+            {% if order.vehicules is empty %}
+                <p class="no-vehicules">Aucun véhicule associé à cette commande.</p>
+            {% else %}
+                <div class="vehicules-grid" style="display: flex; gap: 1.2rem; flex-wrap: wrap;">
+                    {% for vehicule in order.vehicules %}
+                        <div class="vehicule-item" style="background: var(--gray-light); border-radius: 10px; padding: 0.7rem; min-width: 160px; display: flex; flex-direction: column; align-items: center;">
+                            <div class="vehicule-image" style="width: 100px; height: 70px; border-radius: 8px; overflow: hidden; background: #eee; display: flex; align-items: center; justify-content: center; margin-bottom: 0.5rem;">
+                                {% if vehicule.pictures is not empty %}
+                                    <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures.first.name) }}" alt="{{ vehicule.brand }} {{ vehicule.model }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                {% else %}
+                                    <div class="no-image"><i class="fas fa-car"></i></div>
+                                {% endif %}
                             </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-
-        {% if order.payement is not empty %}
-            <div class="payments-section">
-                <div class="info-card">
-                    <h3>Paiements</h3>
-                    <div class="payments-list">
-                        {% for payment in order.payement %}
-                            <div class="payment-item">
-                                <div class="payment-info">
-                                    <span class="payment-amount">{{ (payment.amount / 100)|number_format(2, ',', ' ') }} €</span>
-                                    <span class="payment-status status-{{ payment.payementStatus }}">
-                                        {% if payment.payementStatus == 'completed' %}
-                                            Terminé
-                                        {% elseif payment.payementStatus == 'pending' %}
-                                            En attente
-                                        {% elseif payment.payementStatus == 'failed' %}
-                                            Échoué
-                                        {% else %}
-                                            {{ payment.payementStatus }}
-                                        {% endif %}
-                                    </span>
-                                </div>
-                                <div class="payment-date">
-                                    {{ payment.payementAt|date('d/m/Y H:i') }}
-                                </div>
+                            <div class="vehicule-info" style="text-align: center;">
+                                <h4 style="margin: 0 0 0.2rem 0; font-size: 1rem; color: var(--primary-color);">{{ vehicule.brand }} {{ vehicule.model }}</h4>
+                                <p class="vehicule-year" style="font-size: 0.95rem; color: var(--text-color); margin: 0;">{{ vehicule.year|date('Y') }}</p>
+                                <p class="vehicule-price" style="font-size: 0.95rem; color: var(--text-color); margin: 0;">{{ vehicule.salePrice|number_format(2, ',', ' ')|replace({',00':''}) }} €</p>
                             </div>
-                        {% endfor %}
-                    </div>
+                        </div>
+                    {% endfor %}
                 </div>
-            </div>
-        {% endif %}
+            {% endif %}
+        </div>
+        <div class="order-actions" style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+            <a href="{{ path('app_orders_edit', {'id': order.id}) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Modifier</a>
+            <form method="post" action="{{ path('app_orders_delete', {'id': order.id}) }}" style="display: inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette commande ?')">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ order.id) }}">
+                <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Supprimer</button>
+            </form>
+            <a href="{{ path('app_orders_index') }}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i> Retour à la liste</a>
+        </div>
     </div>
 </div>
 {% endblock %} 

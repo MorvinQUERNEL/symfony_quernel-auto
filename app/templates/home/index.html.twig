@@ -143,7 +143,7 @@
                                 </div>
                                 
                                 {# Prix de vente formaté #}
-                                <div class="vehicle-price">{{ (vehicule.salePrice / 100)|number_format(0, ',', ' ') }} €</div>
+                                <div class="vehicle-price">{{ vehicule.salePrice|number_format(2, ',', ' ')|replace({',00':''}) }} €</div>
                                 
                                 {# Actions disponibles sur le véhicule #}
                                 <div class="vehicle-actions">

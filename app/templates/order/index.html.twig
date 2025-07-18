@@ -62,7 +62,7 @@
                         <div class="order-info">
                             <p><strong>Client :</strong> {{ order.users.firstName }} {{ order.users.lastName }}</p>
                             <p><strong>Date :</strong> {{ order.createdAt|date('d/m/Y H:i') }}</p>
-                            <p><strong>Prix :</strong> {{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</p>
+                            <p><strong>Prix :</strong> {{ order.totalPrice|number_format(2, ',', ' ')|replace({',00':''}) }} €</p>
                             <p><strong>Véhicules :</strong> {{ order.vehicules|length }}</p>
                         </div>
                         

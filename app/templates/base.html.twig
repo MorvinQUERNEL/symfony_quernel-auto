@@ -8,28 +8,28 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <meta name="description" content="Quernel Auto - Vente de véhicules d'exception">
-        
+
         {# Métadonnées spécifiques Apple pour l'expérience mobile #}
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
         <meta name="format-detection" content="telephone=no">
-        
+
         {# Titre de la page avec bloc pour personnalisation #}
-        <title>{% block title %}Quernel Auto - Véhicules d'exception{% endblock %}</title>
-        
+        <title>{% block title %}Quernel Auto - import/export de Véhicules d'exception{% endblock %}</title>
+
         {# Favicon de l'application #}
         <link rel="icon" href="{{ asset('images/logo_quernel_auto.png') }}">
-        
+
         {# Bloc pour les feuilles de style CSS #}
         {% block stylesheets %}
             {# CSS principal de l'application avec versioning pour cache busting #}
             <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=2.3">
             <link rel="stylesheet" href="{{ asset('css/navbar.css') }}?v=2.3">
             <link rel="stylesheet" href="{{ asset('css/flash.css') }}?v=2.3">
-            
+
             {# Font Awesome pour les icônes #}
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-            
+
             {# Bloc pour les CSS spécifiques à chaque page #}
             {% block page_stylesheets %}{% endblock %}
         {% endblock %}
@@ -42,15 +42,15 @@
             <script src="{{ asset('js/flash.js') }}?v=2.3" defer></script>
             <script src="{{ asset('js/forms.js') }}?v=2.3" defer></script>
             <script src="{{ asset('js/app.js') }}?v=2.3" defer></script>
-            
+
             {# Bloc pour les JS spécifiques à chaque page #}
             {% block page_javascripts %}{% endblock %}
         {% endblock %}
-        
+
         {# Bloc pour les classes CSS personnalisées dans le head #}
         {% block head_body_class %}{% endblock %}
     </head>
-    
+
     {# Corps de la page avec classe personnalisable #}
     <body class="{% block body_class %}{% endblock %}">
         {# En-tête avec navigation #}
@@ -97,11 +97,11 @@
                     <div class="footer-section">
                         <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="footer-logo">
                         <p class="footer-description">
-                            Votre spécialiste des véhicules d'exception. 
+                            Votre spécialiste des véhicules d'exception.
                             Qualité, transparence et service client au cœur de notre démarche.
                         </p>
                     </div>
-                    
+
                     {# Section liens utiles et légaux #}
                     <div class="footer-section footer-links-section">
                         <h3 class="footer-title">Liens utiles</h3>
@@ -111,7 +111,7 @@
                             <li><a href="{{ path('app_cgv') }}" class="footer-link">Conditions générales de vente</a></li>
                         </ul>
                     </div>
-                    
+
                     {# Section informations de contact #}
                     <div class="footer-section footer-contact-section">
                         <h3 class="footer-title">Contact</h3>
@@ -121,7 +121,7 @@
                             <p><i class="fas fa-map-marker-alt"></i> 123 Rue de la Paix, 75001 Paris</p>
                         </div>
                     </div>
-                    
+
                     {# Section réseaux sociaux #}
                     <div class="footer-section footer-social-section">
                         <h3 class="footer-title">Suivez-nous</h3>
@@ -142,7 +142,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 {# Copyright avec année dynamique #}
                 <div class="footer-bottom">
                     <p>&copy; {{ "now"|date("Y") }} Quernel Auto. Tous droits réservés.</p>

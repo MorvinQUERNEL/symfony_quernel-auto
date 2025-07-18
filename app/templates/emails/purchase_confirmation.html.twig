@@ -43,7 +43,7 @@
         {# Ligne prix du véhicule #}
         <tr>
             <td style="padding: 15px 0;">Prix du véhicule</td>
-            <td align="right" style="padding: 15px 0;">{{ (order.vehicule.salePrice / 100)|number_format(2, ',', ' ') }} €</td>
+            <td align="right" style="padding: 15px 0;">{{ order.vehicule.salePrice|number_format(2, ',', ' ')|replace({',00':''}) }} €</td>
         </tr>
         {# Ligne frais de service #}
         <tr>

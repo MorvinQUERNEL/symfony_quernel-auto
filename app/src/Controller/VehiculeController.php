@@ -271,6 +271,41 @@ class VehiculeController extends AbstractController
     }
 
     /**
+     * Suppression d'une image d'un véhicule (admin)
+     *
+     * @param int $vehicule_id
+     * @param int $picture_id
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
+    #[Route('/{vehicule_id}/delete-picture/{picture_id}', name: 'app_vehicules_delete_picture', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function deletePicture(int $vehicule_id, int $picture_id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $vehicule = $entityManager->getRepository(Vehicules::class)->find($vehicule_id);
+        $picture = $entityManager->getRepository(Pictures::class)->find($picture_id);
+        if (!$vehicule || !$picture || !$vehicule->getPictures()->contains($picture)) {
+            $this->addFlash('error', 'Image ou véhicule introuvable.');
+            return $this->redirectToRoute('app_vehicules_edit', ['id' => $vehicule_id]);
+        }
+        if (!$this->isCsrfTokenValid('delete_picture_' . $picture_id, $request->request->get('_token'))) {
+            $this->addFlash('error', 'Token CSRF invalide.');
+            return $this->redirectToRoute('app_vehicules_edit', ['id' => $vehicule_id]);
+        }
+        try {
+            $this->pictureUploadService->deletePicture($picture);
+            $vehicule->removePicture($picture);
+            $entityManager->remove($picture);
+            $entityManager->flush();
+            $this->addFlash('success', 'Image supprimée avec succès.');
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Erreur lors de la suppression de l\'image.');
+        }
+        return $this->redirectToRoute('app_vehicules_edit', ['id' => $vehicule_id]);
+    }
+
+    /**
      * Démarrage du processus d'achat d'un véhicule
      * 
      * Cette méthode gère :

@@ -46,8 +46,8 @@ class Vehicules
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $status = null;
 
-    #[ORM\Column(type: Types::BIGINT)]
-    private ?int $salePrice = null;
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?float $salePrice = null;
 
     /**
      * @var Collection<int, Pictures>
@@ -188,12 +188,12 @@ class Vehicules
         return $this;
     }
 
-    public function getSalePrice(): ?int
+    public function getSalePrice(): ?float
     {
         return $this->salePrice;
     }
 
-    public function setSalePrice(int $salePrice): static
+    public function setSalePrice(float $salePrice): static
     {
         $this->salePrice = $salePrice;
 

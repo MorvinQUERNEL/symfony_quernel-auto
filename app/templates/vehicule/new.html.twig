@@ -94,6 +94,7 @@
                 <div class="images-collection" data-prototype="{{ form_widget(form.pictures.vars.prototype)|e('html_attr') }}">
                     {% for picture in form.pictures %}
                         <div class="image-item">
+                            <div class="image-preview"></div>
                             {{ form_widget(picture) }}
                             <button type="button" class="btn btn-danger btn-sm remove-image">
                                 <i class="fas fa-trash"></i> Supprimer
@@ -130,16 +131,38 @@ document.addEventListener('DOMContentLoaded', function() {
     const prototype = imagesCollection.dataset.prototype;
     let index = imagesCollection.children.length;
 
+    // Fonction d'aperçu de la miniature
+    function handlePreview(input) {
+        if (!input) return;
+        input.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            let preview = e.target.closest('.image-item').querySelector('.image-preview');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    preview.innerHTML = '<img src="' + evt.target.result + '" alt="Miniature" style="max-width:80px;max-height:60px;border-radius:6px;margin-bottom:4px;">';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.innerHTML = '';
+            }
+        });
+    }
+
+    // Initialiser l'aperçu sur les inputs existants
+    imagesCollection.querySelectorAll('input[type="file"]').forEach(handlePreview);
+
     // Ajouter une nouvelle image
     addImageBtn.addEventListener('click', function() {
         const newImage = prototype.replace(/__name__/g, index);
         const imageItem = document.createElement('div');
         imageItem.className = 'image-item';
-        imageItem.innerHTML = newImage + 
+        imageItem.innerHTML = '<div class="image-preview"></div>' + newImage +
             '<button type="button" class="btn btn-danger btn-sm remove-image">' +
             '<i class="fas fa-trash"></i> Supprimer</button>';
-        
         imagesCollection.appendChild(imageItem);
+        // Ajouter l'aperçu sur le nouvel input
+        handlePreview(imageItem.querySelector('input[type="file"]'));
         index++;
     });
 

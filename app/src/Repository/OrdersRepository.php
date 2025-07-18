@@ -40,4 +40,36 @@ class OrdersRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    /**
+     * Retourne les commandes d'un utilisateur avec les relations véhicules et paiements.
+     */
+    public function findByUserWithRelations($user): array
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.vehicules', 'v')
+            ->addSelect('v')
+            ->leftJoin('o.payement', 'p')
+            ->addSelect('p')
+            ->where('o.users = :user')
+            ->setParameter('user', $user)
+            ->orderBy('o.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Retourne toutes les commandes avec les relations véhicules et paiements.
+     */
+    public function findAllWithRelations(): array
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.vehicules', 'v')
+            ->addSelect('v')
+            ->leftJoin('o.payement', 'p')
+            ->addSelect('p')
+            ->orderBy('o.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -19,7 +19,7 @@
     <section class="login-card p-4 p-md-5">
         {# En-tête avec logo et titre #}
         <header class="login-header text-center mb-4">
-            <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="login-logo mb-4">
+ 
             <h1 class="h3 mb-3 font-weight-normal">Inscription</h1>
         </header>
 
@@ -144,14 +144,16 @@
             <div class="form-group">
                 <div class="checkbox-simple">
                     {{ form_widget(registrationForm.rgpdConsent) }}
-                    {{ form_label(registrationForm.rgpdConsent) }}
+                    <label for="{{ registrationForm.rgpdConsent.vars.id }}">
+                        J'accepte <a href="{{ path('app_politique_confidentialite') }}" target="_blank" rel="noopener noreferrer">la politique de confidentialité</a> et le traitement de mes données personnelles conformément au RGPD
+                    </label>
                 </div>
                 {{ form_errors(registrationForm.rgpdConsent) }}
             </div>
             
             {# Bouton de soumission du formulaire #}
             <div class="form-group text-center">
-                <button type="submit" class="btn btn-login">S'inscrire</button>
+                <button type="submit" class="form-btn-login btn-login btn-primary">S'inscrire</button>
             </div>
         {# Fin du formulaire Symfony #}
         {{ form_end(registrationForm) }}

@@ -9,7 +9,7 @@
     <h3 style="border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 30px;">Détails du Véhicule</h3>
     <p><strong>Modèle :</strong> {{ order.vehicule.brand }} {{ order.vehicule.model }}</p>
     <p><strong>Année :</strong> {{ order.vehicule.year|date('Y') }}</p>
-    <p><strong>Prix de vente :</strong> {{ (order.vehicule.salePrice / 100)|number_format(2, ',', ' ') }} €</p>
+    <p><strong>Prix de vente :</strong> {{ order.vehicule.salePrice|number_format(2, ',', ' ')|replace({',00':''}) }} €</p>
     
     <h3 style="border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 30px;">Détails de l'Acheteur</h3>
     <p><strong>Nom :</strong> {{ order.users.firstname }} {{ order.users.lastname }}</p>

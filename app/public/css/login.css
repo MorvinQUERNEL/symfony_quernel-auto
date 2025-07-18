@@ -312,7 +312,7 @@ input[type="password"]::placeholder {
 /* ========================================
    BOUTON LOGIN - MOBILE FIRST
    ======================================== */
-.btn-login {
+.form-btn-login {
     width: 100%;
     padding: var(--spacing-sm) var(--spacing-md);
     min-height: var(--touch-target);
@@ -334,18 +334,18 @@ input[type="password"]::placeholder {
     -webkit-tap-highlight-color: transparent;
 }
 
-.btn-login:hover,
-.btn-login:focus {
+.form-btn-login:hover,
+.form-btn-login:focus {
     background-color: var(--primary-dark);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
 }
 
-.btn-login:active {
+.form-btn-login:active {
     transform: translateY(0);
 }
 
-.btn-login i {
+.form-btn-login i {
     font-size: var(--font-size-lg);
 }
 
@@ -602,7 +602,7 @@ input[type="password"]::placeholder {
     }
     
     /* Bouton */
-    .btn-login {
+    .form-btn-login {
         width: calc(100% - var(--spacing-sm));
         margin: 0 var(--spacing-xs) var(--spacing-lg) var(--spacing-xs);
         padding: var(--spacing-md) var(--spacing-xl);
@@ -665,18 +665,18 @@ input[type="password"]::placeholder {
     }
     
     /* Bouton */
-    .btn-login {
+    .form-btn-login {
         padding: var(--spacing-lg) var(--spacing-xxl);
         font-size: var(--font-size-xl);
         gap: var(--spacing-sm);
     }
     
-    .btn-login:hover {
+    .form-btn-login:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(255, 107, 0, 0.4);
     }
     
-    .btn-login i {
+    .form-btn-login i {
         font-size: var(--font-size-xl);
     }
     
