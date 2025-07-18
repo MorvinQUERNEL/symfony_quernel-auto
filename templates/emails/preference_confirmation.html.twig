@@ -5,7 +5,18 @@
 {% block content %}
     <h2 style="font-size: 20px; color: #FF6B00; margin-top: 0;">Votre préférence a été enregistrée</h2>
     <p>Bonjour {{ user.firstname }},</p>
-    <p>Nous avons bien enregistré votre préférence pour un véhicule de type <strong>{{ preference.type }}</strong>.</p>
+    <p>Nous avons bien enregistré votre préférence pour un véhicule
+        {% if preference.prefereneceBrand %}
+            de marque <strong>{{ preference.prefereneceBrand }}</strong>
+        {% endif %}
+        {% if preference.preferenceModel %}
+            , modèle <strong>{{ preference.preferenceModel }}</strong>
+        {% endif %}
+        {% if preference.preferenceFuelType %}
+            , carburant <strong>{{ preference.preferenceFuelType }}</strong>
+        {% endif %}
+        .
+    </p>
     <p>Notre équipe vous contactera dès que nous aurons une offre correspondant à vos critères.</p>
     
     <p style="text-align: center; margin-top: 30px;">

@@ -10,6 +10,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/vehicules.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}
 
 {# Contenu principal de la page de liste des véhicules #}
@@ -74,65 +75,65 @@
                 <div class="vehicules-list">
                     {# Boucle sur tous les véhicules #}
                     {% for vehicule in vehicules %}
-                        {# Lien vers la page de détail du véhicule #}
-                        <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="vehicule-card-link">
-                            <article class="vehicule-card">
-                                {# Section image du véhicule #}
-                                <div class="vehicule-card-image">
-                                    {% if vehicule.pictures is not empty %}
-                                        {# Image principale du véhicule #}
-                                        <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures.first.name) }}" alt="{{ vehicule.brand }} {{ vehicule.model }}">
-                                    {% else %}
-                                        {# Placeholder si aucune image n'est disponible #}
-                                        <div class="no-image-placeholder"><i class="fas fa-car-side"></i></div>
-                                    {% endif %}
-                                    {# Badge de statut du véhicule #}
-                                    <div class="vehicule-card-status {{ vehicule.status|lower|replace({' ': '-'}) }}">
-                                        {{ vehicule.status|default('Disponible') }}
-                                    </div>
-                                </div>
-                                
-                                {# Section informations du véhicule #}
-                                <div class="vehicule-card-info">
-                                    {# En-tête avec titre et prix #}
-                                    <header class="info-header">
-                                        <div>
-                                            <h3>{{ vehicule.brand }} {{ vehicule.model }}</h3>
-                                            <p class="year">{{ vehicule.year|date('Y') }}</p>
+                        <div class="vehicule-card-link-wrapper">
+                            <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}" class="vehicule-card-link">
+                                <article class="vehicule-card">
+                                    {# Section image du véhicule #}
+                                    <div class="vehicule-card-image">
+                                        {% if vehicule.pictures is not empty %}
+                                            {# Image principale du véhicule #}
+                                            <img src="{{ asset('uploads/vehicules/' ~ vehicule.pictures.first.name) }}" alt="{{ vehicule.brand }} {{ vehicule.model }}">
+                                        {% else %}
+                                            {# Placeholder si aucune image n'est disponible #}
+                                            <div class="no-image-placeholder"><i class="fas fa-car-side"></i></div>
+                                        {% endif %}
+                                        {# Badge de statut du véhicule #}
+                                        <div class="vehicule-card-status {{ vehicule.status|lower|replace({' ': '-'}) }}">
+                                            {{ vehicule.status|default('Disponible') }}
                                         </div>
-                                        {# Prix formaté en euros #}
-                                        <p class="price">{{ (vehicule.salePrice / 100)|number_format(0, ',', ' ') }} €</p>
-                                    </header>
-                                    
-                                    {# Liste des détails techniques #}
-                                    <ul class="info-details">
-                                        {# Kilométrage #}
-                                        <li class="detail-item"><i class="fas fa-road"></i> {{ vehicule.mileage|number_format(0, ',', ' ') }} km</li>
-                                        {# Type de carburant #}
-                                        <li class="detail-item"><i class="fas fa-gas-pump"></i> {{ vehicule.fuelType }}</li>
-                                        {# Type de transmission #}
-                                        <li class="detail-item"><i class="fas fa-cog"></i> {{ vehicule.trasmission }}</li>
-                                    </ul>
-                                </div>
-                                
-                                {# Actions d'administration (utilisateurs admin uniquement) #}
-                                {% if is_granted('ROLE_ADMIN') %}
-                                    <div class="admin-actions" onclick="event.stopPropagation();">
-                                        {# Bouton d'édition #}
-                                        <a href="{{ path('app_vehicules_edit', {'id': vehicule.id}) }}" class="btn-admin edit" onclick="event.preventDefault(); window.location.href=this.href;">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        {# Formulaire de suppression avec confirmation #}
-                                        <form method="post" action="{{ path('app_vehicules_delete', {'id': vehicule.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce véhicule ?');">
-                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vehicule.id) }}">
-                                            <button type="submit" class="btn-admin delete">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
                                     </div>
-                                {% endif %}
-                            </article>
-                        </a>
+                                    
+                                    {# Section informations du véhicule #}
+                                    <div class="vehicule-card-info">
+                                        {# En-tête avec titre et prix #}
+                                        <header class="info-header">
+                                            <div>
+                                                <h3>{{ vehicule.brand }} {{ vehicule.model }}</h3>
+                                                <p class="year">{{ vehicule.year|date('Y') }}</p>
+                                            </div>
+                                            {# Prix formaté en euros #}
+                                            <p class="price">{{ vehicule.salePrice|number_format(2, ',', ' ')|replace({',00':''}) }} €</p>
+                                        </header>
+                                        
+                                        {# Liste des détails techniques #}
+                                        <ul class="info-details">
+                                            {# Kilométrage #}
+                                            <li class="detail-item"><i class="fas fa-road"></i> {{ vehicule.mileage|number_format(0, ',', ' ') }} km</li>
+                                            {# Type de carburant #}
+                                            <li class="detail-item"><i class="fas fa-gas-pump"></i> {{ vehicule.fuelType }}</li>
+                                            {# Type de transmission #}
+                                            <li class="detail-item"><i class="fas fa-cog"></i> {{ vehicule.trasmission }}</li>
+                                        </ul>
+                                    </div>
+                                    {# Actions d'administration (utilisateurs admin uniquement) #}
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <div class="admin-actions" onclick="event.stopPropagation();">
+                                            {# Bouton d'édition #}
+                                            <a href="{{ path('app_vehicules_edit', {'id': vehicule.id}) }}" class="btn-admin edit" title="Modifier">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            {# Formulaire de suppression avec confirmation #}
+                                            <form method="post" action="{{ path('app_vehicules_delete', {'id': vehicule.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce véhicule ?');" style="display:inline;">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vehicule.id) }}">
+                                                <button type="submit" class="btn-admin delete" title="Supprimer">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+                                </article>
+                            </a>
+                        </div>
                     {% endfor %}
                 </div>
             {% else %}

@@ -20,7 +20,7 @@
                 <h2>Récapitulatif de votre commande</h2>
                 <div class="order-details">
                     <p><strong>Numéro de commande :</strong> #{{ order.id }}</p>
-                    <p><strong>Montant total :</strong> <span class="price">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</span></p>
+                    <p><strong>Montant total :</strong> <span class="price">{{ order.totalPrice|number_format(2, ',', ' ')|replace({',00':''}) }} €</span></p>
                     <p><strong>Date :</strong> {{ order.createdAt|date('d/m/Y à H:i') }}</p>
                 </div>
 
@@ -45,7 +45,7 @@
 
             <div class="limit-info">
                 <h2>Pourquoi cette limite ?</h2>
-                <p>Stripe impose une limite de <strong>999 999,99 €</strong> par session de paiement pour des raisons de sécurité. Votre commande de <strong>{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</strong> dépasse cette limite.</p>
+                <p>Stripe impose une limite de <strong>999 999,99 €</strong> par session de paiement pour des raisons de sécurité. Votre commande de <strong>{{ order.totalPrice|number_format(2, ',', ' ')|replace({',00':''}) }} €</strong> dépasse cette limite.</p>
             </div>
 
             <div class="payment-alternatives">

@@ -66,7 +66,7 @@
             <section class="info-block price-block" aria-labelledby="price-title">
                 <h3 id="price-title" class="price-label">Prix</h3>
                 {# Prix formaté en euros #}
-                <p class="price">{{ (vehicule.salePrice / 100)|number_format(0, ',', ' ') }} €</p>
+                <p class="price">{{ vehicule.salePrice|number_format(2, ',', ' ')|replace({',00':''}) }} €</p>
                 
                 {# Bouton d'achat ou badge de statut selon la disponibilité #}
                 {% if vehicule.status == 'Disponible' %}

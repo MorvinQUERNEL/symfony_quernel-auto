@@ -70,7 +70,7 @@
                         
                         {# Montant total de la commande #}
                         <div class="order-amount">
-                            <span class="amount">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</span>
+                            <span class="amount">{{ order.totalPrice|number_format(2, ',', ' ')|replace({',00':''}) }} €</span>
                         </div>
                     </div>
                 </div>
@@ -97,7 +97,7 @@
                         <div class="payment-summary">
                             <div class="summary-row">
                                 <span>Sous-total :</span>
-                                <span>{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</span>
+                                <span>{{ order.totalPrice|number_format(2, ',', ' ')|replace({',00':''}) }} €</span>
                             </div>
                             <div class="summary-row">
                                 <span>Frais de transaction :</span>
@@ -105,7 +105,7 @@
                             </div>
                             <div class="summary-row total">
                                 <span>Total à payer :</span>
-                                <span>{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</span>
+                                <span>{{ order.totalPrice|number_format(2, ',', ' ')|replace({',00':''}) }} €</span>
                             </div>
                         </div>
                         

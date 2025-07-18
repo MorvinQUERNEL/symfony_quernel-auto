@@ -655,9 +655,13 @@ body {
     
     /* Préférences */
     .preference-item {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
+    }
+    .preference-delete-btn-wrapper {
+        display: block;
+        margin-top: 0.5rem;
     }
 }
 
@@ -736,4 +740,18 @@ body {
     .preference-item span {
         font-size: var(--font-size-base);
     }
+}
+
+@media (min-width: 768px) {
+  .preference-delete-btn-wrapper {
+    display: block;
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .preference-delete-btn-wrapper {
+    display: inline-block;
+    margin-top: 0.5rem;
+  }
 }

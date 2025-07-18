@@ -117,7 +117,7 @@
                                         <div class="vehicule-info">
                                             <h5>{{ vehicule.brand }} {{ vehicule.model }}</h5>
                                             <p class="vehicule-year">{{ vehicule.year|date('Y') }}</p>
-                                            <p class="vehicule-price">{{ (vehicule.salePrice / 100)|number_format(2, ',', ' ') }} €</p>
+                                            <p class="vehicule-price">{{ vehicule.salePrice|number_format(2, ',', ' ')|replace({',00':''}) }} €</p>
                                         </div>
                                     </div>
                                 {% endfor %}

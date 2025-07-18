@@ -105,7 +105,9 @@
             <div class="form-group">
                 <div class="checkbox-simple">
                     {{ form_widget(form.rgpdConsent) }}
-                    {{ form_label(form.rgpdConsent) }}
+                    <label for="{{ form.rgpdConsent.vars.id }}">
+                        J'accepte <a href="{{ path('app_politique_confidentialite') }}" target="_blank" rel="noopener noreferrer">la politique de confidentialité</a> et le traitement de mes données personnelles conformément au RGPD
+                    </label>
                     <span class="required-field">*</span>
                 </div>
                 <div class="form-errors">{{ form_errors(form.rgpdConsent) }}</div>

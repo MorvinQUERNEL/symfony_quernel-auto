@@ -51,9 +51,21 @@ class ResetPasswordFormType extends AbstractType
                         ]),
                         // Contrainte : longueur du mot de passe (6-4096 caractères)
                         new Length([
-                            'min' => 6,
-                            'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
-                            'max' => 4096, // Limite de sécurité Symfony
+                            'min' => 12,
+                            'minMessage' => 'Le mot de passe doit contenir au moins 12 caractères.',
+                            'max' => 4096,
+                        ]),
+                        new \Symfony\Component\Validator\Constraints\Regex([
+                            'pattern' => '/[A-Z]/',
+                            'message' => 'Le mot de passe doit contenir au moins une lettre majuscule.'
+                        ]),
+                        new \Symfony\Component\Validator\Constraints\Regex([
+                            'pattern' => '/[a-z]/',
+                            'message' => 'Le mot de passe doit contenir au moins une lettre minuscule.'
+                        ]),
+                        new \Symfony\Component\Validator\Constraints\Regex([
+                            'pattern' => '/[^a-zA-Z0-9]/',
+                            'message' => 'Le mot de passe doit contenir au moins un caractère spécial (ex : !@#$%^&*).'
                         ]),
                     ],
                     'label' => 'Nouveau mot de passe',
