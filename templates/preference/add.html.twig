@@ -18,17 +18,16 @@
     <article class="login-card p-4 p-md-5">
         {# En-tête avec logo et titre #}
         <header class="login-header text-center mb-4">
-            <img src="{{ asset('images/logo_quernel_auto.png') }}" alt="Quernel Auto" class="login-logo mb-4">
             <h1 class="h3 mb-3 font-weight-normal">Préférence véhicule</h1>
         </header>
-        
+
         {# Affichage des messages flash (succès, erreurs, avertissements) #}
         {% for label, messages in app.flashes %}
             {% for message in messages %}
                 <div class="flash-message flash-{{ label }}" role="alert" aria-live="polite">{{ message }}</div>
             {% endfor %}
         {% endfor %}
-        
+
         {# Section du formulaire de préférence #}
         <section class="preference-form-section">
             {# Début du formulaire Symfony avec classe CSS #}
@@ -51,11 +50,11 @@
             {# Fin du formulaire Symfony #}
             {{ form_end(form) }}
         </section>
-        
+
         {# Pied de page avec lien de retour au profil #}
         <footer class="text-center mt-4">
             <a href="{{ path('app_profile') }}" class="register-link">Retour à mon profil</a>
         </footer>
     </article>
 </main>
-{% endblock %} 
+{% endblock %}
