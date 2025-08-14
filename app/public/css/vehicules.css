@@ -97,6 +97,7 @@ body {
     max-width: 1600px;
     margin: 0 auto;
     padding: var(--spacing-lg);
+    padding-bottom: var(--spacing-xxl);
     color: var(--light-color);
 }
 
