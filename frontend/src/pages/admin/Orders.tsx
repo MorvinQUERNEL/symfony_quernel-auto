@@ -69,53 +69,56 @@ export function AdminOrdersPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                    {data?.data.map((order) => (
-                      <tr key={order.id} className="hover:bg-gray-50 transition-colors">
-                        <td className="px-6 py-4">
-                          <span className="font-medium text-gray-900">
-                            #{order.id}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div>
-                            <p className="font-medium text-gray-900">
-                              {order.user.firstname} {order.user.lastname}
+                    {data?.data.map((order) => {
+                      const vehicule = order.vehicules?.[0];
+                      return (
+                        <tr key={order.id} className="hover:bg-gray-50 transition-colors">
+                          <td className="px-6 py-4">
+                            <span className="font-medium text-gray-900">
+                              #{order.id}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div>
+                              <p className="font-medium text-gray-900">
+                                {order.users?.firstname} {order.users?.lastname}
+                              </p>
+                              <p className="text-sm text-gray-500">
+                                {order.users?.email}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <p className="text-gray-900">
+                              {vehicule?.brand} {vehicule?.model}
                             </p>
                             <p className="text-sm text-gray-500">
-                              {order.user.email}
+                              {vehicule?.year ? new Date(vehicule.year).getFullYear() : '-'}
                             </p>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <p className="text-gray-900">
-                            {order.vehicule.brand} {order.vehicule.model}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            {order.vehicule.year}
-                          </p>
-                        </td>
-                        <td className="px-6 py-4">
-                          <StatusBadge status={order.status} />
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className="font-semibold text-gray-900">
-                            {order.totalPrice.toLocaleString('fr-FR')} €
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-gray-600">
-                          {format(new Date(order.createdAt), 'dd MMM yyyy', {
-                            locale: fr,
-                          })}
-                        </td>
-                        <td className="px-6 py-4 text-right">
-                          <Link to={`/orders/${order.id}`}>
-                            <Button variant="ghost" size="sm" leftIcon={<Eye className="w-4 h-4" />}>
-                              Voir
-                            </Button>
-                          </Link>
-                        </td>
-                      </tr>
-                    ))}
+                          </td>
+                          <td className="px-6 py-4">
+                            <StatusBadge status={order.orderStatus} />
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className="font-semibold text-gray-900">
+                              {(order.totalPrice / 100).toLocaleString('fr-FR')} €
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-gray-600">
+                            {format(new Date(order.createdAt), 'dd MMM yyyy', {
+                              locale: fr,
+                            })}
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <Link to={`/orders/${order.id}`}>
+                              <Button variant="ghost" size="sm" leftIcon={<Eye className="w-4 h-4" />}>
+                                Voir
+                              </Button>
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

@@ -68,7 +68,7 @@ export function AdminUsersPage() {
                         Inscrit le
                       </th>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                        Vérifié
+                        Dernière connexion
                       </th>
                     </tr>
                   </thead>
@@ -86,8 +86,8 @@ export function AdminUsersPage() {
                               <p className="font-medium text-gray-900">
                                 {user.firstname} {user.lastname}
                               </p>
-                              {user.phone && (
-                                <p className="text-sm text-gray-500">{user.phone}</p>
+                              {user.phoneNumber && (
+                                <p className="text-sm text-gray-500">{user.phoneNumber}</p>
                               )}
                             </div>
                           </div>
@@ -100,20 +100,16 @@ export function AdminUsersPage() {
                         </td>
                         <td className="px-6 py-4">{getRoleBadge(user.roles)}</td>
                         <td className="px-6 py-4 text-gray-600">
-                          {format(new Date(user.createdAt), 'dd MMM yyyy', {
-                            locale: fr,
-                          })}
+                          {user.registrationAt
+                            ? format(new Date(user.registrationAt), 'dd MMM yyyy', { locale: fr })
+                            : '-'
+                          }
                         </td>
-                        <td className="px-6 py-4">
-                          {user.isVerified ? (
-                            <Badge variant="success" dot>
-                              Vérifié
-                            </Badge>
-                          ) : (
-                            <Badge variant="warning" dot>
-                              Non vérifié
-                            </Badge>
-                          )}
+                        <td className="px-6 py-4 text-gray-600">
+                          {user.lastLoginAt
+                            ? format(new Date(user.lastLoginAt), 'dd MMM yyyy', { locale: fr })
+                            : 'Jamais'
+                          }
                         </td>
                       </tr>
                     ))}

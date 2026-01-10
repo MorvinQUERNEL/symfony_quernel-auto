@@ -109,6 +109,15 @@ class ErrorController extends AbstractController
             'exception' => $exception ? $exception->getMessage() : 'Aucune exception'
         ]);
 
+        // Pour les routes API, retourner du JSON
+        if (str_starts_with($request->getPathInfo(), '/api/')) {
+            return $this->json([
+                'error' => $statusText,
+                'message' => $exception ? $exception->getMessage() : 'Une erreur est survenue',
+                'statusCode' => $statusCode
+            ], $statusCode);
+        }
+
         // Sélectionner le template approprié
         $template = match($statusCode) {
             404 => 'bundles/TwigBundle/Exception/error404.html.twig',

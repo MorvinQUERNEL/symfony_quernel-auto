@@ -99,8 +99,9 @@ class OrderApiController extends AbstractController
             return $this->json(['error' => 'Véhicule non trouvé'], Response::HTTP_NOT_FOUND);
         }
 
-        // Vérifier que le véhicule est disponible
-        if ($vehicule->getStatus() !== 'Disponible') {
+        // Vérifier que le véhicule est disponible (accepte 'available' ou 'Disponible')
+        $status = strtolower($vehicule->getStatus() ?? '');
+        if ($status !== 'available' && $status !== 'disponible') {
             return $this->json(
                 ['error' => 'Ce véhicule n\'est plus disponible'],
                 Response::HTTP_CONFLICT
@@ -122,7 +123,7 @@ class OrderApiController extends AbstractController
         $order->addVehicule($vehicule);
 
         // Marquer le véhicule comme réservé
-        $vehicule->setStatus('Reserve');
+        $vehicule->setStatus('reserved');
 
         $this->entityManager->persist($order);
         $this->entityManager->flush();
@@ -162,7 +163,7 @@ class OrderApiController extends AbstractController
 
         // Remettre le véhicule en disponible
         foreach ($order->getVehicules() as $vehicule) {
-            $vehicule->setStatus('Disponible');
+            $vehicule->setStatus('available');
         }
 
         $order->setOrderStatus('cancelled');

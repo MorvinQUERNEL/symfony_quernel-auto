@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Mail, Lock, User, Phone, ArrowRight, CheckCircle } from 'lucide-react';
+import { Mail, Lock, User, Phone, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
 import { Button, Input, Card } from '@/components/ui';
 import { AuthLayout } from '@/components/layout';
 import { useAuthStore } from '@/stores';
 
 const registerSchema = z.object({
-  firstname: z.string().min(2, 'Le prénom doit contenir au moins 2 caractères'),
-  lastname: z.string().min(2, 'Le nom doit contenir au moins 2 caractères'),
+  firstname: z.string().min(2, 'Le prénom doit contenir au moins 2 caractères').max(50, 'Le prénom ne peut pas dépasser 50 caractères'),
+  lastname: z.string().min(2, 'Le nom doit contenir au moins 2 caractères').max(50, 'Le nom ne peut pas dépasser 50 caractères'),
   email: z.string().email('Adresse email invalide'),
   phone: z.string().optional(),
   password: z.string()
@@ -25,8 +25,13 @@ const registerSchema = z.object({
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
+interface ServerErrors {
+  [key: string]: string;
+}
+
 export function RegisterPage() {
   const [serverError, setServerError] = useState<string | null>(null);
+  const [serverFieldErrors, setServerFieldErrors] = useState<ServerErrors>({});
   const [isSuccess, setIsSuccess] = useState(false);
 
   const { register: registerUser, isLoading } = useAuthStore();
@@ -35,12 +40,14 @@ export function RegisterPage() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
   });
 
   const onSubmit = async (data: RegisterFormData) => {
     setServerError(null);
+    setServerFieldErrors({});
     try {
       await registerUser({
         firstname: data.firstname,
@@ -51,8 +58,23 @@ export function RegisterPage() {
       });
       setIsSuccess(true);
     } catch (err) {
-      const error = err as { message?: string };
-      setServerError(error.message || 'Une erreur est survenue');
+      const error = err as { message?: string; errors?: ServerErrors };
+
+      // Si le serveur retourne des erreurs par champ
+      if (error.errors) {
+        setServerFieldErrors(error.errors);
+        // Mapper les erreurs du serveur aux champs du formulaire
+        Object.entries(error.errors).forEach(([field, message]) => {
+          if (field in data) {
+            setError(field as keyof RegisterFormData, {
+              type: 'server',
+              message: message
+            });
+          }
+        });
+      }
+
+      setServerError(error.message || 'Une erreur est survenue lors de l\'inscription');
     }
   };
 
@@ -109,7 +131,19 @@ export function RegisterPage() {
         {/* Error message */}
         {serverError && (
           <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200">
-            <p className="text-sm text-red-600">{serverError}</p>
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="font-medium text-red-800">{serverError}</p>
+                {Object.keys(serverFieldErrors).length > 0 && (
+                  <ul className="mt-2 text-sm text-red-600 list-disc list-inside">
+                    {Object.entries(serverFieldErrors).map(([field, message]) => (
+                      <li key={field}>{message}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
           </div>
         )}
 

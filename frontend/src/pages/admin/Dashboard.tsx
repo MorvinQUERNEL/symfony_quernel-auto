@@ -127,30 +127,33 @@ export function AdminDashboardPage() {
 
                   {stats?.recentOrders && stats.recentOrders.length > 0 ? (
                     <div className="space-y-4">
-                      {stats.recentOrders.slice(0, 5).map((order) => (
-                        <div
-                          key={order.id}
-                          className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0"
-                        >
-                          <div>
-                            <p className="font-medium text-gray-900">
-                              {order.vehicule.brand} {order.vehicule.model}
-                            </p>
-                            <p className="text-sm text-gray-500">
-                              {order.user.firstname} {order.user.lastname} •{' '}
-                              {format(new Date(order.createdAt), 'dd MMM', {
-                                locale: fr,
-                              })}
-                            </p>
+                      {stats.recentOrders.slice(0, 5).map((order) => {
+                        const vehicule = order.vehicules?.[0];
+                        return (
+                          <div
+                            key={order.id}
+                            className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0"
+                          >
+                            <div>
+                              <p className="font-medium text-gray-900">
+                                {vehicule?.brand} {vehicule?.model}
+                              </p>
+                              <p className="text-sm text-gray-500">
+                                {order.users?.firstname} {order.users?.lastname} •{' '}
+                                {format(new Date(order.createdAt), 'dd MMM', {
+                                  locale: fr,
+                                })}
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <StatusBadge status={order.orderStatus} size="sm" />
+                              <p className="text-sm font-semibold text-gray-900 mt-1">
+                                {(order.totalPrice / 100).toLocaleString('fr-FR')} €
+                              </p>
+                            </div>
                           </div>
-                          <div className="text-right">
-                            <StatusBadge status={order.status} size="sm" />
-                            <p className="text-sm font-semibold text-gray-900 mt-1">
-                              {order.totalPrice.toLocaleString('fr-FR')} €
-                            </p>
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   ) : (
                     <p className="text-gray-500 text-center py-8">

@@ -1,16 +1,24 @@
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { ArrowLeft, ShoppingCart, Calendar, Gauge, Fuel } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { ArrowLeft, ShoppingCart, Calendar, Gauge, Fuel, MapPin } from 'lucide-react';
 import { Layout } from '@/components/layout';
-import { Card, Button, Spinner, Badge } from '@/components/ui';
+import { Card, Button, Spinner, Badge, Input } from '@/components/ui';
 import { vehiculesApi, ordersApi } from '@/api';
 import { useAuthStore } from '@/stores';
 import { getImageUrl, getYearFromDate, formatPrice } from '@/types';
 
-interface OrderFormData {
-  notes: string;
-}
+const orderSchema = z.object({
+  deliveryAddress: z.string().min(5, 'L\'adresse est requise (min 5 caractères)'),
+  deliveryCity: z.string().min(2, 'La ville est requise'),
+  deliveryPostalCode: z.string().min(4, 'Le code postal est requis'),
+  deliveryCountry: z.string().min(2, 'Le pays est requis'),
+  notes: z.string().optional(),
+});
+
+type OrderFormData = z.infer<typeof orderSchema>;
 
 export function NewOrderPage() {
   const [searchParams] = useSearchParams();
@@ -24,12 +32,29 @@ export function NewOrderPage() {
     enabled: !!vehiculeId,
   });
 
-  const { register, handleSubmit } = useForm<OrderFormData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<OrderFormData>({
+    resolver: zodResolver(orderSchema),
+    defaultValues: {
+      deliveryAddress: user?.address || '',
+      deliveryCity: user?.city || '',
+      deliveryPostalCode: user?.postalCode?.toString() || '',
+      deliveryCountry: user?.country || 'France',
+      notes: '',
+    },
+  });
 
   const createOrderMutation = useMutation({
     mutationFn: (data: OrderFormData) =>
       ordersApi.create({
         vehiculeId: Number(vehiculeId),
+        deliveryAddress: data.deliveryAddress,
+        deliveryCity: data.deliveryCity,
+        deliveryPostalCode: data.deliveryPostalCode,
+        deliveryCountry: data.deliveryCountry,
         notes: data.notes || undefined,
       }),
     onSuccess: (order) => {
@@ -165,12 +190,48 @@ export function NewOrderPage() {
                       <p className="text-gray-500">Email</p>
                       <p className="font-medium">{user?.email}</p>
                     </div>
-                    {user?.phone && (
+                    {user?.phoneNumber && (
                       <div>
                         <p className="text-gray-500">Téléphone</p>
-                        <p className="font-medium">{user.phone}</p>
+                        <p className="font-medium">{user.phoneNumber}</p>
                       </div>
                     )}
+                  </div>
+                </Card>
+
+                {/* Delivery address */}
+                <Card variant="elevated">
+                  <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <MapPin className="w-5 h-5 text-[#FF6B00]" />
+                    Adresse de livraison
+                  </h3>
+                  <div className="space-y-4">
+                    <Input
+                      label="Adresse"
+                      placeholder="123 Rue de la Paix"
+                      error={errors.deliveryAddress?.message}
+                      {...register('deliveryAddress')}
+                    />
+                    <div className="grid grid-cols-2 gap-4">
+                      <Input
+                        label="Ville"
+                        placeholder="Paris"
+                        error={errors.deliveryCity?.message}
+                        {...register('deliveryCity')}
+                      />
+                      <Input
+                        label="Code postal"
+                        placeholder="75001"
+                        error={errors.deliveryPostalCode?.message}
+                        {...register('deliveryPostalCode')}
+                      />
+                    </div>
+                    <Input
+                      label="Pays"
+                      placeholder="France"
+                      error={errors.deliveryCountry?.message}
+                      {...register('deliveryCountry')}
+                    />
                   </div>
                 </Card>
 

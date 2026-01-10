@@ -4,13 +4,14 @@ export interface User {
   email: string;
   firstname: string;
   lastname: string;
-  phone?: string;
+  phoneNumber?: string;
   address?: string;
   city?: string;
-  zipcode?: string;
+  postalCode?: number;
+  country?: string;
   roles: string[];
-  createdAt: string;
-  isVerified: boolean;
+  registrationAt?: string;
+  lastLoginAt?: string;
 }
 
 export interface AuthResponse {
@@ -85,20 +86,25 @@ export interface VehiculeListResponse {
 // Order types
 export interface Order {
   id: number;
-  user: User;
-  vehicule: Vehicule;
-  status: OrderStatus;
-  totalPrice: number;
+  users?: User;
+  vehicules: Vehicule[];
+  orderStatus: OrderStatus;
+  totalPrice: number; // In centimes
   createdAt: string;
-  updatedAt?: string;
-  paymentId?: string;
-  notes?: string;
+  deliveryCity?: string;
+  deliveryPostalCode?: number;
+  deliveryCountry?: string;
+  deliveryAdress?: string;
 }
 
 export type OrderStatus = 'pending' | 'confirmed' | 'paid' | 'cancelled' | 'completed';
 
 export interface CreateOrderData {
   vehiculeId: number;
+  deliveryAddress: string;
+  deliveryCity: string;
+  deliveryPostalCode: string;
+  deliveryCountry: string;
   notes?: string;
 }
 

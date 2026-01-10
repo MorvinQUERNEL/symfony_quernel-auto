@@ -6,7 +6,6 @@ export function Footer() {
 
   const footerLinks = {
     company: [
-      { label: 'À propos', href: '/about' },
       { label: 'Notre processus', href: '/processus' },
       { label: 'Contact', href: '/contact' },
     ],

@@ -13,10 +13,11 @@ const profileSchema = z.object({
   firstname: z.string().min(2, 'Le prénom doit contenir au moins 2 caractères'),
   lastname: z.string().min(2, 'Le nom doit contenir au moins 2 caractères'),
   email: z.string().email('Adresse email invalide'),
-  phone: z.string().optional(),
+  phoneNumber: z.string().optional(),
   address: z.string().optional(),
   city: z.string().optional(),
-  zipcode: z.string().optional(),
+  postalCode: z.string().optional(),
+  country: z.string().optional(),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -49,10 +50,11 @@ export function ProfilePage() {
       firstname: user?.firstname || '',
       lastname: user?.lastname || '',
       email: user?.email || '',
-      phone: user?.phone || '',
+      phoneNumber: user?.phoneNumber || '',
       address: user?.address || '',
       city: user?.city || '',
-      zipcode: user?.zipcode || '',
+      postalCode: user?.postalCode?.toString() || '',
+      country: user?.country || '',
     },
   });
 
@@ -66,7 +68,14 @@ export function ProfilePage() {
   });
 
   const updateProfileMutation = useMutation({
-    mutationFn: (data: ProfileFormData) => usersApi.updateProfile(data),
+    mutationFn: (data: ProfileFormData) => {
+      // Convert postalCode from string to number for API
+      const apiData = {
+        ...data,
+        postalCode: data.postalCode ? parseInt(data.postalCode, 10) : undefined,
+      };
+      return usersApi.updateProfile(apiData);
+    },
     onSuccess: () => {
       fetchUser();
       setSuccessMessage('Profil mis à jour avec succès');
@@ -130,8 +139,8 @@ export function ProfilePage() {
                   label="Téléphone"
                   type="tel"
                   leftIcon={<Phone />}
-                  error={profileErrors.phone?.message}
-                  {...registerProfile('phone')}
+                  error={profileErrors.phoneNumber?.message}
+                  {...registerProfile('phoneNumber')}
                 />
 
                 <Input
@@ -149,10 +158,16 @@ export function ProfilePage() {
                   />
                   <Input
                     label="Code postal"
-                    error={profileErrors.zipcode?.message}
-                    {...registerProfile('zipcode')}
+                    error={profileErrors.postalCode?.message}
+                    {...registerProfile('postalCode')}
                   />
                 </div>
+
+                <Input
+                  label="Pays"
+                  error={profileErrors.country?.message}
+                  {...registerProfile('country')}
+                />
 
                 <div className="pt-4">
                   <Button

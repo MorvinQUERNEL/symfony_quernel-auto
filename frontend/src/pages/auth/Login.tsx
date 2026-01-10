@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Mail, Lock, ArrowRight } from 'lucide-react';
+import { Mail, Lock, ArrowRight, AlertCircle } from 'lucide-react';
 import { Button, Input, Card } from '@/components/ui';
 import { AuthLayout } from '@/components/layout';
 import { useAuthStore } from '@/stores';
@@ -38,8 +38,16 @@ export function LoginPage() {
       await login(data);
       navigate(from, { replace: true });
     } catch (err) {
-      const error = err as { message?: string };
-      setServerError(error.message || 'Une erreur est survenue');
+      const error = err as { message?: string; statusCode?: number };
+
+      // Messages d'erreur personnalisés selon le code de statut
+      if (error.statusCode === 401) {
+        setServerError('Email ou mot de passe incorrect.');
+      } else if (error.statusCode === 429) {
+        setServerError('Trop de tentatives de connexion. Veuillez réessayer dans quelques minutes.');
+      } else {
+        setServerError(error.message || 'Une erreur est survenue lors de la connexion.');
+      }
     }
   };
 
@@ -71,7 +79,10 @@ export function LoginPage() {
         {/* Error message */}
         {serverError && (
           <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200">
-            <p className="text-sm text-red-600">{serverError}</p>
+            <div className="flex items-center gap-3">
+              <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+              <p className="text-sm font-medium text-red-800">{serverError}</p>
+            </div>
           </div>
         )}
 
