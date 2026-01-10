@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -16,15 +17,18 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user:read', 'user:list', 'order:read', 'message:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Groups(['user:read', 'user:list', 'order:read', 'message:read'])]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Groups(['user:read', 'user:list'])]
     private array $roles = [];
 
     /**
@@ -34,27 +38,35 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['user:read', 'user:list', 'order:read', 'message:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['user:read', 'user:list', 'order:read', 'message:read'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 20)]
+    #[Groups(['user:read'])]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['user:read'])]
     private ?string $address = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['user:read'])]
     private ?string $city = null;
 
     #[ORM\Column]
+    #[Groups(['user:read'])]
     private ?int $postalCode = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['user:read'])]
     private ?string $country = null;
 
     #[ORM\Column]
+    #[Groups(['user:read', 'user:list'])]
     private \DateTimeImmutable $registrationAt;
 
     #[ORM\Column(type: 'datetime', nullable: true)]

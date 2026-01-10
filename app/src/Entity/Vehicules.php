@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: VehiculesRepository::class)]
 class Vehicules
@@ -14,45 +15,58 @@ class Vehicules
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['vehicule:read', 'vehicule:list', 'order:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['vehicule:read', 'vehicule:list', 'order:read'])]
     private ?string $brand = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['vehicule:read', 'vehicule:list', 'order:read'])]
     private ?string $model = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['vehicule:read', 'vehicule:list', 'order:read'])]
     private ?\DateTime $year = null;
 
     #[ORM\Column]
+    #[Groups(['vehicule:read', 'vehicule:list'])]
     private ?int $mileage = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['vehicule:read', 'vehicule:list'])]
     private ?string $fuelType = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['vehicule:read', 'vehicule:list'])]
     private ?string $trasmission = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['vehicule:read'])]
     private ?string $color = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
+    #[Groups(['vehicule:read'])]
     private ?int $doorCount = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['vehicule:read'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Groups(['vehicule:read', 'vehicule:list'])]
     private ?string $status = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    private ?float $salePrice = null;
+    #[ORM\Column(type: Types::BIGINT)]
+    #[Groups(['vehicule:read', 'vehicule:list', 'order:read'])]
+    private ?int $salePrice = null;
 
     /**
      * @var Collection<int, Pictures>
      */
     #[ORM\OneToMany(targetEntity: Pictures::class, mappedBy: 'vehicules', cascade: ['persist', 'remove'])]
+    #[Groups(['vehicule:read', 'vehicule:list'])]
     private Collection $pictures;
 
     #[ORM\ManyToOne(inversedBy: 'vehicules')]
@@ -188,12 +202,12 @@ class Vehicules
         return $this;
     }
 
-    public function getSalePrice(): ?float
+    public function getSalePrice(): ?int
     {
         return $this->salePrice;
     }
 
-    public function setSalePrice(float $salePrice): static
+    public function setSalePrice(int $salePrice): static
     {
         $this->salePrice = $salePrice;
 

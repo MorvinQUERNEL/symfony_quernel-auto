@@ -6,6 +6,7 @@ use App\Repository\OrdersRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: OrdersRepository::class)]
 class Orders
@@ -13,30 +14,39 @@ class Orders
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['order:read', 'order:list'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['order:read', 'order:list'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['order:read', 'order:list'])]
     private ?string $orderStatus = null;
 
     #[ORM\Column(type: 'bigint')]
+    #[Groups(['order:read', 'order:list'])]
     private ?int $totalPrice = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['order:read'])]
     private ?string $deliveryCity = null;
 
     #[ORM\Column]
+    #[Groups(['order:read'])]
     private ?int $deliveryPostalCode = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['order:read'])]
     private ?string $deliveryCountry = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['order:read'])]
     private ?string $deliveryAdress = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[Groups(['order:read'])]
     private ?Users $users = null;
 
     /**
@@ -49,6 +59,7 @@ class Orders
      * @var Collection<int, Vehicules>
      */
     #[ORM\OneToMany(targetEntity: Vehicules::class, mappedBy: 'orders')]
+    #[Groups(['order:read', 'order:list'])]
     private Collection $vehicules;
 
     public function __construct()

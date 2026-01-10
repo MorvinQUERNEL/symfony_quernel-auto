@@ -3,3 +3,6 @@ mysql
 
 app/.env:43
 app/config/services.yaml:9
+.DS_Store
+**/.DS_Store
+.vite/

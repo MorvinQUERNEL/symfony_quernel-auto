@@ -9,6 +9,24 @@ services:
       - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ./app:/var/www/html # ./app dossier local des fichiers php, /var/www/html dossier dans le conteneur
       - ./apache/default.conf:/etc/apache2/sites-enabled/000-default.conf
+    depends_on:
+      database:
+        condition: service_healthy
+
+  frontend:
+    image: node:20-alpine
+    container_name: frontend_quernel_auto
+    working_dir: /app
+    ports:
+      - 5173:5173
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    environment:
+      - VITE_API_URL=http://localhost:8080/api
+    depends_on:
+      - php
 
   database:
     image: mysql:8.0
@@ -20,6 +38,11 @@ services:
       MYSQL_PASSWORD: azerty # On met ce qu'on veut
     volumes:
       - ./mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pcequejeveux"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   phpmyadmin:
     image: phpmyadmin
@@ -36,3 +59,28 @@ services:
     image: mailhog/mailhog
     ports:
       - 8025:8025
+
+  # Service d'initialisation des données de démo (exécuté une seule fois)
+  init-demo:
+    build:
+      context: ./php
+    container_name: init_quernel_auto
+    volumes:
+      - ./app:/var/www/html
+    depends_on:
+      database:
+        condition: service_healthy
+    command: >
+      sh -c "
+        echo 'Attente de la base de données...' &&
+        sleep 10 &&
+        echo 'Installation des dépendances...' &&
+        composer install --no-interaction --optimize-autoloader &&
+        echo 'Exécution des migrations...' &&
+        php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration &&
+        echo 'Création des véhicules de démonstration...' &&
+        php bin/console app:seed-demo-vehicules --force &&
+        echo 'Initialisation terminée !'
+      "
+    profiles:
+      - init
