@@ -31,15 +31,15 @@ class Vehicules
     private ?\DateTime $year = null;
 
     #[ORM\Column]
-    #[Groups(['vehicule:read', 'vehicule:list'])]
+    #[Groups(['vehicule:read', 'vehicule:list', 'order:read', 'order:list'])]
     private ?int $mileage = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['vehicule:read', 'vehicule:list'])]
+    #[Groups(['vehicule:read', 'vehicule:list', 'order:read', 'order:list'])]
     private ?string $fuelType = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['vehicule:read', 'vehicule:list'])]
+    #[Groups(['vehicule:read', 'vehicule:list', 'order:read', 'order:list'])]
     private ?string $trasmission = null;
 
     #[ORM\Column(length: 50)]
@@ -66,7 +66,7 @@ class Vehicules
      * @var Collection<int, Pictures>
      */
     #[ORM\OneToMany(targetEntity: Pictures::class, mappedBy: 'vehicules', cascade: ['persist', 'remove'])]
-    #[Groups(['vehicule:read', 'vehicule:list'])]
+    #[Groups(['vehicule:read', 'vehicule:list', 'order:read', 'order:list'])]
     private Collection $pictures;
 
     #[ORM\ManyToOne(inversedBy: 'vehicules')]
