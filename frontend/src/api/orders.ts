@@ -1,4 +1,4 @@
-import { get, post, put } from './client';
+import { get, post, del } from './client';
 import type { Order, CreateOrderData, CheckoutSession } from '@/types';
 
 export const ordersApi = {
@@ -12,7 +12,7 @@ export const ordersApi = {
     post<Order>('/orders', data),
 
   cancel: (id: number) =>
-    put<Order>(`/orders/${id}/cancel`),
+    del<{ message: string }>(`/orders/${id}`),
 
   checkout: (id: number) =>
     post<CheckoutSession>(`/orders/${id}/checkout`),
