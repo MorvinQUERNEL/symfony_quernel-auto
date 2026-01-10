@@ -68,3 +68,4 @@ jobs:
           source: "frontend/dist/*"
           target: "~/public_html/frontend/"
           strip_components: 2
+# Deployment trigger: 20260110-161609
