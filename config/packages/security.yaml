@@ -13,6 +13,19 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        api_login:
+            pattern: ^/api/auth/login
+            stateless: true
+            json_login:
+                check_path: /api/auth/login
+                username_path: email
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        api:
+            pattern: ^/api
+            stateless: true
+            jwt: ~
         main:
             lazy: true
             provider: app_user_provider
@@ -33,6 +46,27 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        # API Routes publiques
+        - { path: ^/api/auth/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/auth/register, roles: PUBLIC_ACCESS }
+        - { path: ^/api/auth/refresh, roles: PUBLIC_ACCESS }
+        - { path: ^/api/auth/password-reset, roles: PUBLIC_ACCESS }
+        - { path: ^/api/vehicules, roles: PUBLIC_ACCESS, methods: [GET] }
+        - { path: ^/api/payments/webhook, roles: PUBLIC_ACCESS }
+
+        # API Routes utilisateur authentifié
+        - { path: ^/api/auth/me, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/auth/logout, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/users/me, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/orders, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/preferences, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/messages, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/payments, roles: IS_AUTHENTICATED_FULLY }
+
+        # API Routes admin
+        - { path: ^/api/admin, roles: ROLE_ADMIN }
+        - { path: ^/api/vehicules, roles: ROLE_ADMIN, methods: [POST, PUT, DELETE] }
+
         # Routes publiques (accessibles à tous)
         - { path: ^/$, roles: PUBLIC_ACCESS }
         - { path: ^/connexion, roles: PUBLIC_ACCESS }
@@ -42,7 +76,7 @@ security:
         - { path: ^/politique-confidentialite, roles: PUBLIC_ACCESS }
         - { path: ^/cgv, roles: PUBLIC_ACCESS }
         - { path: ^/reset-password, roles: PUBLIC_ACCESS }
-        
+
         # Routes utilisateur
         - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/orders, roles: ROLE_USER }
