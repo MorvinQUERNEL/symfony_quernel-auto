@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -8,6 +7,7 @@ import { Layout } from '@/components/layout';
 import { Button, Input, Card, CardHeader, CardTitle, CardContent } from '@/components/ui';
 import { useAuthStore } from '@/stores';
 import { usersApi } from '@/api';
+import { useToast } from '@/hooks/useToast';
 
 const profileSchema = z.object({
   firstname: z.string().min(2, 'Le prénom doit contenir au moins 2 caractères'),
@@ -38,7 +38,7 @@ type PasswordFormData = z.infer<typeof passwordSchema>;
 
 export function ProfilePage() {
   const { user, fetchUser } = useAuthStore();
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const {
     register: registerProfile,
@@ -78,8 +78,10 @@ export function ProfilePage() {
     },
     onSuccess: () => {
       fetchUser();
-      setSuccessMessage('Profil mis à jour avec succès');
-      setTimeout(() => setSuccessMessage(null), 3000);
+      toast.success('Profil mis à jour avec succès');
+    },
+    onError: () => {
+      toast.error('Erreur lors de la mise à jour du profil');
     },
   });
 
@@ -88,8 +90,10 @@ export function ProfilePage() {
       usersApi.changePassword(data.currentPassword, data.newPassword),
     onSuccess: () => {
       resetPassword();
-      setSuccessMessage('Mot de passe modifié avec succès');
-      setTimeout(() => setSuccessMessage(null), 3000);
+      toast.success('Mot de passe modifié avec succès');
+    },
+    onError: () => {
+      toast.error('Erreur lors du changement de mot de passe');
     },
   });
 
@@ -98,12 +102,6 @@ export function ProfilePage() {
       <div className="bg-gray-50 min-h-screen py-12">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-black text-gray-900 mb-8">Mon profil</h1>
-
-          {successMessage && (
-            <div className="mb-6 p-4 rounded-xl bg-green-50 border border-green-200">
-              <p className="text-sm text-green-600">{successMessage}</p>
-            </div>
-          )}
 
           {/* Profile form */}
           <Card variant="elevated" className="mb-8">

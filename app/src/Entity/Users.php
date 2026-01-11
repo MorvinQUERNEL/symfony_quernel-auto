@@ -75,33 +75,26 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Orders>
      */
-    #[ORM\OneToMany(targetEntity: Orders::class, mappedBy: 'users')]
+    #[ORM\OneToMany(targetEntity: Orders::class, mappedBy: 'users', cascade: ['remove'], orphanRemoval: true)]
     private Collection $orders;
 
     /**
      * @var Collection<int, Preference>
      */
-    #[ORM\OneToMany(targetEntity: Preference::class, mappedBy: 'users')]
+    #[ORM\OneToMany(targetEntity: Preference::class, mappedBy: 'users', cascade: ['remove'], orphanRemoval: true)]
     private Collection $preferences;
 
     /**
      * @var Collection<int, Messages>
      */
-    #[ORM\OneToMany(targetEntity: Messages::class, mappedBy: 'sender')]
+    #[ORM\OneToMany(targetEntity: Messages::class, mappedBy: 'sender', cascade: ['remove'], orphanRemoval: true)]
     private Collection $messages;
-
-    /**
-     * @var Collection<int, Messages>
-     */
-    #[ORM\OneToMany(targetEntity: Messages::class, mappedBy: 'recipient')]
-    private Collection $messagesRecipient;
 
     public function __construct()
     {
         $this->orders = new ArrayCollection();
         $this->preferences = new ArrayCollection();
         $this->messages = new ArrayCollection();
-        $this->messagesRecipient = new ArrayCollection();
         $this->registrationAt = new \DateTimeImmutable();
     }
 
@@ -386,36 +379,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($message->getSender() === $this) {
                 $message->setSender(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Messages>
-     */
-    public function getMessagesRecipient(): Collection
-    {
-        return $this->messagesRecipient;
-    }
-
-    public function addMessagesRecipient(Messages $messagesRecipient): static
-    {
-        if (!$this->messagesRecipient->contains($messagesRecipient)) {
-            $this->messagesRecipient->add($messagesRecipient);
-            $messagesRecipient->setRecipient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMessagesRecipient(Messages $messagesRecipient): static
-    {
-        if ($this->messagesRecipient->removeElement($messagesRecipient)) {
-            // set the owning side to null (unless already changed)
-            if ($messagesRecipient->getRecipient() === $this) {
-                $messagesRecipient->setRecipient(null);
             }
         }
 

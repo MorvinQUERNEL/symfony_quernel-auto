@@ -2,8 +2,10 @@ import { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuthStore } from '@/stores';
-import { LoadingOverlay } from '@/components/ui';
+import { LoadingOverlay, ToastContainer } from '@/components/ui';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { ChatBot } from '@/components/ChatBot';
+import { DemoPopup } from '@/components/DemoPopup';
 
 // Eager-loaded pages (critical path)
 import { HomePage } from '@/pages/Home';
@@ -88,6 +90,9 @@ export function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthInitializer>
+          <ToastContainer />
+          <DemoPopup />
+          <ChatBot />
           <Suspense fallback={<PageLoader />}>
             <Routes>
               {/* Public routes */}

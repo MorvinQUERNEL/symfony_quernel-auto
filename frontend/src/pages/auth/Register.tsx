@@ -7,6 +7,7 @@ import { Mail, Lock, User, Phone, ArrowRight, CheckCircle, AlertCircle } from 'l
 import { Button, Input, Card } from '@/components/ui';
 import { AuthLayout } from '@/components/layout';
 import { useAuthStore } from '@/stores';
+import { useToast } from '@/hooks/useToast';
 
 const registerSchema = z.object({
   firstname: z.string().min(2, 'Le prénom doit contenir au moins 2 caractères').max(50, 'Le prénom ne peut pas dépasser 50 caractères'),
@@ -33,6 +34,7 @@ export function RegisterPage() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [serverFieldErrors, setServerFieldErrors] = useState<ServerErrors>({});
   const [isSuccess, setIsSuccess] = useState(false);
+  const { toast } = useToast();
 
   const { register: registerUser, isLoading } = useAuthStore();
 
@@ -57,6 +59,7 @@ export function RegisterPage() {
         password: data.password,
       });
       setIsSuccess(true);
+      toast.success('Compte créé avec succès !');
     } catch (err) {
       const error = err as { message?: string; errors?: ServerErrors };
 
@@ -75,6 +78,7 @@ export function RegisterPage() {
       }
 
       setServerError(error.message || 'Une erreur est survenue lors de l\'inscription');
+      toast.error(error.message || 'Erreur lors de l\'inscription');
     }
   };
 

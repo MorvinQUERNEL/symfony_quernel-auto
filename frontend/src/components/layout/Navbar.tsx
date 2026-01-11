@@ -14,27 +14,24 @@ import {
 } from 'lucide-react';
 import { useAuthStore, selectIsAdmin } from '@/stores';
 import { Button, CountBadge } from '@/components/ui';
-
-interface NavLink {
-  label: string;
-  href: string;
-  icon?: React.ReactNode;
-}
-
-const publicLinks: NavLink[] = [
-  { label: 'Accueil', href: '/' },
-  { label: 'Véhicules', href: '/vehicules', icon: <Car className="w-4 h-4" /> },
-  { label: 'Processus', href: '/processus' },
-  { label: 'Contact', href: '/contact' },
-];
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { useTranslation } from '@/i18n';
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const location = useLocation();
+  const t = useTranslation();
 
   const { user, isAuthenticated, logout } = useAuthStore();
   const isAdmin = useAuthStore(selectIsAdmin);
+
+  const publicLinks = [
+    { label: t.nav.home, href: '/' },
+    { label: t.nav.vehicles, href: '/vehicules', icon: <Car className="w-4 h-4" /> },
+    { label: t.nav.process, href: '/processus' },
+    { label: t.nav.contact, href: '/contact' },
+  ];
 
   const handleLogout = async () => {
     await logout();
@@ -138,14 +135,14 @@ export function Navbar() {
                   {/* Dropdown menu */}
                   {isUserMenuOpen && (
                     <>
-                      {/* Backdrop */}
+                      {/* Backdrop - closes menu when clicking outside */}
                       <div
-                        className="fixed inset-0 z-10"
+                        className="fixed inset-0"
                         onClick={() => setIsUserMenuOpen(false)}
                       />
 
-                      {/* Menu */}
-                      <div className="absolute right-0 mt-2 w-64 z-20 py-2 bg-white rounded-2xl shadow-xl border border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
+                      {/* Menu - positioned above backdrop */}
+                      <div className="absolute right-0 mt-2 w-64 z-50 py-2 bg-white rounded-2xl shadow-xl border border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
                         {/* User info */}
                         <div className="px-4 py-3 border-b border-gray-100">
                           <p className="text-sm font-semibold text-gray-900">
@@ -164,7 +161,7 @@ export function Navbar() {
                             className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                           >
                             <User className="w-4 h-4" />
-                            Mon profil
+                            {t.nav.myProfile}
                           </Link>
                           <Link
                             to="/orders"
@@ -172,7 +169,7 @@ export function Navbar() {
                             className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                           >
                             <ShoppingBag className="w-4 h-4" />
-                            Mes commandes
+                            {t.nav.myOrders}
                           </Link>
                           <Link
                             to="/messages"
@@ -180,7 +177,7 @@ export function Navbar() {
                             className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                           >
                             <MessageSquare className="w-4 h-4" />
-                            Messages
+                            {t.nav.messages}
                           </Link>
 
                           {isAdmin && (
@@ -192,7 +189,7 @@ export function Navbar() {
                                 className="flex items-center gap-3 px-4 py-2 text-sm text-[#FF6B00] font-medium hover:bg-[#FF6B00]/5 transition-colors"
                               >
                                 <Settings className="w-4 h-4" />
-                                Administration
+                                {t.nav.admin}
                               </Link>
                             </>
                           )}
@@ -205,7 +202,7 @@ export function Navbar() {
                             className="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
                           >
                             <LogOut className="w-4 h-4" />
-                            Déconnexion
+                            {t.nav.logout}
                           </button>
                         </div>
                       </div>
@@ -217,16 +214,19 @@ export function Navbar() {
               <div className="flex items-center gap-3">
                 <Link to="/login">
                   <Button variant="ghost" size="sm">
-                    Connexion
+                    {t.nav.login}
                   </Button>
                 </Link>
                 <Link to="/register" className="hidden sm:block">
                   <Button variant="primary" size="sm">
-                    Inscription
+                    {t.nav.register}
                   </Button>
                 </Link>
               </div>
             )}
+
+            {/* Language Switcher */}
+            <LanguageSwitcher />
 
             {/* Mobile menu button */}
             <button
@@ -263,7 +263,7 @@ export function Navbar() {
                 <div className="pt-4 mt-4 border-t border-gray-100">
                   <Link to="/register" onClick={() => setIsMenuOpen(false)}>
                     <Button variant="primary" fullWidth>
-                      Inscription
+                      {t.nav.register}
                     </Button>
                   </Link>
                 </div>

@@ -7,6 +7,7 @@ import { Mail, Lock, ArrowRight, AlertCircle } from 'lucide-react';
 import { Button, Input, Card } from '@/components/ui';
 import { AuthLayout } from '@/components/layout';
 import { useAuthStore } from '@/stores';
+import { useToast } from '@/hooks/useToast';
 
 const loginSchema = z.object({
   email: z.string().email('Adresse email invalide'),
@@ -19,6 +20,7 @@ export function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [serverError, setServerError] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const { login, isLoading } = useAuthStore();
 
@@ -36,6 +38,7 @@ export function LoginPage() {
     setServerError(null);
     try {
       await login(data);
+      toast.success('Connexion réussie !');
       navigate(from, { replace: true });
     } catch (err) {
       const error = err as { message?: string; statusCode?: number };
@@ -43,10 +46,13 @@ export function LoginPage() {
       // Messages d'erreur personnalisés selon le code de statut
       if (error.statusCode === 401) {
         setServerError('Email ou mot de passe incorrect.');
+        toast.error('Email ou mot de passe incorrect.');
       } else if (error.statusCode === 429) {
         setServerError('Trop de tentatives de connexion. Veuillez réessayer dans quelques minutes.');
+        toast.error('Trop de tentatives. Réessayez plus tard.');
       } else {
         setServerError(error.message || 'Une erreur est survenue lors de la connexion.');
+        toast.error('Erreur de connexion');
       }
     }
   };

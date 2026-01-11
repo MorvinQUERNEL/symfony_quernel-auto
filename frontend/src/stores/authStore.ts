@@ -144,8 +144,8 @@ export const useAuthStore = create<AuthState>()(
 export const selectUser = (state: AuthState) => state.user;
 export const selectIsAuthenticated = (state: AuthState) => state.isAuthenticated;
 export const selectIsAdmin = (state: AuthState) =>
-  state.user?.roles.some((role) => ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'].includes(role)) ?? false;
+  state.user?.roles?.some((role) => ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'].includes(role)) ?? false;
 export const selectIsSuperAdmin = (state: AuthState) =>
-  state.user?.roles.includes('ROLE_SUPER_ADMIN') ?? false;
+  state.user?.roles?.includes('ROLE_SUPER_ADMIN') ?? false;
 
 export default useAuthStore;

@@ -52,7 +52,7 @@ class Orders
     /**
      * @var Collection<int, Payement>
      */
-    #[ORM\OneToMany(targetEntity: Payement::class, mappedBy: 'orders')]
+    #[ORM\OneToMany(targetEntity: Payement::class, mappedBy: 'orders', cascade: ['remove'], orphanRemoval: true)]
     private Collection $payement;
 
     /**

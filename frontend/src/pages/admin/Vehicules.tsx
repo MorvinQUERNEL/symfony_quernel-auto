@@ -41,7 +41,7 @@ export function AdminVehiculesPage() {
             <div className="flex justify-center py-20">
               <Spinner size="xl" />
             </div>
-          ) : data?.data.length === 0 ? (
+          ) : data?.data?.length === 0 ? (
             <Card variant="outlined" className="text-center py-12">
               <Car className="w-16 h-16 mx-auto mb-4 text-gray-300" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -81,7 +81,7 @@ export function AdminVehiculesPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                    {data?.data.map((vehicule) => (
+                    {data?.data?.map((vehicule) => (
                       <tr key={vehicule.id} className="hover:bg-gray-50 transition-colors">
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-4">

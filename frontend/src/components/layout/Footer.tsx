@@ -1,23 +1,25 @@
 import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from 'lucide-react';
+import { useTranslation } from '@/i18n';
 
 export function Footer() {
+  const t = useTranslation();
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
     company: [
-      { label: 'Notre processus', href: '/processus' },
-      { label: 'Contact', href: '/contact' },
+      { label: t.footer.links.process, href: '/processus' },
+      { label: t.footer.links.contact, href: '/contact' },
     ],
     vehicles: [
-      { label: 'Tous les véhicules', href: '/vehicules' },
-      { label: 'Import', href: '/vehicules?type=import' },
-      { label: 'Export', href: '/vehicules?type=export' },
+      { label: t.footer.links.allVehicles, href: '/vehicules' },
+      { label: t.footer.links.import, href: '/vehicules?type=import' },
+      { label: t.footer.links.export, href: '/vehicules?type=export' },
     ],
     legal: [
-      { label: 'Mentions légales', href: '/mentions-legales' },
-      { label: 'CGV', href: '/cgv' },
-      { label: 'Politique de confidentialité', href: '/politique-confidentialite' },
+      { label: t.footer.links.legalNotice, href: '/mentions-legales' },
+      { label: t.footer.links.terms, href: '/cgv' },
+      { label: t.footer.links.privacy, href: '/politique-confidentialite' },
     ],
   };
 
@@ -54,8 +56,7 @@ export function Footer() {
             </Link>
 
             <p className="mt-6 text-gray-400 text-sm leading-relaxed max-w-sm">
-              Votre partenaire de confiance pour l'import et l'export de véhicules.
-              Qualité, transparence et service personnalisé depuis plus de 10 ans.
+              {t.footer.description}
             </p>
 
             {/* Contact info */}
@@ -84,7 +85,7 @@ export function Footer() {
           {/* Links columns */}
           <div>
             <h4 className="text-sm font-bold uppercase tracking-wider text-white mb-4">
-              Entreprise
+              {t.footer.company}
             </h4>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
@@ -102,7 +103,7 @@ export function Footer() {
 
           <div>
             <h4 className="text-sm font-bold uppercase tracking-wider text-white mb-4">
-              Véhicules
+              {t.footer.vehiclesTitle}
             </h4>
             <ul className="space-y-3">
               {footerLinks.vehicles.map((link) => (
@@ -120,7 +121,7 @@ export function Footer() {
 
           <div>
             <h4 className="text-sm font-bold uppercase tracking-wider text-white mb-4">
-              Légal
+              {t.footer.legal}
             </h4>
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
@@ -140,7 +141,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="py-6 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-gray-500">
-            © {currentYear} Quernel Auto. Tous droits réservés.
+            © {currentYear} Quernel Auto. {t.footer.copyright}
           </p>
 
           {/* Social links */}

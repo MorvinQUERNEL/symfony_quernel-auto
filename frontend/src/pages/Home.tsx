@@ -2,31 +2,34 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Shield, Truck, Clock, Star, ChevronRight } from 'lucide-react';
 import { Button, Card } from '@/components/ui';
 import { Layout } from '@/components/layout';
+import { useTranslation } from '@/i18n';
 
 export function HomePage() {
+  const t = useTranslation();
+
   const features = [
     {
       icon: <Shield className="w-6 h-6" />,
-      title: 'Garantie Qualité',
-      description: 'Tous nos véhicules sont rigoureusement inspectés et certifiés avant la vente.',
+      title: t.home.features.quality.title,
+      description: t.home.features.quality.description,
     },
     {
       icon: <Truck className="w-6 h-6" />,
-      title: 'Livraison Sécurisée',
-      description: 'Transport professionnel et assurance complète pour votre tranquillité.',
+      title: t.home.features.delivery.title,
+      description: t.home.features.delivery.description,
     },
     {
       icon: <Clock className="w-6 h-6" />,
-      title: 'Processus Rapide',
-      description: 'De la sélection à la livraison en moins de 3 semaines.',
+      title: t.home.features.fast.title,
+      description: t.home.features.fast.description,
     },
   ];
 
   const stats = [
-    { value: '500+', label: 'Véhicules vendus' },
-    { value: '98%', label: 'Clients satisfaits' },
-    { value: '10+', label: "Années d'expérience" },
-    { value: '24/7', label: 'Support client' },
+    { value: '500+', label: t.home.stats.vehicles },
+    { value: '98%', label: t.home.stats.satisfaction },
+    { value: '10+', label: t.home.stats.experience },
+    { value: '24/7', label: t.home.stats.support },
   ];
 
   return (
@@ -57,34 +60,33 @@ export function HomePage() {
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-8">
                 <span className="w-2 h-2 bg-[#FF6B00] rounded-full animate-pulse" />
                 <span className="text-sm text-white/80 font-medium">
-                  Import & Export de Véhicules
+                  {t.home.hero.badge}
                 </span>
               </div>
 
               {/* Title */}
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight">
-                Votre véhicule
+                {t.home.hero.title}
                 <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B00] to-[#FFAA00]">
-                  sur mesure
+                  {t.home.hero.titleHighlight}
                 </span>
               </h1>
 
               <p className="mt-6 text-lg text-gray-300 max-w-xl mx-auto lg:mx-0">
-                Quernel Auto vous accompagne dans l'acquisition de votre véhicule idéal.
-                Import, export, nous gérons tout pour vous.
+                {t.home.hero.description}
               </p>
 
               {/* CTAs */}
               <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link to="/vehicules">
                   <Button size="lg" rightIcon={<ArrowRight className="w-5 h-5" />}>
-                    Voir les véhicules
+                    {t.home.hero.cta}
                   </Button>
                 </Link>
                 <Link to="/processus">
                   <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white hover:text-gray-900">
-                    Notre processus
+                    {t.home.hero.ctaSecondary}
                   </Button>
                 </Link>
               </div>
@@ -108,15 +110,31 @@ export function HomePage() {
                 <div className="absolute w-[400px] h-[400px] border border-[#FF6B00]/30 rounded-full animate-[spin_40s_linear_infinite_reverse]" />
               </div>
 
-              {/* Placeholder for car image */}
-              <div className="relative aspect-[4/3] flex items-center justify-center">
-                <div className="w-full max-w-md p-8 text-center">
-                  <div className="w-32 h-32 mx-auto rounded-2xl bg-gradient-to-br from-[#FF6B00] to-[#FFAA00] flex items-center justify-center mb-6 shadow-2xl shadow-[#FF6B00]/30">
-                    <span className="text-6xl font-black text-white">Q</span>
+              {/* Featured vehicle image */}
+              <div className="relative aspect-[4/3] flex flex-col items-center justify-center">
+                <div className="relative w-full max-w-lg">
+                  {/* Glow effect behind image */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#FF6B00]/30 to-[#FFAA00]/20 blur-3xl rounded-full transform scale-75" />
+
+                  {/* Car image */}
+                  <img
+                    src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&q=80"
+                    alt="Porsche 911 - Véhicule à la une"
+                    className="relative w-full h-auto rounded-2xl shadow-2xl shadow-black/50 object-cover"
+                  />
+
+                  {/* Badge */}
+                  <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 px-6 py-2 bg-gradient-to-r from-[#FF6B00] to-[#FFAA00] rounded-full shadow-lg">
+                    <span className="text-white font-bold text-sm whitespace-nowrap">
+                      {t.home.hero.featuredVehicle}
+                    </span>
                   </div>
-                  <p className="text-gray-400 text-sm">
-                    Image du véhicule à la une
-                  </p>
+                </div>
+
+                {/* Vehicle info */}
+                <div className="mt-8 text-center">
+                  <p className="text-white font-semibold text-lg">Porsche 911 Carrera</p>
+                  <p className="text-gray-400 text-sm">{t.home.hero.featuredVehicleSubtitle}</p>
                 </div>
               </div>
             </div>
@@ -125,7 +143,7 @@ export function HomePage() {
 
         {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/50">
-          <span className="text-xs uppercase tracking-widest">Découvrir</span>
+          <span className="text-xs uppercase tracking-widest">{t.home.hero.discover}</span>
           <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center p-2">
             <div className="w-1.5 h-3 bg-white/50 rounded-full animate-bounce" />
           </div>
@@ -138,14 +156,13 @@ export function HomePage() {
           {/* Section header */}
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-[#FF6B00] font-semibold uppercase tracking-wider text-sm">
-              Pourquoi nous choisir
+              {t.home.whyUs.subtitle}
             </span>
             <h2 className="mt-4 text-3xl sm:text-4xl font-black text-gray-900">
-              Un service d'excellence
+              {t.home.whyUs.title}
             </h2>
             <p className="mt-4 text-gray-600">
-              Nous mettons notre expertise à votre service pour vous garantir
-              une expérience d'achat unique et sans stress.
+              {t.home.whyUs.description}
             </p>
           </div>
 
@@ -187,24 +204,23 @@ export function HomePage() {
             <div className="relative grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-3xl sm:text-4xl font-black text-white">
-                  Prêt à trouver votre
-                  <span className="text-[#FF6B00]"> véhicule idéal</span> ?
+                  {t.home.cta.title}
+                  <span className="text-[#FF6B00]"> {t.home.cta.titleHighlight}</span> ?
                 </h2>
                 <p className="mt-4 text-gray-300">
-                  Parcourez notre catalogue ou contactez-nous pour une recherche personnalisée.
-                  Notre équipe est à votre écoute.
+                  {t.home.cta.description}
                 </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 lg:justify-end">
                 <Link to="/vehicules">
                   <Button size="lg" rightIcon={<ChevronRight className="w-5 h-5" />}>
-                    Voir le catalogue
+                    {t.home.cta.viewCatalog}
                   </Button>
                 </Link>
                 <Link to="/contact">
                   <Button variant="secondary" size="lg">
-                    Nous contacter
+                    {t.home.cta.contactUs}
                   </Button>
                 </Link>
               </div>
@@ -218,10 +234,10 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-[#FF6B00] font-semibold uppercase tracking-wider text-sm">
-              Témoignages
+              {t.home.testimonials.subtitle}
             </span>
             <h2 className="mt-4 text-3xl sm:text-4xl font-black text-gray-900">
-              Ce que disent nos clients
+              {t.home.testimonials.title}
             </h2>
           </div>
 
@@ -229,18 +245,18 @@ export function HomePage() {
             {[
               {
                 name: 'Pierre D.',
-                role: 'Client depuis 2022',
-                content: "Service impeccable ! Mon véhicule est arrivé exactement comme décrit. L'équipe a été très réactive tout au long du processus.",
+                role: t.home.testimonials.clientSince + ' 2022',
+                content: t.home.testimonials.testimonial1,
               },
               {
                 name: 'Marie L.',
-                role: 'Cliente depuis 2023',
-                content: "J'ai fait importer ma voiture d'Allemagne grâce à Quernel Auto. Tout s'est passé parfaitement, je recommande vivement.",
+                role: t.home.testimonials.clientSince + ' 2023',
+                content: t.home.testimonials.testimonial2,
               },
               {
                 name: 'Thomas B.',
-                role: 'Client depuis 2021',
-                content: 'Professionnalisme et transparence. Les prix sont compétitifs et le suivi est excellent. Ma troisième commande avec eux !',
+                role: t.home.testimonials.clientSince + ' 2021',
+                content: t.home.testimonials.testimonial3,
               },
             ].map((testimonial, index) => (
               <Card key={index} variant="elevated" className="relative">

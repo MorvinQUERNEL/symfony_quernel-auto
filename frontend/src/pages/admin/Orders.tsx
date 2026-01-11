@@ -69,7 +69,7 @@ export function AdminOrdersPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                    {data?.data.map((order) => {
+                    {data?.data?.map((order) => {
                       const vehicule = order.vehicules?.[0];
                       return (
                         <tr key={order.id} className="hover:bg-gray-50 transition-colors">

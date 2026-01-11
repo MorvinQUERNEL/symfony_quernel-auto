@@ -202,7 +202,7 @@ export function VehiculesListPage() {
                 Réessayer
               </Button>
             </Card>
-          ) : data?.data.length === 0 ? (
+          ) : data?.data?.length === 0 ? (
             <Card variant="outlined" className="text-center py-12">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
                 <Car className="w-8 h-8 text-gray-400" />
@@ -230,7 +230,7 @@ export function VehiculesListPage() {
 
               {/* Grid */}
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {data?.data.map((vehicule) => (
+                {data?.data?.map((vehicule) => (
                   <Link key={vehicule.id} to={`/vehicules/${vehicule.id}`}>
                     <VehicleCard
                       image={getImageUrl(vehicule.pictures[0])}

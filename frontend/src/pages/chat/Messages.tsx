@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Send, MessageSquare } from 'lucide-react';
 import { Layout } from '@/components/layout';
@@ -7,11 +7,15 @@ import { messagesApi } from '@/api';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { clsx } from 'clsx';
+import { useToast } from '@/hooks/useToast';
 
 export function MessagesPage() {
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
+  const [isNewConversation, setIsNewConversation] = useState(false);
   const [newMessage, setNewMessage] = useState('');
   const queryClient = useQueryClient();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
   // Fetch conversations
   const { data: conversations, isLoading: loadingConversations } = useQuery({
@@ -23,20 +27,37 @@ export function MessagesPage() {
   const { data: messages, isLoading: loadingMessages } = useQuery({
     queryKey: ['messages', selectedConversation],
     queryFn: () => messagesApi.getConversation(selectedConversation!),
-    enabled: !!selectedConversation,
+    enabled: !!selectedConversation && !isNewConversation,
   });
+
+  // Scroll to bottom when messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   // Send message mutation
   const sendMessageMutation = useMutation({
     mutationFn: (content: string) =>
       messagesApi.send({
         content,
-        conversationId: selectedConversation || undefined,
+        // Don't send conversationId for new conversations - backend will create one
+        conversationId: isNewConversation ? undefined : selectedConversation || undefined,
       }),
-    onSuccess: () => {
+    onSuccess: (response) => {
       setNewMessage('');
+      toast.success('Message envoyé');
+
+      // If this was a new conversation, update the selected conversation
+      if (isNewConversation && response.conversationId) {
+        setSelectedConversation(response.conversationId);
+        setIsNewConversation(false);
+      }
+
       queryClient.invalidateQueries({ queryKey: ['messages', selectedConversation] });
       queryClient.invalidateQueries({ queryKey: ['conversations'] });
+    },
+    onError: () => {
+      toast.error('Erreur lors de l\'envoi du message');
     },
   });
 
@@ -45,6 +66,16 @@ export function MessagesPage() {
     if (newMessage.trim()) {
       sendMessageMutation.mutate(newMessage.trim());
     }
+  };
+
+  const handleNewConversation = () => {
+    setSelectedConversation(null);
+    setIsNewConversation(true);
+  };
+
+  const handleSelectConversation = (convId: string) => {
+    setSelectedConversation(convId);
+    setIsNewConversation(false);
   };
 
   return (
@@ -74,10 +105,10 @@ export function MessagesPage() {
                   {conversations?.map((conv) => (
                     <button
                       key={conv.id}
-                      onClick={() => setSelectedConversation(conv.id)}
+                      onClick={() => handleSelectConversation(conv.id)}
                       className={clsx(
                         'w-full p-4 text-left border-b border-gray-100 transition-colors',
-                        selectedConversation === conv.id
+                        selectedConversation === conv.id && !isNewConversation
                           ? 'bg-[#FF6B00]/5 border-l-4 border-l-[#FF6B00]'
                           : 'hover:bg-gray-50'
                       )}
@@ -106,8 +137,8 @@ export function MessagesPage() {
               <div className="p-4 border-t border-gray-100">
                 <Button
                   fullWidth
-                  variant="outline"
-                  onClick={() => setSelectedConversation('new')}
+                  variant={isNewConversation ? 'primary' : 'outline'}
+                  onClick={handleNewConversation}
                 >
                   Nouvelle conversation
                 </Button>
@@ -116,11 +147,11 @@ export function MessagesPage() {
 
             {/* Messages area */}
             <Card variant="elevated" padding="none" className="lg:col-span-2 flex flex-col overflow-hidden">
-              {!selectedConversation ? (
+              {!selectedConversation && !isNewConversation ? (
                 <div className="flex-1 flex items-center justify-center text-gray-500">
                   <div className="text-center">
                     <MessageSquare className="w-16 h-16 mx-auto mb-4 text-gray-200" />
-                    <p>Sélectionnez une conversation</p>
+                    <p>Sélectionnez une conversation ou créez-en une nouvelle</p>
                   </div>
                 </div>
               ) : (
@@ -133,43 +164,48 @@ export function MessagesPage() {
 
                   {/* Messages */}
                   <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                    {loadingMessages ? (
+                    {loadingMessages && !isNewConversation ? (
                       <div className="flex justify-center py-8">
                         <Spinner />
                       </div>
-                    ) : messages?.length === 0 ? (
+                    ) : isNewConversation || messages?.length === 0 ? (
                       <div className="text-center text-gray-500 py-8">
-                        <p>Commencez la conversation</p>
+                        <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                        <p className="font-medium">Nouvelle conversation</p>
+                        <p className="text-sm mt-1">Envoyez un message pour démarrer</p>
                       </div>
                     ) : (
-                      messages?.map((message) => (
-                        <div
-                          key={message.id}
-                          className={clsx(
-                            'flex',
-                            message.isFromUser ? 'justify-end' : 'justify-start'
-                          )}
-                        >
+                      <>
+                        {messages?.map((message) => (
                           <div
+                            key={message.id}
                             className={clsx(
-                              'max-w-[70%] rounded-2xl px-4 py-3',
-                              message.isFromUser
-                                ? 'bg-[#FF6B00] text-white rounded-br-md'
-                                : 'bg-gray-100 text-gray-900 rounded-bl-md'
+                              'flex',
+                              message.isFromUser ? 'justify-end' : 'justify-start'
                             )}
                           >
-                            <p className="whitespace-pre-wrap">{message.content}</p>
-                            <p
+                            <div
                               className={clsx(
-                                'text-xs mt-1',
-                                message.isFromUser ? 'text-white/70' : 'text-gray-500'
+                                'max-w-[70%] rounded-2xl px-4 py-3',
+                                message.isFromUser
+                                  ? 'bg-[#FF6B00] text-white rounded-br-md'
+                                  : 'bg-gray-100 text-gray-900 rounded-bl-md'
                               )}
                             >
-                              {format(new Date(message.createdAt), 'HH:mm', { locale: fr })}
-                            </p>
+                              <p className="whitespace-pre-wrap">{message.content}</p>
+                              <p
+                                className={clsx(
+                                  'text-xs mt-1',
+                                  message.isFromUser ? 'text-white/70' : 'text-gray-500'
+                                )}
+                              >
+                                {format(new Date(message.createdAt), 'HH:mm', { locale: fr })}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                      ))
+                        ))}
+                        <div ref={messagesEndRef} />
+                      </>
                     )}
                   </div>
 
